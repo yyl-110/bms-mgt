@@ -53,10 +53,10 @@ export function getUser(): Promise<AxiosResponse<IResponse<IGetuserRes>>> {
         method: 'get'
     })
 }
-export function getRouterList(): Promise<AxiosResponse<IResponse<Array<IMenubarList>>>> {
+export function getRouterList(params:any): Promise<AxiosResponse<IResponse<Array<IMenubarList>>>> {
     return request({
         url: api.getRouterList,
         method: 'post',
-        data: {}
+        data: params
     })
 }

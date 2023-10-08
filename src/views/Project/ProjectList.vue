@@ -5,9 +5,10 @@
             <div class="header flex items-center h-[60px]">
                 <span class="text-t3 font-[500] text-[20px] flex-shrink-0">项目列表</span>
                 <div class="input w-[60%]">
-                    <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" class="ml-[10px]">
+                    <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" class="ml-[10px]"
+                        @keyup.enter.native="search">
                         <template #append>
-                            <el-button :icon="Search" />
+                            <el-button :icon="Search" @click="search" />
                         </template>
                     </el-input>
                 </div>
@@ -16,7 +17,8 @@
                     导出
                 </el-button>
             </div>
-            <ProjectTable :device_list="device_list" />
+            <ProjectTable :device_list="device_list" @changePagination="changePagination" :search="searchVal"
+                @handleSort="handleSort" />
         </div>
         <div class="mapWrap mt-5">
             <CardContainer title="地图统计">
@@ -37,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { projectData } from '/@/api/project/index'
 import { Search } from '@element-plus/icons-vue';
 import ProjectTable from './components/ProjectTable.vue'
@@ -49,16 +51,46 @@ const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }
 const pos_info = ref({})
 const device_list = ref({})
 const searchVal = ref('')
+const list_rows = ref(10)
+const page = ref(1)
+let order = reactive({ value: { filed: '', order: '' } })
 
-const getProjectData = async () => {
-    const res = await projectData({})
-    console.log('res:', res)
+
+const getProjectData = async (pages = page.value, size = list_rows.value) => {
+    const _order = order.value.filed ? order.value : {}
+    const res = await projectData({ page: pages, list_rows: size, ..._order, search: searchVal.value })
     if (res.code === 1) {
         list.value[0].num = res.data?.project_num
         list.value[1].num = res.data?.device_num
         list.value[2].num = res.data?.online_num
         pos_info.value = res.data?.pos_info
         device_list.value = res.data?.data
+    }
+}
+const handleSort = (val) => {
+    order = { value: val }
+    getProjectData()
+}
+
+const search = () => {
+    getProjectData()
+}
+
+/**
+ * 修改分页
+ * @param {*} value
+ * @param {*} val
+ * @return {*}
+ */
+const changePagination = (value: { type: string, val: number }) => {
+    switch (value.type) {
+        case 'size':
+            getProjectData(page.value, value.val)
+            break;
+        case 'page':
+            getProjectData(value.val, list_rows.value)
+            break;
+
     }
 }
 

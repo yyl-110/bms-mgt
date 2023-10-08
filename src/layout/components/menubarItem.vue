@@ -11,8 +11,8 @@
     </el-sub-menu>
 
     <el-menu-item v-else :key='menuList.path' :index='menuList.path'>
-        <svg-icon :icon-class='"svg-home"' class='mr-2.5 w-6' />
-        <!-- <component :is='UseElIcon(menuList.meta.icon || "el-icon-setting")' /> -->
+        <!-- <svg-icon :icon-class='"svg-home"' class='mr-2.5 w-6' /> -->
+        <component :is='UseElIcon(menuList.meta.icon || "el-icon-setting")' />
         <template #title>
             <span>
                 {{ menuList.meta.title }}

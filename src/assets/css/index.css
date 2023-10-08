@@ -40,3 +40,7 @@ button:focus {
     }
 }
 
+.el-table thead tr th {
+    background-color: #F6F7FC!important;
+}
+

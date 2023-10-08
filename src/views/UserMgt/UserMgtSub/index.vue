@@ -6,9 +6,9 @@
                 <div class="flex items-center w-full lg:flex-1 leftContent flex-wrap lg:flex-nowrap lg:w-auto">
                     <span class="text-t3 font-[500] text-[20px] flex-shrink-0">用户列表</span>
                     <div class="input w-[50%] min-w-[200px] rounded-[6px] ml-5 lg:ml-[50px]">
-                        <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large">
+                        <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" @keyup.enter.native="search">
                             <template #append>
-                                <el-button :icon="Search" />
+                                <el-button :icon="Search" @click="search" />
                             </template>
                         </el-input>
                     </div>
@@ -24,22 +24,30 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-2.5 options ml-auto lg:ml-0 lg:mt-0">
-                    <el-button class="text-[#999]">
-                        <img src="../../assets/img/filter.png" class="w-5 h-5" alt="">
-                        筛选
-                    </el-button>
-                    <el-button class="text-[#999]">
-                        <img src="../../assets/img/point.png" class="w-5 h-5" alt="">
+                    <el-popover placement="bottom-end" title="" trigger="click">
+                        <template #reference>
+                            <el-button class="text-[#999]">
+                                <img src="/@/assets/img/filter.png" class="w-5 h-5" alt="">
+                                筛选
+                            </el-button>
+                        </template>
+                        <el-checkbox-group v-model="checkList" @change="changeCheck">
+                            <el-checkbox :label="item.label" v-for="item in filterList" :key="item.key" />
+                        </el-checkbox-group>
+                    </el-popover>
+
+                    <el-button class="text-[#999]" @click="pointTable">
+                        <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
                         打印
                     </el-button>
                     <el-button class="text-[#999]">
-                        <img src="../../assets/img/export.png" class="w-5 h-5" alt="">
+                        <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
                         导出
                     </el-button>
                 </div>
             </div>
             <UserTable :userList="userList" @changePagination="changePagination" @handleOption="handleOption"
-                :search="searchVal" />
+                :search="searchVal" :checkList="checkList" @handleSort="handleSort" />
 
             <!-- 新增 -->
             <el-dialog v-model="dialogVisible" :width='largerThanSm ? "460" : "90%"' :show-close="false"
@@ -48,7 +56,7 @@
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
                         {{ isAdd ? '添加子用户' : '修改密码' }}
-                        <img src="../../assets/img/close.png"
+                        <img src="/@/assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogVisible = false" alt="">
                     </div>
@@ -82,7 +90,7 @@
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
                         {{ popType === 1 ? '删除子账户' : '解除绑定' }}
-                        <img src="../../assets/img/close.png"
+                        <img src="/@/assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogDelVisible = false" alt="">
                     </div>
@@ -113,19 +121,29 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { deviceIndex, childIndexIndex, addChild, delChild, childUpdate } from '/@/api';
-import OverviewCard from './components/OverviewCard.vue';
-import UserTable from './components/UserTable.vue';
+import OverviewCard from '../components/OverviewCard.vue';
+import UserTable from '../components/UserTable.vue';
 import { Search } from '@element-plus/icons-vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { ElMessage, FormInstance } from 'element-plus';
-import BindDevice from './components/BindDevice.vue';
+import print from "/@/utils/print";
+import BindDevice from '../components/BindDevice.vue';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
 
-
+let order = reactive({ value: { filed: '', order: '' } })
 const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
+const checkList = ref(['序号', '子用户名', '公司', '设备数', '操作'])
+const filterList = ref([
+    { label: '序号', key: 'index' },
+    { label: '子用户名', key: 'username' },
+    { label: '公司', key: 'company' },
+    { label: '设备数', key: 'num' },
+    { label: '操作', key: 'options' },
+])
+const userTable = ref(null)
 const searchVal = ref('')
 const userList = ref({})
 const childList = ref([])
@@ -170,7 +188,8 @@ const getDeviceIndex = async () => {
     const res = await deviceIndex()
 }
 const getChildDeviceList = async (pages = page.value, size = list_rows.value) => {
-    const res = await childIndexIndex({ page: pages, list_rows: size })
+    const _order = order.value.filed ? order.value : {}
+    const res = await childIndexIndex({ page: pages, list_rows: size, ..._order, search: searchVal.value })
     userList.value = res.data
     page.value = res.data?.current_page
     list_rows.value = res.data?.per_page
@@ -297,6 +316,33 @@ const changePagination = (value: { type: string, val: number }) => {
             break;
 
     }
+}
+
+const pointTable = () => {
+    let fields = checkList.value.map(i => filterList.value.find(item => item.label === i)?.key)
+    fields.splice(fields.findIndex(i => i === 'index'), 1)
+    console.log('fields:', fields)
+    print.printJson({
+        title: '', // 打印出来的标题
+        data: childList.value, // 需要打印的数据
+        serial: checkList.value.includes('序号'), // 是否需要打印序列号
+        fields, // 需要打印的字段
+        properties: fields.map(i => {
+            return { field: i, displayName: filterList.value.find(item => item.key === i)?.label }
+        })
+    })
+}
+const handleSort = (val) => {
+    order = { value: val }
+    getChildDeviceList()
+}
+
+const search = () => {
+    getChildDeviceList()
+}
+
+const changeCheck = (e: string[]) => {
+
 }
 
 /* 绑定成功 */

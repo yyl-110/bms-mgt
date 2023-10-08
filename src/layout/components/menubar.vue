@@ -56,6 +56,7 @@ export default defineComponent ({
         const { getMenubar, setRoutes, changeCollapsed, getSetting } = useLayoutStore()
 
         const filterMenubarData = filterMenubar(getMenubar.menuList)
+        console.log('filterMenubarData:', filterMenubarData)
         setRoutes(filterMenubarData)
 
         const activeMenu = computed(() => {

@@ -43,6 +43,7 @@ export interface ILayout {
     status:IStatus
 }
 export interface IMenubarList {
+    parentId?: number | string
     pid?: number | string
     title?: string
     display?:number,

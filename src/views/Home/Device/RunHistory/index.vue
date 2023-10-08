@@ -1,5 +1,7 @@
 <template>
-    <router-view></router-view>
+    <div>
+        RunHistory
+    </div>
 </template>
 
 <script setup lang="ts">

@@ -40,7 +40,6 @@ const generatorDynamicRouter = (data:IMenubarList[]):void => {
     const { setRoutes } = useLayoutStore()
     const routerList:IMenubarList[] = listToTree(data, 0)
     asyncRouter.forEach(v => routerList.push(v))
-    console.log('asyncRouter:', asyncRouter)
     const f = (data:IMenubarList[], pData:IMenubarList|null) => {
         for(let i = 0,len = data.length;i < len;i++) {
             const v:IMenubarList = data[i]

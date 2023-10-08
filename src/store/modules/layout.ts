@@ -6,6 +6,7 @@ import { allowRouter } from '/@/router/index'
 import { generatorDynamicRouter } from '/@/router/asyncRouter'
 import { setLocal, getLocal, decode } from '/@/utils/tools'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
+import { route } from '/mock/data/user'
 
 const setting = getLocal<ISetting>('setting')
 const { ACCESS_TOKEN } = getLocal<IStatus>('token')
@@ -228,9 +229,10 @@ export const useLayoutStore = defineStore({
         //     this.userInfo.role = userInfo.role
         // },
         async GenerateRoutes():Promise<void> {
-            const res = await getRouterList()
+            const res = await getRouterList({lang:'en'})
             const { data } = res as {data:any}
-            generatorDynamicRouter(data)
+            console.log('route:', route)
+            generatorDynamicRouter(route)
         }
     }
 })

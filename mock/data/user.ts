@@ -56,114 +56,120 @@ export const role_route = [
 
 export const route:Array<IMenubarList> = [
     {
-        id: 2,
-        parentId: 0,
-        name: 'Project',
-        path: '/Project',
-        redirect: '/project/list',
-        component: 'Layout',
-        meta: { title: '项目列表', icon: 'el-icon-project' }
+        id: 1,
+        pid: 0,
+        name: "/home",
+        title: "Home",
+        ismenu: 1,
+        icon: null,
+        display: 1
     },
     {
-        id: 20,
-        parentId: 2,
-        name: 'ProjectList',
-        path: '/Project/list',
-        component: 'Project',
-        meta: { title: '项目列表', icon: 'el-icon-project' }
+        id: 2,
+        pid: 1,
+        name: "/home/index",
+        title: "Home",
+        ismenu: 1,
+        icon: null,
+        display: 1
     },
     {
         id: 3,
-        parentId: 0,
-        name: 'UserMgt',
-        path: '/user-mgt',
-        component: 'Layout',
-        redirect: '/user-mgt/sub',
-        meta: { title: '用户管理', icon: 'el-icon-userMgt',alwaysShow: true }
-    },
-    {
-        id: 30,
-        parentId: 3,
-        name: 'UserMgtSub',
-        path: '/user-mgt/sub',
-        component: 'SubUser',
-        meta: { title: '子用户', icon: 'el-icon-user' }
+        pid: 0,
+        name: "/project",
+        title: "ProjectList",
+        ismenu: 1,
+        icon: "el-icon-project",
+        display: 1
     },
     {
         id: 4,
-        parentId: 0,
-        name: 'FirmwareMgt',
-        path: '/firmware-mgt',
-        component: 'Layout',
-        redirect: '/firmware-mgt/list',
-        meta: { title: '固件管理', icon: 'el-icon-mgt', alwaysShow: true }
+        pid: 3,
+        name: "/project/list",
+        title: "ProjectList",
+        ismenu: 1,
+        icon: "el-icon-project",
+        display: 1
     },
     {
-        id: 40,
-        parentId: 4,
-        name: 'FirmwareMgtList',
-        path: '/firmware-mgt/list',
-        component: 'FirmwareList',
-        meta: { title: '固件列表', icon: 'el-icon-list' }
+        id: 5,
+        pid: 0,
+        name: "/user-mgt",
+        title: "UserMgt",
+        ismenu: 1,
+        icon: "el-icon-userMgt",
+        display: 1
     },
     {
-        id: 3,
-        parentId: 0,
-        name: 'Nav',
-        path: '/Nav',
-        component: 'Layout',
-        redirect: '/Nav/SecondNav/ThirdNav',
-        meta: { title: '多级导航', icon: 'el-icon-picture' }
+        id: 6,
+        pid: 5,
+        name: "/user-mgt/sub",
+        title: "UserMgtSub",
+        ismenu: 1,
+        icon: "el-icon-user",
+        display: 1
     },
     {
-        id: 30,
-        parentId: 3,
-        name: 'SecondNav',
-        path: '/Nav/SecondNav',
-        redirect: '/Nav/SecondNav/ThirdNav',
-        component: 'SecondNav',
-        meta: { title: '二级导航', icon: 'el-icon-camera', alwaysShow: true }
+        id: 13,
+        pid: 5,
+        name: "/user-mgt/sub/list",
+        title: "UserMgtSubList",
+        ismenu: 1,
+        icon: "el-icon-user",
+        display: 0
     },
     {
-        id: 300,
-        parentId: 30,
-        name: 'ThirdNav',
-        path: '/Nav/SecondNav/ThirdNav',
-        component: 'ThirdNav',
-        meta: { title: '三级导航', icon: 'el-icon-platform' }
+        id: 7,
+        pid: 0,
+        name: "/firmware-mgt",
+        title: "FirmwareMgt",
+        ismenu: 1,
+        icon: "el-icon-mgt",
+        display: 1
     },
     {
-        id: 31,
-        parentId: 3,
-        name: 'SecondText',
-        path: '/Nav/SecondText',
-        redirect: '/Nav/SecondText/ThirdText',
-        component: 'SecondText',
-        meta: { title: '二级文本', icon: 'el-icon-opportunity', alwaysShow: true }
+        id: 8,
+        pid: 7,
+        name: "/firmware-mgt/list",
+        title: "FirmwareMgtList",
+        ismenu: 1,
+        icon: "el-icon-list",
+        display: 1
     },
     {
-        id: 310,
-        parentId: 31,
-        name: 'ThirdText',
-        path: '/Nav/SecondText/ThirdText',
-        component: 'ThirdText',
-        meta: { title: '三级文本', icon: 'el-icon-menu' }
+        id: 9,
+        pid: 7,
+        name: "/user-mgt/device",
+        title: "Sub user devices",
+        ismenu: 1,
+        icon: null,
+        display: 0
+    },
+    {
+        id: 10,
+        pid: 2,
+        name: "/home/index/device/index",
+        title: "RealTime",
+        ismenu: 1,
+        icon: null,
+        display: 0
+    },
+    {
+        id: 11,
+        pid: 2,
+        name: "/home/index/device/map",
+        title: "PositionInfo",
+        ismenu: 1,
+        icon: null,
+        display: 0
+    },
+    {
+        id: 12,
+        pid: 2,
+        name: "/home/index/device/runHistory",
+        title: "RunHistory",
+        ismenu: 1,
+        icon: null,
+        display: 0
     }
-    // {
-    //     id: 5,
-    //     parentId: 0,
-    //     name: 'Permission',
-    //     path: '/Permission',
-    //     component: 'Layout',
-    //     redirect: '/Permission/Directive',
-    //     meta: { title: '权限管理', icon: 'el-icon-phone', alwaysShow: true }
-    // },
-    // {
-    //     id: 50,
-    //     parentId: 5,
-    //     name: 'Directive',
-    //     path: '/Permission/Directive',
-    //     component: 'Directive',
-    //     meta: { title: '指令管理', icon: 'el-icon-goods' }
-    // }
 ]

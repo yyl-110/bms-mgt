@@ -137,15 +137,15 @@ export function listToTree(data:Array<IMenubarList>, pid: string | number = 1, i
             const list = listToTree(data, val.id, isChildNull)
             let obj:IMenubarList = [...d]
             if(val.pid === 0) {
-                console.log('val:', val)
-                obj = { path:val.name, name:val.title,component:'Layout',meta:{ icon: val.icon,title:val.title,hidden:!!val.diplay,alwaysShow:alwaysShowList.includes(val.title) } }
+                obj = { path:val.name, name:val.title,component:'Layout',meta:{ icon: val.icon,title:val.title,hidden:!val.display,alwaysShow:alwaysShowList.includes(val.title) } }
             }else {
-                console.log('val.name:', val.name)
-                obj = { path:val.name, name:val.title, component: val.title, meta:{ icon: val.icon,title:val.title ,hidden:!!val.diplay } }
+                obj = { path:val.name, name:val.title, component: val.title, meta:{ icon: val.icon,title:val.title ,hidden: !val.display} }
             }
             if(!isChildNull || list.length !== 0) {
-                obj.children = val.name === '/home/index' ? [] : list
+                // obj.children = val.name === '/home/index' ? [] : list
+                obj.children = list
             }
+            console.log('list:', list,pid)
             d.push(obj)
         }
     })
