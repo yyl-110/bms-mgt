@@ -1,9 +1,10 @@
 <template>
     <el-scrollbar>
+        <div class="w-100 h-2 sm:h-5"></div>
         <router-view v-slot='{ Component }'>
-            <transition name='fade-transform' mode='out-in'>  
+            <transition name='fade-transform' mode='out-in'>
                 <keep-alive :include='setting.showTags ? data.cachedViews : []'>
-                    <component :is='Component' :key='key' class='page m-2 relative sm:m-5' />
+                    <component :is='Component' :key='key' class='page m-2 mt-0 relative sm:m-5 sm:mt-0' />
                 </keep-alive>
             </transition>
         </router-view>
@@ -18,7 +19,7 @@ import { computed, defineComponent, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLayoutStore } from '/@/store/modules/layout'
 
-export default defineComponent ({
+export default defineComponent({
     name: 'LayoutContent',
     setup() {
         const route = useRoute()
@@ -44,14 +45,15 @@ export default defineComponent ({
 </script>
 
 <style lang='postcss' scoped>
+.page {}
 
 ::v-deep(.el-card) {
     overflow: visible;
 }
 
-/* ::v-deep(.el-scrollbar__view) {
+::v-deep(.el-scrollbar__view) {
     height: 100%;
-} */
+}
 
 .fade-transform-leave-active,
 .fade-transform-enter-active {

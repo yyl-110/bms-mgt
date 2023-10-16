@@ -1,36 +1,35 @@
 <template>
     <div class='layout flex h-screen'>
-        <div
-            class='layout-sidebar-mask fixed w-screen h-screen bg-black bg-opacity-25 z-20'
-            :class='{ "hidden": getMenubar.status !== 2 }'
-            @click='changeCollapsed'
-        />
-        <div
-            v-if='getSetting.mode === "vertical" || getMenubar.isPhone'
-            class='layout-sidebar flex flex-col h-screen transition-width duration-200 shadow overflow-x-hidden'
-            :class='{
+        <div class='layout-sidebar-mask fixed w-screen h-screen bg-black bg-opacity-25 z-20'
+            :class='{ "hidden": getMenubar.status !== 2 }' @click='changeCollapsed' />
+        <div v-if='getSetting.mode === "vertical" || getMenubar.isPhone'
+            class='layout-sidebar flex flex-col h-screen transition-width duration-200 shadow overflow-x-hidden' :class='{
                 "w-[200px]": getMenubar.status === 0 || getMenubar.status === 2,
                 "w-0": getMenubar.status === 3,
                 "w-16": getMenubar.status === 1,
                 "absolute z-30": getMenubar.status === 2 || getMenubar.status === 3,
-            }'
-        >
+            }'>
             <div class='layout-sidebar-logo flex h-[60px] relative flex-center shadow-lg'>
                 <!-- v-if='getMenubar.status === 0 || getMenubar.status === 2' -->
-                <span :class='getMenubar.status === 1 ? "hidden" : ""'>管理控制台</span>
+                <span :class='getMenubar.status === 1 ? "hidden" : ""'>{{$t('config.name')}}</span>
             </div>
             <div class='layout-sidebar-menubar flex flex-1 overflow-hidden'>
-                <el-scrollbar wrap-class='scrollbar-wrapper'>
+                <el-scrollbar wrap-class='scrollbar-wrapper overflow-x-hidden'>
                     <layout-menubar />
                 </el-scrollbar>
             </div>
         </div>
         <div class='layout-main flex flex-1 flex-col overflow-x-hidden overflow-y-auto'>
-            <div class='layout-main-navbar flex justify-between items-center h-[60px] shadow-sm overflow-hidden relative z-10'>
+            <div
+                class='layout-main-navbar flex justify-between items-center h-[60px] shadow-sm overflow-hidden relative z-10'>
                 <layout-navbar />
             </div>
-            <div v-if='getSetting.showTags' class='layout-main-tags h-10 text-sm text-gray-600 relative flex items-center'>
+            <div v-if='getSetting.showTags'
+                class='layout-main-tags h-10 text-sm shadow-sm text-gray-600 relative flex items-center'>
                 <layout-tags />
+            </div>
+            <div class="layout-state min-h-[50px] flex items-center" v-if="isShowProjectBar">
+                <project-info />
             </div>
             <div class='layout-main-content flex-1 overflow-hidden'>
                 <layout-content />
@@ -44,7 +43,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 import LayoutContent from '/@/layout/components/content.vue'
 import LayoutMenubar from '/@/layout/components/menubar.vue'
 import LayoutNavbar from '/@/layout/components/navbar.vue'
@@ -52,7 +51,11 @@ import LayoutTags from '/@/layout/components/tags.vue'
 import LayoutSideSetting from '/@/layout/components/sideSetting.vue'
 import { throttle } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
+import { useIndexStore } from '/@/store/modules/index'
 import icon from '/@/assets/img/icon.png'
+import ProjectInfo from './components/projectInfo.vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
     name: 'Layout',
@@ -61,15 +64,21 @@ export default defineComponent({
         LayoutMenubar,
         LayoutNavbar,
         LayoutTags,
-        LayoutSideSetting
+        LayoutSideSetting,
+        ProjectInfo
     },
     setup() {
         const { changeDeviceWidth, changeCollapsed, getMenubar, getSetting } = useLayoutStore()
 
-        onMounted(async() => {
+        const hiddenName = ['Device', 'PositionInfo', 'RunHistory', 'DeviceUpgrade', 'History', 'HistoryChart']
+        const route = useRoute()
+        const isShowProjectBar = computed(() => hiddenName.includes(route.name))
+
+
+        onMounted(async () => {
             changeDeviceWidth()
             const throttleFn = throttle(300)
-            let throttleF = async function() {
+            let throttleF = async function () {
                 await throttleFn()
                 changeDeviceWidth()
             }
@@ -80,7 +89,8 @@ export default defineComponent({
             getMenubar,
             getSetting,
             changeCollapsed,
-            icon
+            icon,
+            isShowProjectBar,
         }
     }
 })

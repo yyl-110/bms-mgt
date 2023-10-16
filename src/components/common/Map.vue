@@ -1,5 +1,5 @@
 <template>
-    <div id="mapDiv" class="w-full h-full"></div>
+    <div id="mapDiv" class="w-full h-full z-0"></div>
 </template>
 
 <script setup lang="ts">
@@ -32,7 +32,7 @@ const init = () => {
 
     let arrayObj = new Array();
     let icon = new T.Icon({
-        iconUrl: new URL("../../../assets/img/car.png", import.meta.url).href
+        iconUrl: new URL("/@/assets/img/car.png", import.meta.url).href
     })
     let datas: any = []
     for (let i in props.pos_info) {

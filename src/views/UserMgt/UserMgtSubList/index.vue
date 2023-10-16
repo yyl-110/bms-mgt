@@ -4,9 +4,10 @@
         <div class="tableWrap w-full bg-[#fff] rounded-[10px] mt-5 px-5">
             <div class="header flex items-center h-auto py-2.5 lg:h-[60px] lg:py-0 flex-wrap lg:flex-nowrap">
                 <div class="flex items-center w-full lg:flex-1 leftContent flex-wrap lg:flex-nowrap lg:w-auto">
-                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">设备列表</span>
+                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">{{ $t('subUser.deviceList') }}</span>
                     <div class="input w-[50%] min-w-[200px] rounded-[6px] ml-5 lg:ml-[50px]">
-                        <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" @keyup.enter.native="search">
+                        <el-input v-model="searchVal" :placeholder="$t('table.searchText')" size="large"
+                            @keyup.enter.native="search">
                             <template #append>
                                 <el-button :icon="Search" @click="search" />
                             </template>
@@ -18,7 +19,7 @@
                         <template #reference>
                             <el-button class="text-[#999]">
                                 <img src="/@/assets/img/filter.png" class="w-5 h-5" alt="">
-                                筛选
+                                {{ $t('table.filter') }}
                             </el-button>
                         </template>
                         <el-checkbox-group v-model="checkList" @change="changeCheck">
@@ -28,11 +29,11 @@
 
                     <el-button class="text-[#999]" @click="pointTable">
                         <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
-                        打印
+                        {{ $t('table.print') }}
                     </el-button>
                     <el-button class="text-[#999]">
                         <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
-                        导出
+                        {{ $t('table.export') }}
                     </el-button>
                 </div>
             </div>
@@ -43,7 +44,7 @@
             <template #header>
                 <div
                     class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                    解除绑定
+                    {{ $t('table.unbind') }}
                     <img src="/@/assets/img/close.png"
                         class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                         @click="dialogDelVisible = false" alt="">
@@ -51,17 +52,17 @@
             </template>
             <div
                 class="text-center text-t3 text-[16px] sm:text-[20px] xl:h-[90px] h-[50px] flex justify-center items-center">
-                确定解除绑定？
+                {{ $t('table.areYueUnbind') }}
             </div>
             <template #footer>
                 <span class="dialog-footer flex justify-center items-center">
                     <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                         @click="confirmOption">
-                        确定
+                        {{ $t('btn.confirm') }}
                     </el-button>
                     <el-button class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                         @click="dialogDelVisible = false">
-                        取消
+                        {{ $t('btn.cancel') }}
                     </el-button>
                 </span>
             </template>
@@ -74,17 +75,19 @@ import { onMounted, reactive, ref } from 'vue';
 import OverviewCard from '../components/OverviewCard.vue';
 import { Search } from '@element-plus/icons-vue';
 import print from '/@/utils/print';
-import { childDeviceIndex, deviceDel } from '/@/api';
+import { childDeviceIndex, childIndexIndex, deviceDel } from '/@/api';
 import { useRoute } from 'vue-router';
 import DeviceTable from '../components/DeviceTable.vue';
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { ElMessage } from 'element-plus';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const route = useRoute()
 
-const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
+const list = ref([{ title: t('subUser.subUserNum'), num: 0 }, { title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }])
 const searchVal = ref('')
 const tableList = ref<any>([])
 const deviceData = ref<any>({})
@@ -93,24 +96,23 @@ const list_rows = ref(10)
 const page = ref(1)
 const handelId = ref<number | null>(null)
 let order = reactive({ value: { filed: '', order: '' } })
-const checkList = ref(['序号', '设备ID', '项目号', '描述', '状态', '操作'])
+const checkList = ref([t('table.index'), t('table.identify_code'), t('table.project_name'), t('table.desc'), t('table.status'), t('table.operate')])
 const filterList = ref([
-    { label: '序号', key: 'index' },
-    { label: '设备ID', key: 'identify_code' },
-    { label: '项目号', key: 'project_name' },
-    { label: '描述', key: 'des' },
-    { label: '状态', key: 'status' },
-    { label: '操作', key: 'options' },
+    { label: t('table.index'), key: 'index' },
+    { label: t('table.identify_code'), key: 'identify_code' },
+    { label: t('table.project_name'), key: 'project_name' },
+    { label: t('table.desc'), key: 'des' },
+    { label: t('table.status'), key: 'status' },
+    { label: t('table.operate'), key: 'options' },
 ])
 
 const pointTable = () => {
     let fields = checkList.value.map(i => filterList.value.find(item => item.label === i)?.key)
     fields.splice(fields.findIndex(i => i === 'index'), 1)
-    console.log('fields:', fields)
     print.printJson({
         title: '', // 打印出来的标题
         data: tableList.value, // 需要打印的数据
-        serial: checkList.value.includes('序号'), // 是否需要打印序列号
+        serial: checkList.value.includes(t('table.index')), // 是否需要打印序列号
         fields, // 需要打印的字段
         properties: fields.map(i => {
             return { field: i, displayName: filterList.value.find(item => item.key === i)?.label }
@@ -132,7 +134,6 @@ const changePagination = (value: { type: string, val: number }) => {
         case 'page':
             fetchData(value.val, list_rows.value)
             break;
-
     }
 }
 
@@ -144,7 +145,7 @@ const confirmOption = async () => {
     const res = await deviceDel({ ids: handelId.value })
     if (res.code === 1) {
         ElMessage({
-            message: '解绑成功',
+            message: t('table.unBindSuc'),
             type: 'success',
         })
         dialogDelVisible.value = false
@@ -180,8 +181,17 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
 
 const changeCheck = () => { }
 
+const getChildDeviceList = async () => {
+    const res = await childIndexIndex({ page: 1, list_rows: 10 })
+    list.value[0].num = res.data.total
+    list.value[1].num = res.data.project_num
+    list.value[2].num = res.data.device_num
+    list.value[3].num = res.data.online_num
+}
+
 onMounted(() => {
     fetchData(1)
+    getChildDeviceList()
 })
 
 </script>

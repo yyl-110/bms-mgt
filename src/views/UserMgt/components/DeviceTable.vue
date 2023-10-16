@@ -2,12 +2,14 @@
     <div class="w-full" id="TableWrap">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
             <el-table-column type="selection" width="55" />
-            <el-table-column :align="'center'" sortable type="index" label="序号" width="80" :index="indexMethod"
-                v-if="checkList.includes('序号')" />
-            <el-table-column :align="'center'" prop="identify_code" sortable label="设备ID"
-                v-if="checkList.includes('设备ID')" />
-            <el-table-column :align="'center'" prop="project_name" label="项目号" sortable v-if="checkList.includes('项目号')" />
-            <el-table-column :align="'center'" prop="des" label="描述" sortable v-if="checkList.includes('描述')">
+            <el-table-column :align="'center'" sortable type="index" :label="$t('table.index')" width="80"
+                :index="indexMethod" v-if="checkList.includes($t('table.index'))" />
+            <el-table-column :align="'center'" prop="identify_code" sortable :label="$t('table.identify_code')"
+                v-if="checkList.includes($t('table.identify_code'))" />
+            <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" sortable
+                v-if="checkList.includes($t('table.project_name'))" />
+            <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" sortable
+                v-if="checkList.includes($t('table.desc'))">
                 <template #default="scope">
                     <div class="flex items-center justify-center">
                         {{ scope.row.des }}
@@ -15,13 +17,13 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="status" label="状态" sortable width="100"
-                v-if="checkList.includes('状态')" />
-            <el-table-column label="操作" align="center" v-if="checkList.includes('操作')">
+            <el-table-column :align="'center'" prop="status" :label="$t('table.status')" sortable width="100"
+                v-if="checkList.includes($t('table.status'))" />
+            <el-table-column :label="$t('table.operate')" align="center" v-if="checkList.includes($t('table.operate'))">
                 <template #default="scope">
                     <el-button type="danger" @click="handleOption(scope.row.device_id)">
                         <svg-icon class-name='cursor-pointer' icon-class='svg-unbind' class="text-lg" />
-                        解除绑定</el-button>
+                        {{ $t('table.unbind') }}</el-button>
                 </template>
             </el-table-column>
         </el-table>

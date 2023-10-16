@@ -2,22 +2,28 @@
     <div ref='chartDom' class='w-full h-[360px]' />
 </template>
 
-<script lang='ts'>
-import { defineComponent, onMounted, ref, defineProps } from 'vue'
+<script lang='ts' setup>
+import { defineComponent, onMounted, ref, defineProps, watch } from 'vue'
 import { echarts, ECOption } from '/@/components/Echart'
+import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n()
+
 
 const props = defineProps({
-    pieData: {
-        type: Array,
-        default: () => []
+    lineData: {
+        type: Object,
+        default: () => { }
     }
 })
+const chartDom = ref(null)
 
 // 圆饼图
 const chartPie: () => ECOption = () => {
+
     const option: ECOption = {
         title: {
-            text: '日充放电量',
+            text: t('home.title3'),
             left: '20',
             top: "15",
             textStyle: {
@@ -47,7 +53,7 @@ const chartPie: () => ECOption = () => {
             containLabel: true,
         },
         legend: {
-            data: ['充电量', '放电量'],
+            data: [t('home.cd'), t('home.fd')],
             right: "22%",
             top: 20,
             itemWidth: 15,
@@ -62,7 +68,7 @@ const chartPie: () => ECOption = () => {
         },
         xAxis: {
             type: 'category',
-            data: ['1', '2', '3', '4'],
+            data: props.lineData?.date,
             axisLine: {
                 show: false,
                 lineStyle: {
@@ -88,7 +94,7 @@ const chartPie: () => ECOption = () => {
                 color: "#666666",
                 fontSize: 14,
                 fontWeight: 600,
-                padding: [10, 0, 0, -50]
+                padding: [10, 0, 0, -40]
             },
             nameGap: 25,  // 表现为上下位置
             type: 'value',
@@ -114,7 +120,7 @@ const chartPie: () => ECOption = () => {
             }
         },
         series: [{
-            name: '充电量',
+            name: t('home.cd'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '100',
@@ -131,11 +137,11 @@ const chartPie: () => ECOption = () => {
 
                 },
             },
-            data: [3000, 2000, 1500, 2500,]
+            data: props.lineData?.charge
         },
 
         {
-            name: '放电量',
+            name: t('home.fd'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '20%',
@@ -152,7 +158,7 @@ const chartPie: () => ECOption = () => {
 
                 }
             },
-            data: [4000, 3800, 4200, 3800,]
+            data: props.lineData?.discharge
         },
         ]
     }
@@ -161,28 +167,37 @@ const chartPie: () => ECOption = () => {
 
 // 图标初始化
 const chartInit = () => {
-    const chartDom = ref(null)
-    onMounted(() => {
-        const optionsArray: echarts.ECharts[] = []
-        let myChart = echarts.init(chartDom.value as unknown as HTMLElement)
-        myChart.setOption(chartPie())
-        optionsArray.push(myChart)
-        window.onresize = () => {
-            optionsArray.forEach(v => v.resize())
-        }
-    })
-    return {
-        chartDom
-    }
+    let myChart = echarts.init(chartDom.value as unknown as HTMLElement)
+    myChart.setOption(chartPie())
+}
+//echarts图表自适应方法
+const resizeChart = () => {
+    const myChart = echarts.init(chartDom.value);
+    window.addEventListener(
+        "resize",
+        () => {
+            myChart.resize();
+        },
+        false
+    );
 }
 
-
-export default defineComponent({
-    setup() {
-
-        return {
-            ...chartInit()
-        }
+onMounted(() => {
+    if (!_.isEmpty(props.lineData)) {
+        chartInit()
+        resizeChart()
     }
 })
+
+watch(() => props.lineData, (val) => {
+    chartInit()
+    resizeChart()
+}, { deep: true })
+
+// watch(() => locale.value, () => {
+//     chartInit()
+// })
+
+defineExpose({ resizeChart })
+
 </script>

@@ -1,12 +1,13 @@
 <template>
-    <div>
+    <div class="pb-5">
         <OverviewCard :list="list" />
         <div class="tableWrap w-full bg-[#fff] rounded-[10px] mt-5 px-5">
             <div class="header flex items-center h-auto py-2.5 lg:h-[60px] lg:py-0 flex-wrap lg:flex-nowrap">
                 <div class="flex items-center w-full lg:flex-1 leftContent flex-wrap lg:flex-nowrap lg:w-auto">
-                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">用户列表</span>
+                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">{{ $t('subUser.userList') }}</span>
                     <div class="input w-[50%] min-w-[200px] rounded-[6px] ml-5 lg:ml-[50px]">
-                        <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" @keyup.enter.native="search">
+                        <el-input v-model="searchVal" :placeholder="$t('table.searchText')" size="large"
+                            @keyup.enter.native="search">
                             <template #append>
                                 <el-button :icon="Search" @click="search" />
                             </template>
@@ -15,11 +16,11 @@
                     <div class="flex items-center mt-5 sm:mt-0">
                         <el-button class="text-[#fff] w-[100px] rounded-5 md:ml-5" size="large" type="primary"
                             @click="addChildAccount">
-                            添加子用户
+                            {{ $t('subUser.addSubUser') }}
                         </el-button>
                         <el-button class="text-[#fff] w-[130px] bg-[#05D0CE]" type="info" size="large"
                             @click="bindVisible = true">
-                            子用户绑定设备
+                            {{ $t('subUser.subUserBindDevice') }}
                         </el-button>
                     </div>
                 </div>
@@ -28,7 +29,7 @@
                         <template #reference>
                             <el-button class="text-[#999]">
                                 <img src="/@/assets/img/filter.png" class="w-5 h-5" alt="">
-                                筛选
+                                {{ $t('table.filter') }}
                             </el-button>
                         </template>
                         <el-checkbox-group v-model="checkList" @change="changeCheck">
@@ -38,11 +39,11 @@
 
                     <el-button class="text-[#999]" @click="pointTable">
                         <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
-                        打印
+                        {{ $t('table.print') }}
                     </el-button>
                     <el-button class="text-[#999]">
                         <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
-                        导出
+                        {{ $t('table.export') }}
                     </el-button>
                 </div>
             </div>
@@ -79,7 +80,7 @@
                     <span class="dialog-footer flex justify-center items-center">
                         <el-button type="primary" @click="submitForm(addForm)"
                             class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large">
-                            确定
+                            {{ $t('btn.confirm') }}
                         </el-button>
                     </span>
                 </template>
@@ -103,11 +104,11 @@
                     <span class="dialog-footer flex justify-center items-center">
                         <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="confirmOption">
-                            确定
+                            {{ $t('btn.confirm') }}
                         </el-button>
                         <el-button class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="dialogDelVisible = false">
-                            取消
+                            {{ $t('btn.cancel') }}
                         </el-button>
                     </span>
                 </template>
@@ -122,7 +123,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { deviceIndex, childIndexIndex, addChild, delChild, childUpdate } from '/@/api';
+import { childIndexIndex, addChild, delChild, childUpdate } from '/@/api';
 import OverviewCard from '../components/OverviewCard.vue';
 import UserTable from '../components/UserTable.vue';
 import { Search } from '@element-plus/icons-vue';
@@ -132,16 +133,18 @@ import print from "/@/utils/print";
 import BindDevice from '../components/BindDevice.vue';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 let order = reactive({ value: { filed: '', order: '' } })
-const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
-const checkList = ref(['序号', '子用户名', '公司', '设备数', '操作'])
+const list = ref([{ title: t('subUser.subUserNum'), num: 0 }, { title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 },])
+// const list = ref([{ title: '子用户数', num: 0 }, { title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }])
+const checkList = ref([t('table.index'), t('table.subUserName'), t('table.company'), t('table.deviceNum'), t('table.operate')])
 const filterList = ref([
-    { label: '序号', key: 'index' },
-    { label: '子用户名', key: 'username' },
-    { label: '公司', key: 'company' },
-    { label: '设备数', key: 'num' },
-    { label: '操作', key: 'options' },
+    { label: t('table.index'), key: 'index' },
+    { label: t('table.subUserName'), key: 'username' },
+    { label: t('table.company'), key: 'company' },
+    { label: t('table.deviceNum'), key: 'num' },
+    { label: t('table.operate'), key: 'options' },
 ])
 const userTable = ref(null)
 const searchVal = ref('')
@@ -164,29 +167,26 @@ const rules = {
     username: [
         {
             required: true,
-            message: '请填子用户名',
+            message: t('table.addUserSub'),
             trigger: 'blur',
         },
     ],
     password: [
         {
             required: true,
-            message: '密码不能为空',
+            message: t('table.emptyPwd'),
             trigger: 'change',
         },
     ],
     password2: [
         {
             required: true,
-            message: '请再次输入密码',
+            message: t('table.enterPwd'),
             trigger: 'change',
         },
     ],
 }
 
-const getDeviceIndex = async () => {
-    const res = await deviceIndex()
-}
 const getChildDeviceList = async (pages = page.value, size = list_rows.value) => {
     const _order = order.value.filed ? order.value : {}
     const res = await childIndexIndex({ page: pages, list_rows: size, ..._order, search: searchVal.value })
@@ -194,6 +194,10 @@ const getChildDeviceList = async (pages = page.value, size = list_rows.value) =>
     page.value = res.data?.current_page
     list_rows.value = res.data?.per_page
     childList.value = res.data?.data
+    list.value[0].num = res.data.total
+    list.value[1].num = res.data.project_num
+    list.value[2].num = res.data.device_num
+    list.value[3].num = res.data.online_num
 }
 const addChildAccount = () => {
     isAdd.value = true
@@ -265,7 +269,7 @@ const confirmOption = async () => {
         const delRes: any = await delChild({ ids: handelId.value })
         if (delRes.code === 1) {
             ElMessage({
-                message: '删除成功',
+                message: t('message.delSuccess'),
                 type: 'success',
             })
             handelId.value = null
@@ -325,7 +329,7 @@ const pointTable = () => {
     print.printJson({
         title: '', // 打印出来的标题
         data: childList.value, // 需要打印的数据
-        serial: checkList.value.includes('序号'), // 是否需要打印序列号
+        serial: checkList.value.includes(t('table.index')), // 是否需要打印序列号
         fields, // 需要打印的字段
         properties: fields.map(i => {
             return { field: i, displayName: filterList.value.find(item => item.key === i)?.label }

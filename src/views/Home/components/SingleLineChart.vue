@@ -2,22 +2,27 @@
     <div ref='chartDom' class='w-full h-full' />
 </template>
 
-<script lang='ts'>
-import { defineComponent, onMounted, ref, defineProps } from 'vue'
+<script lang='ts' setup>
+import { defineComponent, onMounted, ref, defineProps, watch } from 'vue'
 import { echarts, ECOption } from '/@/components/Echart'
+import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n()
 
+
+const chartDom = ref(null)
 const props = defineProps({
-    pieData: {
-        type: Array,
-        default: () => []
+    lineData: {
+        type: Object,
+        default: () => { }
     }
 })
-
-// 圆饼图
 const chartPie: () => ECOption = () => {
+    console.log(props.lineData.val, 12313)
+    const data = { key: [0.1, 0.2, 0.4], val: [100, 200, 400] }
     const option: ECOption = {
         title: {
-            text: '运行时长',
+            text: t('home.runTime'),
             left: '20',
             top: "15",
             textStyle: {
@@ -41,17 +46,23 @@ const chartPie: () => ECOption = () => {
         },
         grid: {
             top: '25%',
-            left: '2%',
-            right: '2%',
-            bottom: '2%',
+            left: '5%',
+            right: '10%',
+            bottom: '8%',
             containLabel: true,
         },
         legend: {
             show: false,
         },
         xAxis: {
+            name: `${t('home.time')}(h)`,
+            nameTextStyle: {
+                color: "#666666",
+                fontSize: 14,
+                fontWeight: 400,
+            },
             type: 'category',
-            data: ['1', '2', '3', '4'],
+            data: props.lineData.val,
             axisLine: {
                 show: false,
                 lineStyle: {
@@ -62,8 +73,6 @@ const chartPie: () => ECOption = () => {
                 show: false,
             },
             axisLabel: {
-                // interval: 0,
-                // rotate: 40,
                 show: true,
                 textStyle: {
                     color: '#666666'
@@ -72,12 +81,12 @@ const chartPie: () => ECOption = () => {
         },
 
         yAxis: {
-            name: 'kWh',
+            name: `(${t('home.tower')})`,
             nameTextStyle: {
                 color: "#666666",
                 fontSize: 14,
-                fontWeight: 600,
-                padding: [10, 0, 0, -50]
+                fontWeight: 400,
+                padding: [10, 0, 0, -40]
             },
             nameGap: 25,  // 表现为上下位置
             type: 'value',
@@ -96,14 +105,13 @@ const chartPie: () => ECOption = () => {
             },
             axisLabel: {
                 textStyle: {
-                    fontFamily: 'Microsoft YaHei',
                     color: '#393939',
                     fontSize: 12
                 }
             }
         },
         series: [{
-            name: '充电量',
+            name: t('home.cd'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '100',
@@ -120,7 +128,7 @@ const chartPie: () => ECOption = () => {
 
                 },
             },
-            data: [3000, 2000, 1500, 2500,]
+            data: props.lineData.key
         },
         ]
     }
@@ -129,28 +137,36 @@ const chartPie: () => ECOption = () => {
 
 // 图标初始化
 const chartInit = () => {
-    const chartDom = ref(null)
-    onMounted(() => {
-        const optionsArray: echarts.ECharts[] = []
-        let myChart = echarts.init(chartDom.value as unknown as HTMLElement)
-        myChart.setOption(chartPie())
-        optionsArray.push(myChart)
-        window.onresize = () => {
-            optionsArray.forEach(v => v.resize())
-        }
-    })
-    return {
-        chartDom
-    }
+    let myChart = echarts.init(chartDom.value as unknown as HTMLElement)
+    myChart.setOption(chartPie())
 }
 
+//echarts图表自适应方法
+const resizeChart = () => {
+    const myChart = echarts.init(chartDom.value);
+    window.addEventListener(
+        "resize",
+        () => {
+            myChart.resize();
+        },
+        false
+    );
+}
 
-export default defineComponent({
-    setup() {
-
-        return {
-            ...chartInit()
-        }
+onMounted(() => {
+    if (!_.isEmpty(props.lineData)) {
+        chartInit()
+        resizeChart()
     }
 })
+
+watch(() => props.lineData, () => {
+    chartInit()
+    resizeChart()
+}, { deep: true })
+// watch(() => locale.value, () => {
+//     chartInit()
+// }, { deep: true })
+defineExpose({ resizeChart })
+
 </script>

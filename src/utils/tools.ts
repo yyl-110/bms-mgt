@@ -130,22 +130,14 @@ export function throttle(time = 500):()=>Promise<void> {
  * @param pid 最外层pid
  */
 export function listToTree(data:Array<IMenubarList>, pid: string | number = 1, isChildNull = false):Array<IMenubarList> {
-    const alwaysShowList = ['UserMgt']
     const d:Array<IMenubarList> = []
     data.forEach(val => {
-        if(val.pid == pid) {
+        if(val.parentId == pid) {
             const list = listToTree(data, val.id, isChildNull)
-            let obj:IMenubarList = [...d]
-            if(val.pid === 0) {
-                obj = { path:val.name, name:val.title,component:'Layout',meta:{ icon: val.icon,title:val.title,hidden:!val.display,alwaysShow:alwaysShowList.includes(val.title) } }
-            }else {
-                obj = { path:val.name, name:val.title, component: val.title, meta:{ icon: val.icon,title:val.title ,hidden: !val.display} }
-            }
+            const obj:IMenubarList = { ...val }
             if(!isChildNull || list.length !== 0) {
-                // obj.children = val.name === '/home/index' ? [] : list
                 obj.children = list
             }
-            console.log('list:', list,pid)
             d.push(obj)
         }
     })

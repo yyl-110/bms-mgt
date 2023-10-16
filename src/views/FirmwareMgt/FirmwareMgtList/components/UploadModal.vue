@@ -4,7 +4,7 @@
         <template #header>
             <div
                 class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                子用户绑定设备
+                {{ $t('firmware.upload') }}
                 <img src="/@/assets/img/close.png" class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                     @click="handleClose" alt="">
             </div>
@@ -21,15 +21,15 @@
                         </div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="项目号" prop="projectId">
+                <el-form-item :label="$t('table.project_name')" prop="projectId">
                     <el-select v-model="formValue.projectId" placeholder="Select" class="w-full" size="large"
                         @change="getDtuList()">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="可选设备">
+                <el-form-item :label="$t('table.kx')">
                     <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
-                        filter-placeholder="关键字搜索" />
+                        :filter-placeholder="$t('table.searchText')" />
                 </el-form-item>
             </el-form>
         </div>
@@ -37,7 +37,7 @@
             <span class="dialog-footer flex justify-end items-center">
                 <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                     @click="handelBind">
-                    确定
+                    {{ $t('btn.confirm') }}
                 </el-button>
             </span>
         </template>
@@ -50,6 +50,7 @@ import { computed, onMounted, ref } from 'vue';
 import { projectData } from '../../../../api/project'
 import { optionalDtuList, uploadDtu } from '../../../../api'
 import { getFormData } from '/@/utils/tools'
+import { ElMessage } from 'element-plus';
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThan2xl = breakpoints.greater('2xl') // only larger than sm
@@ -159,8 +160,18 @@ const handelBind = async () => {
         return
     }
     const device_ids = leftValue.value.join(',')
-    console.log({ project_id: formValue.value.projectId, device_ids, filename: uploadData.value })
-    const res = await uploadDtu(getFormData({project_id: formValue.value.projectId, device_ids, filename: uploadData.value}));
+    // console.log({ project_id: formValue.value.projectId, device_ids, filename: uploadData.value })
+    console.log('leftValue.value:', leftValue.value)
+    const fd = new FormData()
+    // leftValue.value.forEach((value, index) => {
+    //     fd.append(`device_ids[${index}]`, Number(value))
+    // })
+    console.log('uploadData.valu:', uploadData.value)
+    fd.append('device_ids', device_ids)
+    fd.append('filename', uploadData.value)
+    fd.append('project_id', formValue.value.projectId)
+    console.log('fd:', fd)
+    const res = await uploadDtu(fd);
     if (res.code === 1) {
         ElMessage({
             message: '上传成功！',

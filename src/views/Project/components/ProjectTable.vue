@@ -1,12 +1,18 @@
 <template>
     <div class="w-full">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
-            <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod" />
-            <el-table-column :align="'center'" prop="project_name" label="项目号" sortable />
-            <el-table-column :align="'center'" prop="identify_code" label="用户项目号" sortable />
-            <el-table-column :align="'center'" prop="description" label="描述" sortable />
-            <el-table-column :align="'center'" prop="num" label="设备数" sortable />
-            <el-table-column :align="'center'" prop="online" label="在线数" sortable />
+            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80" :index="indexMethod" />
+            <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" sortable>
+                <template #default="scope">
+                    <div class="text-primary cursor-pointer" @click="checkedProject(scope.row.project_name)">
+                        {{ scope.row.project_name }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column :align="'center'" prop="identify_code" :label="$t('table.userProjectNumber')" sortable />
+            <el-table-column :align="'center'" prop="description" :label="$t('table.desc')" sortable />
+            <el-table-column :align="'center'" prop="num" :label="$t('table.deviceNum')" sortable />
+            <el-table-column :align="'center'" prop="online" :label="$t('table.onlineNum')" sortable />
         </el-table>
         <div class="pageWrap h-[70px] flex justify-end items-center">
             <el-pagination v-model:current-page="currentPage" background v-model:page-size="pageSize"
@@ -19,7 +25,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 
-const emits = defineEmits(['changePagination', 'handleOption', 'handleSort'])
+const emits = defineEmits(['changePagination', 'handleOption', 'handleSort', 'checkedProject'])
 
 const props = defineProps({
     device_list: { type: Object, default: () => { } }
@@ -43,6 +49,10 @@ const handleCurrentChange = (val) => {
 const handleSort = (e) => {
     const payload = { filed: e.prop, order: e.order === "ascending" ? 'asc' : e.order === "descending" ? 'desc' : '' }
     emits('handleSort', payload)
+}
+
+const checkedProject = (name) => {
+    emits('checkedProject', name)
 }
 
 

@@ -10,38 +10,27 @@ const Components:IObject<() => Promise<typeof import('*.vue')>> = Object.assign(
 
 // 静态路由页面
 export const allowRouter:Array<IMenubarList> = [
-    {
-        name: 'Home',
-        path: '/',
-        component: Components['Layout'],
-        redirect: '/home',
-        meta: { title: '首页', icon: 'el-icon-star' },
-        children: [
-            {
-                name: 'Home',
-                path: '/home',
-                component: Components['Home'],
-                meta: { title: '首页', icon: 'el-icon-home' },
-                // children: [
-                //     {
-                //         name: 'Device',
-                //         path: '/device',
-                //         component: Components['Device'],
-                //         redirect: '/home/device/index',
-                //         meta: { title: '设备', icon: 'el-icon-home' },
-                //         children: [
-                //             {
-                //                 name: 'DeviceIndex',
-                //                 path: '/index',
-                //                 component: Components['PositionInfo'],
-                //                 meta: { title: '设备', icon: 'el-icon-home' }
-                //             }
-                //         ]
-                //     }
-                // ]
-            }
-        ]
-    },
+    // {
+    //     name: 'Home',
+    //     path: '/',
+    //     component: Components['Layout'],
+    //     redirect: '/home',
+    //     meta: { title: '首页', icon: 'el-icon-star' },
+    //     children: [
+    //         {
+    //             name: 'Home',
+    //             path: '/home',
+    //             component: Components['Home'],
+    //             meta: { title: '首页', icon: 'el-icon-home' },
+    //         },
+    //         {
+    //             name: 'Device',
+    //             path: '/device',
+    //             component: Components['PositionInfo'],
+    //             meta: { title: '设备', icon: 'el-icon-home' },
+    //         }
+    //     ]
+    // },
     {
         name: 'ErrorPage',
         path: '/ErrorPage',

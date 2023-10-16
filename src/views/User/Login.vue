@@ -2,17 +2,18 @@
     <div class='w-screen h-screen bg flex items-center justify-end'>
         <div
             class='layout-login w-[90%] sm:w-[40%] mb-[100px] px-4 md:w-[50%] xl:w-[23%] mx-auto lg:w-[33%] sm:mr-[12%] py-8 rounded'>
-            <h3 class='text-2xl font-[400] text-[#333] text-center mb-6'>BMS后台管理</h3>
+            <h3 class='text-2xl font-[400] text-[#333] text-center mb-6'> {{ $t('config.title') }}</h3>
             <el-form ref='ruleForm' label-position='right' label-width='0' :model='form' :rules='rules' size='large'>
                 <el-form-item prop='name' class='mb-4 xl:mb-10'>
-                    <el-input v-model='form.name' placeholder='请输入用户名' prefix-icon='el-icon-user'>
+                    <el-input v-model='form.name' :placeholder="$t('login.userName')" prefix-icon='el-icon-user'>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop='pwd' class='mb-4 xl:mb-10'>
-                    <el-input v-model='form.pwd' placeholder='请输入密码' prefix-icon='el-icon-lock' show-password />
+                    <el-input v-model='form.pwd' :placeholder="$t('login.password')" prefix-icon='el-icon-lock'
+                        show-password />
                 </el-form-item>
                 <el-form-item prop='code' class='mb-4'>
-                    <el-input v-model='form.code' placeholder='填写右侧验证码' @keyup='enterSubmit'>
+                    <el-input v-model='form.code' :placeholder="$t('login.code')" @keyup='enterSubmit'>
                         <template #append>
                             <div class='codeBox w-[100px]' @click='getVerify'>
                                 <img v-if='codeImg' :src='codeImg' class='code w-full h-full' alt=''>
@@ -21,7 +22,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type='primary' class='w-full mt-5' @click='onSubmit'>登录</el-button>
+                    <el-button type='primary' class='w-full mt-5' @click='onSubmit'>{{ $t('login.login') }}</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -35,8 +36,11 @@ import { ElNotification } from 'element-plus'
 import { validate } from '/@/utils/formExtend'
 import { verify } from '/@/api/layout'
 import { getFormData } from '/@/utils/tools'
+import { useI18n } from 'vue-i18n'
+
 
 const formRender = () => {
+    const { t } = useI18n()
     const { login } = useLayoutStore()
     let form = reactive({
         name: 'user1',
@@ -66,8 +70,7 @@ const formRender = () => {
             return
         }
         ElNotification({
-            title: '欢迎',
-            message: '欢迎回来',
+            message: t('login.msg'),
             type: 'success'
         })
     }
@@ -76,7 +79,7 @@ const formRender = () => {
             {
                 validator: (rule: any, value: any, callback: (arg0?: Error | undefined) => void) => {
                     if (!value) {
-                        return callback(new Error('用户名不能为空'))
+                        return callback(new Error(`${t('login.emptyUser')}`))
                     }
                     callback()
                 }, trigger: 'blur'
@@ -86,7 +89,7 @@ const formRender = () => {
             {
                 validator: (rule: any, value: any, callback: (arg0?: Error | undefined) => void) => {
                     if (!value) {
-                        return callback(new Error('密码不能为空'))
+                        return callback(new Error(`${t('login.emptyPwd')}`))
                     }
                     callback()
                 }, trigger: 'blur'
@@ -96,7 +99,7 @@ const formRender = () => {
             {
                 validator: (rule: any, value: any, callback: (arg0?: Error | undefined) => void) => {
                     if (!value) {
-                        return callback(new Error('验证码不能为空'))
+                        return callback(new Error(`${t('login.emptyCode')}`))
                     }
                     callback()
                 }, trigger: 'blur'
@@ -113,7 +116,7 @@ const formRender = () => {
         getVerify,
         enterSubmit,
         rules,
-        ruleForm
+        ruleForm,
     }
 }
 export default defineComponent({

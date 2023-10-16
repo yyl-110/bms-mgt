@@ -51,7 +51,6 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
                     manualChunks: {
                         'element-plus': ['element-plus'],
                         echarts: ['echarts'],
-                        pinyin: ['pinyin']
                     }
                 }
             },

@@ -1,16 +1,18 @@
 <template>
     <div class="w-full" id="TableWrap">
-        <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe  @sort-change="handleSort">
+        <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
             <el-table-column type="selection" width="55" />
-            <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod"
-                v-if="checkList.includes('序号')" />
-            <el-table-column :align="'center'" prop="username" label="子用户名" sortable v-if="checkList.includes('子用户名')">
+            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80" :index="indexMethod"
+                v-if="checkList.includes($t('table.index'))" />
+            <el-table-column :align="'center'" prop="username" :label="$t('table.subUserName')" sortable
+                v-if="checkList.includes($t('table.subUserName'))">
                 <template #default="scope">
                     <div class="cursor-pointer text-primary" @click="goTo(scope.row.id)">{{
                         scope.row.username }}</div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="company" label="公司" width="120" sortable v-if="checkList.includes('公司')">
+            <el-table-column :align="'center'" prop="company" :label="$t('table.company')" width="120" sortable
+                v-if="checkList.includes($t('table.company'))">
                 <template #default="scope">
                     <div class="flex items-center justify-center">
                         {{ scope.row.company }}
@@ -18,21 +20,25 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="num" label="设备数" sortable width="100"
-                v-if="checkList.includes('设备数')" />
-            <el-table-column label="操作" width="400" align="center" v-if="checkList.includes('操作')">
+            <el-table-column :align="'center'" prop="num" :label="$t('table.deviceNum')" sortable width="100"
+                v-if="checkList.includes($t('table.deviceNum'))" />
+            <el-table-column :label="$t('table.operate')" width="500" align="center"
+                v-if="checkList.includes($t('table.operate'))">
                 <template #default="scope">
-                    <el-button type="primary" icon="el-icon-lock" @click="handleOption(4, scope.row.id)">修改密码</el-button>
-                    <el-button type="info" icon="el-icon-plus" @click="handleOption(3, scope.row.id)">添加设备</el-button>
-                    <el-button type="danger" icon="el-icon-delete" @click="handleOption(1, scope.row.id)">删除子用户</el-button>
+                    <el-button type="primary" icon="el-icon-lock" @click="handleOption(4, scope.row.id)">{{
+                        $t('table.changePassword') }}</el-button>
+                    <el-button type="info" icon="el-icon-plus" @click="handleOption(3, scope.row.id)">{{
+                        $t('table.addDevice') }}</el-button>
+                    <el-button type="danger" icon="el-icon-delete" @click="handleOption(1, scope.row.id)">{{
+                        $t('table.delSubUser') }}</el-button>
                     <!-- <el-button type="danger" @click="handleOption(2)">解除绑定</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
         <div class="pageWrap h-[70px] flex justify-end items-center">
             <el-pagination v-model:current-page="currentPage" background v-model:page-size="pageSize"
-                :page-sizes="[5, 10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper"
-                :total="userList?.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+                :page-sizes="[5, 10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="userList?.total"
+                @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
     </div>
 </template>
@@ -66,11 +72,9 @@ const indexMethod = (index: number) => {
 }
 const handleSizeChange = (val) => {
     emits('changePagination', { type: 'size', val })
-    console.log('val:', val)
 }
 const handleCurrentChange = (val) => {
     emits('changePagination', { type: 'page', val })
-    console.log('val:', val)
 }
 const handleOption = (val: number, id: number) => {
     emits('handleOption', { type: val, id })

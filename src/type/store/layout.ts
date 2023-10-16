@@ -32,6 +32,10 @@ export interface IStatus {
     isLoading: boolean
     ACCESS_TOKEN: string
 }
+
+interface IProjectBarStatus {
+
+}
 export interface ILayout {
     // 左侧导航栏
     menubar: IMenubar
@@ -41,6 +45,7 @@ export interface ILayout {
     tags: ITags
     setting: ISetting
     status:IStatus
+    projectBarStatus: number
 }
 export interface IMenubarList {
     parentId?: number | string

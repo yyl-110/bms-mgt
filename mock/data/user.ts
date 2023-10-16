@@ -57,119 +57,184 @@ export const role_route = [
 export const route:Array<IMenubarList> = [
     {
         id: 1,
-        pid: 0,
-        name: "/home",
-        title: "Home",
-        ismenu: 1,
-        icon: null,
-        display: 1
+        parentId: 0,
+        name: "Home",
+        path: "/",
+        redirect: "/home",
+        component: "Layout",
+        meta: {
+            title: "首页",
+            icon: "svg-home",
+        }
+    },
+    {
+        id: 50,
+        parentId: 1,
+        name: "HomePage",
+        path: "/home",
+        component: "Home",
+        meta: {
+            title: "首页",
+            alwaysShow:true,
+            icon: "svg-home",
+        }
+    },
+    {
+        id: 51,
+        parentId: 1,
+        name: "Device",
+        path: "/device",
+        display:0,
+        component: "RealTime",
+        meta: {
+            title: "实时状态",
+            icon: "svg-status"
+        }
+    },
+    {
+        id: 52,
+        parentId: 1,
+        name: "PositionInfo",
+        path: "/positioninfo",
+        display:0,
+        component: "PositionInfo",
+        meta: {
+            title: "位置状态",
+            icon: "svg-location"
+        }
+    },
+    {
+        id: 53,
+        parentId: 1,
+        name: "RunHistory",
+        path: "/runhistory",
+        display:0,
+        component: "RunHistory",
+        meta: {
+            title: "运行历史",
+            icon: "svg-play"
+        }
+    },
+    {
+        id: 54,
+        parentId: 1,
+        name: "DeviceUpgrade",
+        path: "/deviceupgrade",
+        component: "DeviceUpgrade",
+        display:0,
+
+        meta: {
+            title: "固件升级",
+            icon: "svg-update"
+        }
+    },
+    {
+        id: 55,
+        parentId: 1,
+        name: "History",
+        path: "/history",
+        component: "History",
+        display:0,
+
+        meta: {
+            title: "历史数据",
+            icon: "svg-history"
+        }
+    },
+    {
+        id: 55,
+        parentId: 1,
+        name: "HistoryChart",
+        path: "/historychart",
+        display:0,
+        component: "HistoryChart",
+        meta: {
+            title: "历史图表",
+            icon: "svg-chart"
+        }
     },
     {
         id: 2,
-        pid: 1,
-        name: "/home/index",
-        title: "Home",
-        ismenu: 1,
-        icon: null,
-        display: 1
+        parentId: 0,
+        name: "Project",
+        path: "/Project",
+        redirect: "/project/list",
+        component: "Layout",
+        meta: {
+            title: "项目管理",
+            icon: "svg-project"
+        }
+    },
+    {
+        id: 20,
+        parentId: 2,
+        name: "ProjectList",
+        path: "/Project/list",
+        component: "ProjectList",
+        meta: {
+            title: "项目列表",
+            icon: "svg-project"
+        }
     },
     {
         id: 3,
-        pid: 0,
-        name: "/project",
-        title: "ProjectList",
-        ismenu: 1,
-        icon: "el-icon-project",
-        display: 1
+        parentId: 0,
+        name: "UserMgt",
+        path: "/user-mgt",
+        component: "Layout",
+        redirect: "/user-mgt/sub",
+        meta: {
+            title: "用户管理",
+            icon: "svg-userMgt",
+            "alwaysShow": true
+        }
+    },
+    {
+        id: 30,
+        parentId: 3,
+        name: "UserMgtSub",
+        path: "/user-mgt/sub",
+        component: "UserMgtSub",
+        meta: {
+            title: "子用户",
+            icon: "svg-user"
+        }
+    },
+    {
+        id: 31,
+        parentId: 3,
+        name: "UserMgtSubList",
+        path: "/user-mgt/sub/list",
+        component: "UserMgtSubList",
+        meta: {
+            title: "子用户",
+            icon: "el-icon-user",
+            hidden:true,
+            activeMenu:'/user-mgt/sub'
+        }
     },
     {
         id: 4,
-        pid: 3,
-        name: "/project/list",
-        title: "ProjectList",
-        ismenu: 1,
-        icon: "el-icon-project",
-        display: 1
+        parentId: 0,
+        name: "FirmwareMgt",
+        path: "/firmware-mgt",
+        component: "Layout",
+        redirect: "/firmware-mgt/list",
+        meta: {
+            title: "固件管理",
+            icon: "svg-fMgt",
+            alwaysShow: true
+        }
     },
     {
-        id: 5,
-        pid: 0,
-        name: "/user-mgt",
-        title: "UserMgt",
-        ismenu: 1,
-        icon: "el-icon-userMgt",
-        display: 1
-    },
-    {
-        id: 6,
-        pid: 5,
-        name: "/user-mgt/sub",
-        title: "UserMgtSub",
-        ismenu: 1,
-        icon: "el-icon-user",
-        display: 1
-    },
-    {
-        id: 13,
-        pid: 5,
-        name: "/user-mgt/sub/list",
-        title: "UserMgtSubList",
-        ismenu: 1,
-        icon: "el-icon-user",
-        display: 0
-    },
-    {
-        id: 7,
-        pid: 0,
-        name: "/firmware-mgt",
-        title: "FirmwareMgt",
-        ismenu: 1,
-        icon: "el-icon-mgt",
-        display: 1
-    },
-    {
-        id: 8,
-        pid: 7,
-        name: "/firmware-mgt/list",
-        title: "FirmwareMgtList",
-        ismenu: 1,
-        icon: "el-icon-list",
-        display: 1
-    },
-    {
-        id: 9,
-        pid: 7,
-        name: "/user-mgt/device",
-        title: "Sub user devices",
-        ismenu: 1,
-        icon: null,
-        display: 0
-    },
-    {
-        id: 10,
-        pid: 2,
-        name: "/home/index/device/index",
-        title: "RealTime",
-        ismenu: 1,
-        icon: null,
-        display: 0
-    },
-    {
-        id: 11,
-        pid: 2,
-        name: "/home/index/device/map",
-        title: "PositionInfo",
-        ismenu: 1,
-        icon: null,
-        display: 0
-    },
-    {
-        id: 12,
-        pid: 2,
-        name: "/home/index/device/runHistory",
-        title: "RunHistory",
-        ismenu: 1,
-        icon: null,
-        display: 0
+        id: 40,
+        parentId: 4,
+        name: "FirmwareMgtList",
+        path: "/firmware-mgt/list",
+        component: "FirmwareMgtList",
+        meta: {
+            title: "固件列表",
+            icon: "svg-list"
+        }
     }
 ]

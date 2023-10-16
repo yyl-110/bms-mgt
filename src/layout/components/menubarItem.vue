@@ -1,8 +1,8 @@
 <template>
     <el-sub-menu v-if='menuList.children && menuList.children.length > 0' :key='menuList.path' :index='menuList.path'>
         <template #title>
-            <svg-icon :icon-class='"svg-icon"' class='mr-2.5 w-6' />
-            <!-- <component :is='UseElIcon(menuList.meta.icon || "el-icon-location")' /> -->
+            <svg-icon :icon-class='menuList.meta.icon || "icon-home"' class='mr-2.5 w-5 h-5' />
+            <!-- <component :is='UseElIcon("el-icon-location")' /> -->
             <span>{{ menuList.meta.title }}</span>
         </template>
         <el-menu-item-group>
@@ -11,8 +11,8 @@
     </el-sub-menu>
 
     <el-menu-item v-else :key='menuList.path' :index='menuList.path'>
-        <!-- <svg-icon :icon-class='"svg-home"' class='mr-2.5 w-6' /> -->
-        <component :is='UseElIcon(menuList.meta.icon || "el-icon-setting")' />
+        <svg-icon :icon-class='menuList.meta.icon || "icon-home"' class='mr-2.5 w-5 h-5' />
+        <!-- <component :is='UseElIcon(menuList.meta.icon || "el-icon-setting")' /> -->
         <template #title>
             <span>
                 {{ menuList.meta.title }}

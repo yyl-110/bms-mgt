@@ -2,7 +2,7 @@
     <div class="z-100 window pt-[6px]">
         <div class="header w-full flex items-center justify-between px-2">
             <span class="text-t3 text-[18px]">设备信息</span>
-            <img src="../../../assets/img/close.png" alt="" class="w-[13px] h-[13px] close" id="close">
+            <img src="/@/assets/img/close.png" alt="" class="w-[13px] h-[13px] close" id="close">
         </div>
         <div class="px-2 w-full" style="line-height: 24px;">
             <div class="row text-[16px] text-t3 ">

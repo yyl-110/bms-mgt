@@ -26,15 +26,15 @@
                 <div class="flex items-center mt-2.5 options ml-auto lg:ml-0 lg:mt-0">
                     <el-button class="text-[#999]">
                         <img src="../../assets/img/filter.png" class="w-5 h-5" alt="">
-                        筛选
+                        {{ $t('table.filter') }}
                     </el-button>
                     <el-button class="text-[#999]">
                         <img src="../../assets/img/point.png" class="w-5 h-5" alt="">
-                        打印
+                        {{ $t('table.print') }}
                     </el-button>
                     <el-button class="text-[#999]">
                         <img src="../../assets/img/export.png" class="w-5 h-5" alt="">
-                        导出
+                        {{ $t('table.export') }}
                     </el-button>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <span class="dialog-footer flex justify-center items-center">
                         <el-button type="primary" @click="submitForm(addForm)"
                             class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large">
-                            确定
+                            {{ $t('btn.confirm') }}
                         </el-button>
                     </span>
                 </template>
@@ -95,11 +95,11 @@
                     <span class="dialog-footer flex justify-center items-center">
                         <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="confirmOption">
-                            确定
+                            {{ $t('btn.confirm') }}
                         </el-button>
                         <el-button class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="dialogDelVisible = false">
-                            取消
+                            {{ $t('btn.cancel') }}
                         </el-button>
                     </span>
                 </template>
@@ -114,7 +114,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { deviceIndex, childIndexIndex, addChild, delChild, childUpdate } from '/@/api';
+import { childIndexIndex, addChild, delChild, childUpdate } from '/@/api';
 import OverviewCard from './components/OverviewCard.vue';
 import UserTable from './components/UserTable.vue';
 import { Search } from '@element-plus/icons-vue';
@@ -123,6 +123,8 @@ import { ElMessage, FormInstance } from 'element-plus';
 import BindDevice from './components/BindDevice.vue';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 
 const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
@@ -166,9 +168,6 @@ const rules = {
     ],
 }
 
-const getDeviceIndex = async () => {
-    const res = await deviceIndex()
-}
 const getChildDeviceList = async (pages = page.value, size = list_rows.value) => {
     const res = await childIndexIndex({ page: pages, list_rows: size })
     userList.value = res.data
@@ -246,7 +245,7 @@ const confirmOption = async () => {
         const delRes: any = await delChild({ ids: handelId.value })
         if (delRes.code === 1) {
             ElMessage({
-                message: '删除成功',
+                message: t('message.delSuccess'),
                 type: 'success',
             })
             handelId.value = null

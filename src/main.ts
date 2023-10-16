@@ -6,6 +6,7 @@ import direct from '/@/directive/index'
 import router from '/@/router/index'
 import { pinia } from '/@/store'
 import '/@/permission'
+import i18n from './i18n'
 
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/display.css'
@@ -21,6 +22,7 @@ direct(app)
 app.use(ElementPlus)
 app.use(router)
 app.use(pinia)
+app.use(i18n)
 app.component('SvgIcon', SvgIcon)
 
 const ElIconsData = ElIcons as unknown as Array<() => Promise<typeof import('*.vue')>>

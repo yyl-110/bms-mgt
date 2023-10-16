@@ -3,26 +3,27 @@
         <div class="tableWrap w-full bg-[#fff] rounded-[10px] mt-5 px-5">
             <div class="header flex items-center h-auto py-2.5 lg:h-[60px] lg:py-0 justify-between">
                 <div class="flex items-center w-full lg:flex-1 leftContent flex-wrap lg:flex-nowrap lg:w-auto">
-                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">固件列表</span>
+                    <span class="text-t3 font-[500] text-[20px] flex-shrink-0">{{ $t('firmware.title') }}</span>
                 </div>
                 <el-button type="primary" size="large" class="rounded-[10px]" @click="bindVisible = true">
-                    上传固件
+                    {{ $t('firmware.upload') }}
                 </el-button>
             </div>
             <div>
                 <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe
                     @sort-change="handleSort">
                     <el-table-column type="selection" width="55" />
-                    <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod" />
-                    <el-table-column :align="'center'" prop="file_name" label="项目名" sortable />
-                    <el-table-column :align="'center'" prop="id" label="项目号" sortable />
-                    <el-table-column label="操作" width="300" align="center">
+                    <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80"
+                        :index="indexMethod" />
+                    <el-table-column :align="'center'" prop="file_name" :label="$t('table.pName')" sortable />
+                    <el-table-column :align="'center'" prop="id" :label="$t('table.project_name')" sortable />
+                    <el-table-column :label="$t('table.operate')" width="300" align="center">
                         <template #default="scope">
                             <el-button type="primary" @click="handleOption(1, scope.row.id)" class="rounded-[5px]">
                                 <img src="/@/assets/img/sj.png" alt="" class="w-[16px] h-[16px] mr-2">
-                                升级设备</el-button>
+                                {{ $t('btn.update') }}</el-button>
                             <el-button type="danger" icon="el-icon-delete" class="rounded-[5px]"
-                                @click="handleOption(2, scope.row.id)">删除</el-button>
+                                @click="handleOption(2, scope.row.id)">{{ $t('btn.del') }}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -39,7 +40,7 @@
                 <template #header>
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                        删除固件
+                        {{ $t('firmware.del') }}
                         <img src="/@/assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogDelVisible = false" alt="">
@@ -47,17 +48,17 @@
                 </template>
                 <div
                     class="text-center text-t3 text-[16px] sm:text-[20px] xl:h-[90px] h-[50px] flex justify-center items-center">
-                    确定删除固件？
+                    {{ $t('firmware.areYue') }}
                 </div>
                 <template #footer>
                     <span class="dialog-footer flex justify-center items-center">
                         <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="confirmOption">
-                            确定
+                            {{ $t('btn.confirm') }}
                         </el-button>
                         <el-button class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                             @click="dialogDelVisible = false">
-                            取消
+                            {{ $t('btn.cancel') }}
                         </el-button>
                     </span>
                 </template>
@@ -68,12 +69,14 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
-import { delDtu, dtuList } from '/@/api'
+import { delDtu, dtuList, handleDtuUpdate } from '/@/api'
 import UploadModal from './components/UploadModal.vue'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { ElMessage } from 'element-plus';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const tableData = ref<any>([])
 const tableInfo = ref({})
@@ -110,15 +113,24 @@ const handleCurrentChange = (e) => {
     fetchData()
 }
 
-const handleOption = (type: number, id: number) => {
+const handleOption = async (type: number, id: number) => {
     /* 删除 */
     if (type === 2) {
         handelId.value = id
         dialogDelVisible.value = true
     }
+    if (type === 1) {
+        const res = await handleDtuUpdate({ firmware_id: id })
+        if (res.code === 1) {
+            ElMessage({
+                type: 'success',
+                message: t('table.upSuccess')
+            })
+        }
+    }
 }
 
-const fetchData = async (pages = pageSize.value, size = currentPage.value) => {
+const fetchData = async (pages = currentPage.value, size = pageSize.value) => {
     const _order = order.value.filed ? order.value : {}
     const res = await dtuList({ file_name: '', page: pages, list_rows: size, ..._order })
     if (res.code === 1) {
@@ -135,13 +147,17 @@ const confirmOption = async () => {
     const delRes: any = await delDtu({ ids: handelId.value })
     if (delRes.code === 1) {
         ElMessage({
-            message: '删除成功',
+            message: t('message.delSuccess'),
             type: 'success',
         })
         handelId.value = null
         dialogDelVisible.value = false
         fetchData()
     }
+}
+
+const updateDtu = (id) => {
+
 }
 
 onMounted(() => {

@@ -9,8 +9,14 @@ configure({ showSpinner: false })
 
 const loginRoutePath = '/Login'
 const defaultRoutePath = '/'
+const hiddenName = ['Device', 'PositionInfo', 'RunHistory', 'DeviceUpgrade', 'History', 'HistoryChart']
 
 router.beforeEach(async(to, from) => {
+    console.log('from:', from)
+    if(!hiddenName.includes(to?.name) && hiddenName.includes(from?.name)) {
+        sessionStorage.removeItem('device_code')
+        window.location.href = to?.path
+    }
     start()
     const { getStatus, getMenubar, getTags, setToken, logout, GenerateRoutes, concatAllowRoutes, changeTagNavList, addCachedViews, changeNocacheViewStatus } = useLayoutStore()
     // 修改页面title

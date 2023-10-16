@@ -42,7 +42,8 @@ export const useLayoutStore = defineStore({
         status: {
             isLoading: false,
             ACCESS_TOKEN: ACCESS_TOKEN || ''
-        }
+        },
+        projectBarStatus:1
     }),
     getters: {
         getMenubar():IMenubar {
@@ -59,17 +60,25 @@ export const useLayoutStore = defineStore({
         },
         getStatus():IStatus {
             return this.status
+        },
+        getProjectBarStatus():number {
+            return this.projectBarStatus
         }
     },
     actions: {
+        changeProjectBarStatus(val:number):void {
+            if(val) {
+                this.projectBarStatus = val
+            }
+        },
         changeCollapsed():void {
             this.menubar.status = this.menubar.isPhone
                 ? this.menubar.status === IMenubarStatus.PHN 
                     ? IMenubarStatus.PHE 
                     : IMenubarStatus.PHN
-                : this.menubar.status === IMenubarStatus.PCN 
+                : this.menubar.status === IMenubarStatus.PHN 
                     ? IMenubarStatus.PCE 
-                    : IMenubarStatus.PCN
+                    : IMenubarStatus.PHN
         },
         changeDeviceWidth():void {
             this.menubar.isPhone = document.body.offsetWidth < 768

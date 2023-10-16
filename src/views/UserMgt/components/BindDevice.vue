@@ -10,21 +10,21 @@
             </div>
         </template>
         <div class="content pt-[20px]">
-            <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large" :rules="rules">
-                <el-form-item label="子用户名" prop="username">
+            <el-form label-position="right" label-width="120px" ref="addForm" :model="formValue" size="large" :rules="rules">
+                <el-form-item :label="$t('table.subUserName')" prop="username">
                     <el-select v-model="formValue.username" placeholder="Select" class="w-full" :disabled="child_id"
                         @change="handleChangeUserName">
                         <el-option v-for="item in chileOptions" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目号" prop="projectId">
+                <el-form-item :label="$t('table.project_name')" prop="projectId">
                     <el-select v-model="formValue.projectId" placeholder="Select" class="w-full" @change="getDevice()">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="可选设备">
+                <el-form-item :label="$t('table.kx')">
                     <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
-                        filter-placeholder="关键字搜索" @change="handleChange" />
+                        :filter-placeholder="$t('table.searchText')" @change="handleChange" />
                 </el-form-item>
             </el-form>
         </div>
@@ -32,7 +32,7 @@
             <span class="dialog-footer flex justify-end items-center">
                 <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
                     @click="handelBind">
-                    确定
+                    {{ $t('btn.confirm') }}
                 </el-button>
             </span>
         </template>
@@ -48,6 +48,8 @@ import { ElMessage } from 'element-plus';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThan2xl = breakpoints.greater('2xl') // only larger than sm
 const largerThanMd = breakpoints.greater('md') // only larger than sm
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const emits = defineEmits(['handleClose', 'bindSucess'])
 
@@ -108,11 +110,13 @@ const projectList = ref([])
 const generateData = (_data: IDevice[]): Option[] => {
     const data: Option[] = []
     for (let i = 0; i <= _data.length - 1; i++) {
-        data.push({
-            key: _data[i]?.device_id,
-            label: _data[i]?.identify_code,
-            disabled: false,
-        })
+        if (data.findIndex(item => item.key === data[i]?.key) === -1) {
+            data.push({
+                key: _data[i]?.device_id,
+                label: _data[i]?.identify_code,
+                disabled: false,
+            })
+        }
     }
     return data
 }
@@ -145,7 +149,15 @@ const getDevice = async () => {
     if (res.code === 1) {
         deviceList.value = res.data
         if (Array.isArray(res.data)) {
-            data.value = generateData(res.data)
+            let arrData = res.data
+            let obj: any = {}
+            arrData = arrData.reduce(function (item, next) {
+                obj[next.device_id] ? '' : obj[next.device_id] = true && item.push(next);
+                return item;
+            }, []);
+            console.log('arrData:', arrData)
+
+            data.value = generateData(arrData)
         }
     }
 
@@ -185,7 +197,7 @@ const handelBind = async () => {
     const res = await deviceAdd({ child_id: formValue.value.username, device_ids })
     if (res.code === 1) {
         ElMessage({
-            message: '绑定成功！',
+            message: t('table.bindSuccess'),
             type: 'success',
         })
         emits('bindSucess')

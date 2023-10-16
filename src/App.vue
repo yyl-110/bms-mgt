@@ -1,17 +1,19 @@
 <template>
-    <ElConfigProvider :locale='locale'>
+    <ElConfigProvider :locale="locale === 'en' ? en : zh">
         <router-view />
     </ElConfigProvider>
 </template>
 
 <script lang='ts'>
 import { defineComponent, ref, Ref, watch } from 'vue'
-import locale from 'element-plus/es/locale/lang/zh-cn'
+import zh from 'element-plus/es/locale/lang/zh-cn'
+import en from 'element-plus/es/locale/lang/en'
 import { ElConfigProvider } from 'element-plus'
 import { changeThemeDefaultColor } from '/@/utils/changeThemeColor'
 import { ITheme } from '/@/type/config/theme'
 import theme from '/@/config/theme'
 import { useLayoutStore } from '/@/store/modules/layout'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
     name: 'App',
@@ -19,6 +21,7 @@ export default defineComponent({
         ElConfigProvider
     },
     setup() {
+        const { locale } = useI18n()
         changeThemeDefaultColor()
         const { getSetting } = useLayoutStore()
 
@@ -32,8 +35,14 @@ export default defineComponent({
         watch(() => getSetting.theme, () => themeStyle.value = f())
         watch(() => getSetting.color.primary, () => themeStyle.value = f())
 
+        watch(() => locale.value, () => {
+            window.location.reload()
+        })
+
         return {
             locale,
+            en,
+            zh,
             themeStyle,
             getSetting
         }

@@ -1,5 +1,6 @@
+import { useLayoutStore } from '../store/modules/layout'
 import request from '/@/utils/request'
-import { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 const api = {
     child_device_index: '/api/child/index/index',
@@ -14,8 +15,16 @@ const api = {
     dtu: '/api/dtu',
     dtudtu: '/api/dtu/dtu',
     dtuUpload: '/api/dtu/upload',
-    delDtu: '/api/dtu/del/ids/1',
-
+    delDtu: '/api/dtu/del/ids',
+    deviceIndexApi: '/api/device/index',
+    deviceMap: '/api/device/index/map',
+    runHistoryApi: '/api/device/index/runHistory',
+    historyChart: '/api/device/index/chart',
+    dtu_operation: '/api/device/dtu', // 500
+    deviceHistory : '/api/device/history',
+    dtuUpdate : '/api/device/dtu/update',
+    historyDownload : '/api/device/history/download',
+    qrcode:'/api/qr_code'
 }
 /*
 ** 子用户设备列表
@@ -29,11 +38,11 @@ export function childIndexIndex(params:any): Promise<AxiosResponse<IResponse<str
 }
 
 /* 设备实时数据 */
-export function deviceIndex(): Promise<AxiosResponse<IResponse<string>>> {
+export function deviceIndex(params:any): Promise<AxiosResponse<IResponse<string>>> {
     return request({
         url: api.device_index,
         method: 'post',
-        data: {}
+        data: params
     })
 }
 /* 添加子用户 */
@@ -109,7 +118,7 @@ export function optionalDtuList(params:any): Promise<AxiosResponse<IResponse<str
         data: params
     })
 }
-/* 可选固件 */
+/* 升级 */
 export function uploadDtu(params:any): Promise<AxiosResponse<IResponse<string>>> {
     return request({
         url: api.dtuUpload,
@@ -117,7 +126,7 @@ export function uploadDtu(params:any): Promise<AxiosResponse<IResponse<string>>>
         data: params
     })
 }
-/* 可选固件 */
+/* 删除固件 */
 export function delDtu(params:any): Promise<AxiosResponse<IResponse<string>>> {
     return request({
         url: api.delDtu,
@@ -125,4 +134,82 @@ export function delDtu(params:any): Promise<AxiosResponse<IResponse<string>>> {
         data: params
     })
 }
+/* 获取实时数据 */
+export function deviceIndexApi(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.deviceIndexApi,
+        method: 'post',
+        data: params
+    })
+}
+/* 获取地图信息 */
+export function getDeviceMap(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.deviceMap,
+        method: 'post',
+        data: params
+    })
+}
+/* 运行历史数据 */
+export function runHistory(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.runHistoryApi,
+        method: 'post',
+        data: params
+    })
+}
+/* 运行历史图表 */
+export function getHistoryChart(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.historyChart,
+        method: 'post',
+        data: params
+    })
+}
+/* 固件升级历史 */
+export function dtuOperationList(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.dtu_operation,
+        method: 'post',
+        data: params
+    })
+}
+/* 历史数据 */
+export function getDeviceHistory(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.deviceHistory,
+        method: 'post',
+        data: params
+    })
+}
+/* 固件升级 */
+export function handleDtuUpdate(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.dtuUpdate,
+        method: 'post',
+        data: params
+    })
+}
+/* 获取二维码
+
+ */
+export function getQrcode(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.qrcode,
+        method: 'get',
+        params: params
+    })
+}
+/* 固件升级 */
+// export function downloadHistory(params:any){
+//     const { getStatus } = useLayoutStore()
+//     const baseUrl = '/api'
+//     return axios({method:'post', url:baseUrl + api.historyDownload,data:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
+//     // return request({
+//     //     url: api.historyDownload,
+//     //     responseType:"blob",
+//     //     method: 'post',
+//     //     data: params
+//     // })
+// }
 

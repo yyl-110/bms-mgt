@@ -42,5 +42,10 @@ button:focus {
 
 .el-table thead tr th {
     background-color: #F6F7FC!important;
+    color:#666;
+    font-size: 14px;
 }
 
+.el-table tbody td {
+    color: #333;
+}
