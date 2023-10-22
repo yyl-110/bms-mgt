@@ -15,7 +15,7 @@
                     <el-table-column type="selection" width="55" />
                     <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80"
                         :index="indexMethod" />
-                    <el-table-column :align="'center'" prop="file_name" :label="$t('table.pName')" sortable />
+                    <el-table-column :align="'center'" prop="file_name" :label="$t('table.pName')" width="700" sortable />
                     <el-table-column :align="'center'" prop="id" :label="$t('table.project_name')" sortable />
                     <el-table-column :label="$t('table.operate')" width="300" align="center">
                         <template #default="scope">
@@ -35,6 +35,11 @@
             </div>
             <UploadModal :bind-visible="bindVisible" @handleClose="bindVisible = !bindVisible, handelId = null"
                 @bindSucess="bindSucess" />
+
+
+            <!-- 升级 -->
+            <UpdateModal :bind-visible="updateVisible" @handleClose="updateVisible = !updateVisible, handelId = null"
+                @bindSucess="updateSuccess" :handelId="handelId" />
 
             <el-dialog v-model="dialogDelVisible" :width='largerThanSm ? "500" : "60%"' :show-close="false">
                 <template #header>
@@ -76,6 +81,7 @@ import { ElMessage } from 'element-plus';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
 import { useI18n } from 'vue-i18n'
+import UpdateModal from './components/UpdateModal.vue';
 const { t } = useI18n()
 
 const tableData = ref<any>([])
@@ -85,6 +91,7 @@ const pageSize = ref(10)
 const dialogDelVisible = ref<boolean>(false)
 let order = reactive({ value: { filed: '', order: '' } })
 const bindVisible = ref<boolean>(false)
+const updateVisible = ref<boolean>(false)
 const handelId = ref<number | null>(null)
 
 const indexMethod = (index: number) => {
@@ -94,6 +101,12 @@ const indexMethod = (index: number) => {
 const bindSucess = () => {
     bindVisible.value = false
     fetchData()
+}
+
+const updateSuccess = () => {
+    updateVisible.value = false
+    fetchData()
+
 }
 
 
@@ -120,13 +133,9 @@ const handleOption = async (type: number, id: number) => {
         dialogDelVisible.value = true
     }
     if (type === 1) {
-        const res = await handleDtuUpdate({ firmware_id: id })
-        if (res.code === 1) {
-            ElMessage({
-                type: 'success',
-                message: t('table.upSuccess')
-            })
-        }
+        handelId.value = id
+        // const res = await handleDtuUpdate({ firmware_id: id })
+        updateVisible.value = true
     }
 }
 

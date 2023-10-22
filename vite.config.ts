@@ -54,6 +54,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
                     }
                 }
             },
+            target: 'es2020',
             chunkSizeWarningLimit: 600
         },
         plugins: [

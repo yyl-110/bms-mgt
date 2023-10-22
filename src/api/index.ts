@@ -24,7 +24,8 @@ const api = {
     deviceHistory : '/api/device/history',
     dtuUpdate : '/api/device/dtu/update',
     historyDownload : '/api/device/history/download',
-    qrcode:'/api/qr_code'
+    qrcode:'/api/qr_code',
+    historyTotal:'/api/device/history/total',
 }
 /*
 ** 子用户设备列表
@@ -198,6 +199,16 @@ export function getQrcode(params:any): Promise<AxiosResponse<IResponse<string>>>
         url: api.qrcode,
         method: 'get',
         params: params
+    })
+}
+/* 获取二维码
+
+ */
+export function getHistoryTotal(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.historyTotal,
+        method: 'post',
+        data: params
     })
 }
 /* 固件升级 */

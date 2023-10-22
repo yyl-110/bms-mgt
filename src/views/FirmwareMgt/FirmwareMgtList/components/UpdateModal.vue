@@ -4,23 +4,13 @@
         <template #header>
             <div
                 class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                {{ $t('firmware.upload') }}
+                {{ $t('firmware.update') }}
                 <img src="/@/assets/img/close.png" class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                     @click="handleClose" alt="">
             </div>
         </template>
         <div class="content pt-[20px]">
             <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large">
-                <el-form-item label="上传文件" prop="file_name">
-                    <el-upload class="w-full" action="" :http-request="uploadFile" :show-file-list="false">
-                        <div class="upload flex items-center justify-between px-[14px] rounded-[10px] h-[50px] w-full"
-                            style="border: 1px solid #E5E5E5;">
-                            <span :class="uploadData?.name ? 'text-[#333333]' : 'text-[#999999]'">{{ uploadData?.name ?
-                                uploadData.name : '请选择上传的文件' }}</span>
-                            <img src="../../../../assets/img/wj.png" alt="" class="w-6 h-6">
-                        </div>
-                    </el-upload>
-                </el-form-item>
                 <el-form-item :label="$t('table.project_name')" prop="projectId">
                     <el-select v-model="formValue.projectId" placeholder="Select" filterable class="w-full" size="large"
                         @change="getDtuList()">
@@ -28,9 +18,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('table.kx')">
+                    <el-select v-model="formValue.device_code" placeholder="Select" filterable class="w-full" size="large"
+                        clearable>
+                        <el-option v-for="item in data" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item :label="$t('table.kx')">
                     <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
                         :filter-placeholder="$t('table.searchText')" />
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
         </div>
         <template #footer>
@@ -48,7 +44,7 @@
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 import { computed, onMounted, ref, watch } from 'vue';
 import { projectData } from '../../../../api/project'
-import { getChildDevice, optionalDtuList, uploadDtu } from '../../../../api'
+import { getChildDevice, handleDtuUpdate, optionalDtuList, uploadDtu } from '../../../../api'
 import { getFormData } from '/@/utils/tools'
 import { ElMessage } from 'element-plus';
 
@@ -61,18 +57,20 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    handelId: {
+        type: Number,
+    }
 })
 
 const formValue = ref({
     projectId: 0,
-    file_name: ''
+    device_code: ''
 })
 // 穿梭框数据
 const data = ref([])
 const leftValue = ref([])
 const projectList = ref([])
 const dtuList = ref([])
-const uploadData = ref({})
 
 const visible = computed(() => {
     return props.bindVisible
@@ -105,17 +103,13 @@ const generateData = (_data: IGj[]): Option[] => {
     const data: Option[] = []
     for (let i = 0; i <= _data.length - 1; i++) {
         data.push({
-            key: _data[i]?.device_id,
+            value: _data[i]?.device_id,
             label: _data[i]?.identify_code,
             disabled: false,
         })
     }
+    console.log('data:', data)
     return data
-}
-
-const uploadFile = (e) => {
-    uploadData.value = e.file
-    console.log('e:', e)
 }
 
 /* 获取项目列表 */
@@ -139,6 +133,7 @@ const getDtuList = async () => {
                 obj[next.device_id] ? '' : obj[next.device_id] = true && item.push(next);
                 return item;
             }, []);
+            console.log('arrData:', arrData)
             data.value = generateData(arrData)
         }
     }
@@ -151,36 +146,25 @@ const handleClose = () => {
 }
 
 const handelBind = async () => {
-    if (!uploadData.value.name) {
+    console.log('formValue:', formValue.value)
+    if (!formValue.value.device_code) {
         ElMessage({
-            message: '文件不能为空',
+            message: '请选择设备',
             type: 'error',
         })
         return
     }
-    if (!leftValue.value.length) {
-        ElMessage({
-            message: '请选择固件',
-            type: 'error',
-        })
-        return
-    }
-    const device_ids = leftValue.value.join(',')
+    console.log('device_ids:', formValue.value.device_code)
     // console.log({ project_id: formValue.value.projectId, device_ids, filename: uploadData.value })
-    console.log('leftValue.value:', leftValue.value)
     const fd = new FormData()
     // leftValue.value.forEach((value, index) => {
     //     fd.append(`device_ids[${index}]`, Number(value))
     // })
-    console.log('uploadData.valu:', uploadData.value)
-    fd.append('device_ids', device_ids)
-    fd.append('filename', uploadData.value)
-    fd.append('project_id', formValue.value.projectId)
     console.log('fd:', fd)
-    const res = await uploadDtu(fd);
+    const res = await handleDtuUpdate({ firmware_id: props.handelId, code: "864708060986265" });
     if (res.code === 1) {
         ElMessage({
-            message: '上传成功！',
+            message: '升级成功！',
             type: 'success',
         })
         emits('bindSucess')
@@ -196,9 +180,8 @@ watch(() => props.bindVisible, (val) => {
     if (!val) {
         formValue.value = {
             projectId: 0,
-            file_name: ''
+            device_code: ''
         }
-        leftValue.value = []
     }
 })
 

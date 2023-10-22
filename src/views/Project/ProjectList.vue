@@ -23,11 +23,11 @@
         </div>
         <DeviceTable :projectName="projectName" v-else />
         <div class="mapWrap mt-5">
-            <CardContainer :title="$t('home.title4')">
+            <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''">
                 <template #header>
                     <div class="flex items-center pr-5">
                         <el-checkbox v-model="showMap" :label="$t('home.onlineShow')" size="large" @change="changeOnline" />
-                        <svg-icon class-name='cursor-pointer' icon-class='svg-fullscreen' class="ml-10" />
+                        <Screenfull />
                     </div>
                 </template>
                 <template #content>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { projectData } from '/@/api/project/index'
 import { Search } from '@element-plus/icons-vue';
 import ProjectTable from './components/ProjectTable.vue'
@@ -50,7 +50,19 @@ import CardContainer from '/@/components/common/CardContainer.vue';
 import Map from '/@/components/common/Map.vue';
 import DeviceTable from './components/DeviceTable.vue';
 import { useI18n } from 'vue-i18n'
+import { useIndexStore } from '/@/store/modules';
+import { storeToRefs } from 'pinia';
+import Screenfull from '/@/layout/components/screenfull.vue';
 const { t, locale } = useI18n()
+
+const indexStore = useIndexStore()
+const indexStoreState = storeToRefs(indexStore)
+console.log('indexStoreState:', indexStoreState?.isFullscreenState.value)
+
+const isFullscreen = computed(() => {
+    return indexStoreState?.isFullscreenState.value
+})
+
 
 // const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
 const list = ref([{ title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }, { title: t('home.faults'), num: 0 }])
@@ -132,5 +144,15 @@ onMounted(() => {
     border-color: #E5E5E5;
     color: #999;
 
+}
+
+.fullScreen {
+    // fixed left-0 top-0 w-[100%] h-[100%] z-[1000]
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 120%;
+    z-index: 1000;
 }
 </style>

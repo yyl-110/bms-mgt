@@ -19,7 +19,10 @@ import {
     // 组件类型的定义后缀都为 ComponentOption
     TitleComponentOption,
     GridComponentOption,
-    LegendComponentOption
+    LegendComponentOption,
+    MarkPointComponent,
+    MarkAreaComponent,
+    MarkLineComponent
 } from 'echarts/components'
 import {
     CanvasRenderer
@@ -32,7 +35,8 @@ type ECOption = echarts.ComposeOption<
 
 // 注册必须的组件
 echarts.use(
-    [TitleComponent, TooltipComponent, GridComponent, BarChart, LineChart, RadarChart, RadarComponent, PieChart, CanvasRenderer, LegendComponent]
+    [TitleComponent, TooltipComponent, GridComponent,MarkPointComponent,MarkAreaComponent,
+        MarkLineComponent, BarChart, LineChart, RadarChart, RadarComponent, PieChart, CanvasRenderer, LegendComponent]
 )
 
 export {

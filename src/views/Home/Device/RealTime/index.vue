@@ -12,12 +12,15 @@
                 <CardContainer title="故障信息">
                     <template #content>
                         <div
-                            class="failcontent flex flex-col px-1 pt-[7px] text-[16px] h-[600px] lg:px-5 overflow-x-hidden overflow-y-auto">
-                            <div class="w-full flex items-center justify-around h-10 text-[12px] xl:text-[14px]"
-                                v-for="item in 5"><span
-                                    class="rankNum w-5 h-5 rounded-[50%] flex items-center justify-around text-[14px] flex-shrink-0 bg-red text-white">1</span>
-                                <div class="id max-w-[140px]">868575028559195</div>
-                                <div class="text-[#666] flex-shrink-0">充电单体过压</div>
+                            class="failcontent flex flex-col pt-[7px] text-[16px] h-[600px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto">
+                            <div class="w-full flex items-center h-10 text-[12px] xl:text-[14px]"
+                                v-for="(item, index) in projectInfo?.flt_info" :key="item?.code"><span
+                                    :class="item?.lvl === '1' ? 'one' : (item?.lvl === '2' ? 'two' : 'three')"
+                                    class="rankNum  w-5 h-5 rounded-[50%] flex items-center justify-around text-[14px] flex-shrink-0  text-white">{{
+                                        index + 1 }}</span>
+                                <div class="id w-[70%]  cursor-pointer text-center">{{
+                                    getFltDesc(item?.code) }}</div>
+                                <div class="w-[20%] text-center text-[#666666] text-[14px]">{{ item?.lvl }}</div>
                             </div>
                         </div>
                     </template>
@@ -55,7 +58,7 @@
                                 </div>
                             </template>
                             <div class="max-h-[530px] min-h-[300px] rounded-[10px]">
-                                <Single />
+                                <Single ref="pieChartRef1" />
                             </div>
                         </el-collapse-item>
                     </el-collapse>
@@ -73,25 +76,38 @@
                                 </div>
                             </template>
                             <div class="min-h-[230px] rounded-[10px]">
-                                <Temp />
+                                <Temp ref="pieChartRef2" />
                             </div>
                         </el-collapse-item>
                     </el-collapse>
                 </div>
             </template>
         </CardContainer>
-    
+
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, nextTick, onMounted, ref } from 'vue';
 import DeviceState from '../../components/DeviceState.vue';
 import RunState from '../../components/RunState.vue';
 import Single from '../../components/Single.vue';
 import Temp from '../../components/Temp.vue';
 import CardContainer from '/@/components/common/CardContainer.vue'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { storeToRefs } from 'pinia';
+import { useIndexStore } from '/@/store/modules';
+import { flt_content } from '../data';
+import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
+const indexStore = useIndexStore()
+const projectData = storeToRefs(indexStore)
+console.log('projectData:', projectData.projectInfo.value)
+
+const projectInfo = computed(() => {
+    return projectData.projectInfo.value
+})
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
@@ -101,7 +117,27 @@ const code = sessionStorage.getItem('device_code')
 const activeNames1 = ref(['1'])
 const activeNames2 = ref(['1'])
 const activeNames3 = ref(['1'])
+const pieChartRef1 = ref(null)
+const pieChartRef2 = ref(null)
 
+
+const getFltDesc = (code) => {
+    const data = flt_content.find(item => (item.code === code))
+
+    if (!_.isEmpty(data)) {
+        return locale.value === 'en' ? data?.enInfo : data?.zhInfo
+    }
+    return code
+}
+
+onMounted(() => {
+    nextTick(() => {
+        //在父组件中调用子组件的自适应方法
+        pieChartRef1.value?.resizeChart();
+        pieChartRef2.value?.resizeChart()
+
+    })
+})
 </script>
 
 <style lang="scss" scoped>
@@ -123,5 +159,19 @@ const activeNames3 = ref(['1'])
 :deep(.el-dialog__body) {
     padding: 0;
     padding-top: 29px;
+}
+
+.rankNum {
+    &.one {
+        background-color: #F1D036;
+    }
+
+    &.two {
+        background-color: #E69934;
+    }
+
+    &.three {
+        background: #E63434;
+    }
 }
 </style>

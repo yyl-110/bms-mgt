@@ -24,10 +24,10 @@ const props: IProps = defineProps({
     }
 })
 const IconList = [
-    '/@/assets/img/userIcon.png',
-    '/@/assets/img/icon1@2x.png',
-    '/@/assets/img/icon2@2x.png',
-    '/@/assets/img/icon3@2x.png',
+    '/img/userIcon.png',
+    '/img/icon1@2x.png',
+    '/img/icon2@2x.png',
+    '/img/icon3@2x.png',
 ]
 
 const getImg = (url) => {

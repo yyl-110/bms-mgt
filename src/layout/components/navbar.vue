@@ -53,7 +53,6 @@ import Notice from '/@/layout/components/notice.vue'
 import Screenfull from '/@/layout/components/screenfull.vue'
 import Search from '/@/layout/components/search.vue'
 import LayoutMenubar from '/@/layout/components/menubar.vue'
-import icon from '/@/assets/img/icon.png'
 import LangChange from './langChange.vue'
 
 
@@ -104,7 +103,6 @@ export default defineComponent({
             logout,
             ...breadcrumb(route),
             getSetting,
-            icon
         }
     }
 })

@@ -5,8 +5,6 @@
 <script setup lang='ts'>
 import { defineComponent, onMounted, watch, ref, defineProps } from 'vue'
 import { echarts, ECOption } from '/@/components/Echart'
-import { LineChart } from 'echarts/charts'
-import { isEmpty } from 'element-plus/es/utils'
 import _ from 'lodash'
 
 const props = defineProps({

@@ -19,15 +19,15 @@
             <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe
                 @sort-change="handleSort">
                 <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod" />
-                <el-table-column :align="'center'" prop="identify_code" label="设备ID" sortable>
+                <el-table-column :align="'center'" prop="identify_code" label="设备ID" width="180" sortable>
                     <template #default="scope">
                         <div class="text-primary cursor-pointer" @click="goToDetail(scope.row.identify_code)">
                             {{ scope.row.identify_code }}
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column :align="'center'" prop="desc" label="描述" />
-                <el-table-column :align="'center'" prop="version" label="固定版本" sortable />
+                <el-table-column :align="'center'" prop="desc" width="200" label="描述" />
+                <el-table-column :align="'center'" prop="version" label="固定版本" width="180" sortable />
                 <el-table-column :align="'center'" prop="status" label="状态" sortable />
             </el-table>
 

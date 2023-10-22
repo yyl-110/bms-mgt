@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { deviceIndexApi,getDeviceMap,runHistory } from "/@/api";
+import dayjs from "dayjs";
 
 export const useIndexStore = defineStore({
     id: 'index',
@@ -7,10 +8,15 @@ export const useIndexStore = defineStore({
         projectInfo:{},
         mapInfo:{},
         runHistorySearch: {
-            type:0,
+            type:'',
             start_time:'',
             end_time:''
         },
+        runHistoryChartSearch: {
+            start_time:dayjs().format('YYYY-MM-DD HH:mm:ss'),
+            end_time:dayjs().format('YYYY-MM-DD HH:mm:ss')
+        },
+        isFullscreenState:false
     }),
     getters: {
         getProjectInfo ():any {
@@ -26,6 +32,9 @@ export const useIndexStore = defineStore({
     actions: {
         handleRunHistorySearch (val:any){
             this.runHistorySearch = val
+        },
+        handleRunHistoryChartSearch (val:any){
+            this.runHistoryChartSearch = val
         },
        async getDeviceIndex ():Promise<void>{
         const device_code = sessionStorage.getItem('device_code')
@@ -45,6 +54,9 @@ export const useIndexStore = defineStore({
             }
         }
         },
+         changeFullscreenState(val:any) {
+            this.isFullscreenState = val
+        }
 
      }
 })

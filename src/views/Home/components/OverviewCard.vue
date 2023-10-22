@@ -8,7 +8,7 @@
                         {{ item.num }}
                     </h2>
                 </div>
-                <img :src='getImg(`/@/assets/img/icon${index + 1}@2x.png`)' alt='' class='w-10 h-10'>
+                <img :src='getImg(`/img/icon${index + 1}@2x.png`)' alt='' class='w-10 h-10'>
             </div>
         </el-col>
     </el-row>

@@ -92,6 +92,7 @@ export default {
    firmware: {
     title:'固件列表',
     upload:'上传固件',
+    update:'升级固件',
     del:'删除固件',
     areYue:'确定删除固件？'
    },

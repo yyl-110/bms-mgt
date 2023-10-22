@@ -4,7 +4,7 @@
             <el-col :xs='24' :sm='24' :md='12' :lg='8' :xl='8'>
                 <div class="h-[120px] w-full rounded-[10px] bg-[#fff] flex items-center gap-[30px] pl-5 mb-[24px]"
                     style="box-shadow: 0px 1px 5px 0px #DDE0E4;">
-                    <img src="/@/assets/img/icon1.png" alt="" class="w-[68px] h-[68px]">
+                    <img src="/img/icon1.png" alt="" class="w-[68px] h-[68px]">
                     <div>
                         <p class="text-[#666] text-6">总电压(V)</p>
                         <span class="text-t3 font-[500] text-[36px] mt-6">{{ projectInfo?.sys_info?.total_volt }}</span>
@@ -14,7 +14,7 @@
             <el-col :xs='24' :sm='24' :md='12' :lg='8' :xl='8'>
                 <div class="h-[120px] w-full rounded-[10px] bg-[#fff] flex items-center gap-[30px] pl-5 mb-[24px]"
                     style="box-shadow: 0px 1px 5px 0px #DDE0E4;">
-                    <img src="/@/assets/img/icon2.png" alt="" class="w-[68px] h-[68px]">
+                    <img src="/img/icon2.png" alt="" class="w-[68px] h-[68px]">
                     <div>
                         <p class="text-[#666] text-6">总电流(A)</p>
                         <span class="text-t3 font-[500] text-[36px] mt-6">{{ projectInfo?.sys_info?.total_curr }}</span>
@@ -23,7 +23,7 @@
             </el-col> <el-col :xs='24' :sm='24' :md='12' :lg='8' :xl='8'>
                 <div class="h-[120px] w-full rounded-[10px] bg-[#fff] flex items-center gap-[30px] pl-5 mb-[24px]"
                     style="box-shadow: 0px 1px 5px 0px #DDE0E4;">
-                    <img src="/@/assets/img/icon3.png" alt="" class="w-[68px] h-[68px]">
+                    <img src="/img/icon3.png" alt="" class="w-[68px] h-[68px]">
                     <div>
                         <p class="text-[#666] text-6">SOC(%)</p>
                         <span class="text-t3 font-[500] text-[36px] mt-6">{{ projectInfo?.sys_info?.soc }}</span>

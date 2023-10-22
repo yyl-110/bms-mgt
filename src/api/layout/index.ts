@@ -1,6 +1,8 @@
 import request from '/@/utils/request'
 import axios, { AxiosResponse } from 'axios'
 import { IMenubarList } from '/@/type/store/layout'
+const baseURL = import.meta.env.MODE === 'development' ? '/api' : import.meta.env.VITE_BASE_API as string | undefined
+
 
 const api = {
     login: '/api/user/login',
@@ -32,7 +34,8 @@ export function loginout(param: any):Promise<AxiosResponse<IResponse<string>>> {
     })
 }
 export function verify():Promise<AxiosResponse<IResponse<string>>> {
-    return axios.get('/api/api/user/verify',{ responseType:'arraybuffer' })
+    return axios.get(baseURL + '/api/user/verify',{ responseType:'arraybuffer' })
+    // return axios.get(import.meta.env.VITE_BASE_API as string | undefined + '/api/user/verify',{ responseType:'arraybuffer' })
 }
 
 export function publickey():Promise<AxiosResponse<IResponse<string>>> {

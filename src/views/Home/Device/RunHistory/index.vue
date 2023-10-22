@@ -122,6 +122,7 @@ onMounted(() => {
     getHistoryChartList()
 })
 
+
 watch(() => runHistorySearch, (val) => {
     fetchData()
 }, { deep: true })

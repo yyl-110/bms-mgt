@@ -25,9 +25,10 @@ const chartPie: () => ECOption = () => {
     let data2 = 0
     let data3 = 0
     let data: any = []
-    data1 = props.pieData[1]?.length
-    data2 = props.pieData[2]?.length
-    data3 = props.pieData[3]?.length
+    console.log('props.pieData:', props.pieData)
+    data1 = props.pieData[1]
+    data2 = props.pieData[2]
+    data3 = props.pieData[3]
     if (props.chartType === 1) {
         const total = data1 + data2 + data3
         data = [

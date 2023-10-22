@@ -92,6 +92,7 @@ export default {
    firmware: {
     title:'Firmware List',
     upload:'Upload firmware',
+    update:'Upgrade Firmware',
     del:'Delete',
     areYue:'Are you sure to delete the firmware?'
    },

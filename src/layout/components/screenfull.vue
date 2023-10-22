@@ -2,7 +2,7 @@
     <div class='hidden-xs-only px-2'>
         <svg-icon v-if='!isFullscreen' class-name='cursor-pointer' icon-class='svg-fullscreen' @click='changeScreenfull' />
         <svg-icon v-else class-name='cursor-pointer' icon-class='svg-exit-fullscreen' @click='changeScreenfull' />
-        
+
         <!-- 切换失效 -->
         <!-- <svg-icon class-name='cursor-pointer' :icon-class='isFullscreen ? "svg-exit-fullscreen" : "svg-fullscreen"' @click='changeScreenfull' /> -->
     </div>
@@ -11,10 +11,12 @@
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 import screenfull from 'screenfull'
 import { ElNotification } from 'element-plus'
+import { useIndexStore } from '/@/store/modules'
 
 export default defineComponent({
     name: 'Screenfull',
     setup() {
+        const { changeFullscreenState } = useIndexStore()
         const isFullscreen = ref(false)
         const changeScreenfull = () => {
             if (!screenfull.isEnabled) {
@@ -22,12 +24,13 @@ export default defineComponent({
                     message: '浏览器不支持全屏',
                     type: 'warning'
                 })
-            }else{
+            } else {
                 screenfull.toggle()
             }
         }
         const change = () => {
-            if(screenfull.isEnabled) isFullscreen.value = screenfull.isFullscreen
+            changeFullscreenState(!isFullscreen.value)
+            if (screenfull.isEnabled) isFullscreen.value = screenfull.isFullscreen
         }
         onMounted(() => screenfull.isEnabled && screenfull.on('change', change))
         onUnmounted(() => screenfull.isEnabled && screenfull.off('change', change))

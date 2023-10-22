@@ -3,10 +3,10 @@
         <div class="p-5 bg-[#fff] rounded-[6px]">
             <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe
                 @sort-change="handleSort">
-                <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod" />
-                <el-table-column :align="'center'" :label="item.title" v-for="(item, index) in  header">
+                <el-table-column :align="'center'" type="index" label="序号" fixed width="80" :index="indexMethod" />
+                <el-table-column :align="'center'" :fixed="index < 1" :label="item.title" v-for="(item, index) in  header">
                     <el-table-column :align="'center'" :label="val" v-for="(val) in  item?.children" :prop="val"
-                        width="120"></el-table-column>
+                        width="180"></el-table-column>
                 </el-table-column>
             </el-table>
             <div class="pageWrap h-[70px] flex justify-end items-center">

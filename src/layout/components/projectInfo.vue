@@ -70,12 +70,14 @@
             <div class="flex items-center justify-between flex-1 flex-nowrap">
                 <span>项目号：{{ projectInfo?.project_name }}</span>
                 <span>用户项目号：{{ projectInfo?.user_project_name }}</span>
-                <span>固定版本：{{ projectInfo?.version }}</span>
+                <!-- <span>固定版本：{{ projectInfo?.version }}</span> -->
                 <span>设备ID：{{ code }}</span>
             </div>
             <div class="filter flex items-center justify-end ml-auto">
                 <el-date-picker v-model="timeArr2" type="daterange" range-separator="-" start-placeholder="开始时间"
                     end-placeholder="结束时间" size="small" />
+                <el-button type="primary" class="rounded-[6px] text-[14px] ml-2" size="small"
+                    @click="searchRunHistoryChart">搜索</el-button>
             </div>
         </div>
 
@@ -116,14 +118,6 @@ const largerThanSm = breakpoints.greater('sm') // only larger than sm
 
 const options = [
     {
-        value: 0,
-        label: '按充电状态',
-    },
-    {
-        value: 3,
-        label: '非充非放',
-    },
-    {
         value: 1,
         label: '充电',
     },
@@ -131,10 +125,14 @@ const options = [
         value: 2,
         label: '放电',
     },
+    {
+        value: 0,
+        label: '非充非放',
+    },
 ]
 const timeArr = ref([])
-const timeArr2 = ref([])
-const type = ref(0)
+const timeArr2 = ref([dayjs().format('YYYY-MM-DD HH:mm:ss'), dayjs().format('YYYY-MM-DD HH:mm:ss')])
+const type = ref('')
 const start_time = ref('')
 const end_time = ref('')
 const dialogVisible = ref(false)
@@ -146,7 +144,7 @@ const selectData = ref({
 })
 const indexStore = useIndexStore()
 console.log('useIndexStore():', useIndexStore())
-const { handleRunHistorySearch } = useIndexStore()
+const { handleRunHistorySearch, handleRunHistoryChartSearch } = useIndexStore()
 const layoutStore = useLayoutStore()
 const projectData = storeToRefs(indexStore)
 
@@ -174,6 +172,10 @@ const time = computed(() => {
 const searchRunHistory = () => {
     handleRunHistorySearch({ type: type.value, start_time: dayjs(start_time.value).format('YYYY-MM-DD HH:mm:ss'), end_time: dayjs(end_time.value).format('YYYY-MM-DD HH:mm:ss') })
 }
+const searchRunHistoryChart = () => {
+    console.log(timeArr2.value, 999)
+    handleRunHistoryChartSearch({ start_time: dayjs(timeArr2.value[1]).format('YYYY-MM-DD HH:mm:ss'), end_time: dayjs(timeArr2.value[2]).format('YYYY-MM-DD HH:mm:ss') })
+}
 
 const props = defineProps({
     data: {
@@ -187,7 +189,7 @@ const code = computed(() => {
 })
 
 const fileDownload = (res, filename) => {
-    let blob = new Blob([res.data]); // 将返回的数据通过Blob的构造方法，创建Blob对象
+    const blob = res.data
     if ('msSaveOrOpenBlob' in navigator) {
         window.navigator.msSaveOrOpenBlob(blob, filename); // 针对浏览器
     } else {

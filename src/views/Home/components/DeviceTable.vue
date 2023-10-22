@@ -14,11 +14,11 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="desc" :label="$t('table.desc')" sortable
+            <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" sortable
                 v-if="checkList.includes($t('table.desc'))" />
             <el-table-column :align="'center'" prop="version" :label="$t('table.version')" sortable width="180"
                 v-if="checkList.includes($t('table.version'))" />
-            <el-table-column :align="'center'" prop="iccid" label="SIM" sortable width="180"
+            <el-table-column :align="'center'" prop="iccid" label="SIM" sortable width="200"
                 v-if="checkList.includes('SIM')" />
             <el-table-column :align="'center'" prop="dataupdate_datetime" :label="$t('table.dataupdate_datetime')" sortable
                 width="180" v-if="checkList.includes($t('table.dataupdate_datetime'))" />
@@ -61,6 +61,7 @@ const handleCurrentChange = (val) => {
     emits('changePagination', { type: 'page', val })
 }
 const handleSort = (e) => {
+    console.log('e:', e)
     const payload = { filed: e.prop, order: e.order === "ascending" ? 'asc' : e.order === "descending" ? 'desc' : '' }
     emits('handleSort', payload)
 }

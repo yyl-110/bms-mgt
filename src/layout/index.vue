@@ -52,7 +52,6 @@ import LayoutSideSetting from '/@/layout/components/sideSetting.vue'
 import { throttle } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
 import { useIndexStore } from '/@/store/modules/index'
-import icon from '/@/assets/img/icon.png'
 import ProjectInfo from './components/projectInfo.vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -89,7 +88,6 @@ export default defineComponent({
             getMenubar,
             getSetting,
             changeCollapsed,
-            icon,
             isShowProjectBar,
         }
     }

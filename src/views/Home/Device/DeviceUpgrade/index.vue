@@ -5,7 +5,7 @@
                 <div class="h-[100px] w-full  px-5">
                     <div class="flex gap-[23px] items-center">
                         <div class="label text-[16px] text-[#666]">可升级固件</div>
-                        <el-select v-model="dtuId" placeholder="Select" size="large" class="w-[50%]">
+                        <el-select v-model="dtuId" placeholder="Select" size="large" filterable class="w-[50%]">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                         </el-select>
                         <el-button size="large" type="primary" class="rounded-md" @click="updateDtu"> <img
@@ -20,7 +20,7 @@
                 <div class=" w-full">
                     <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe>
                         <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod" />
-                        <el-table-column :align="'center'" prop="file_name" label="文件名" />
+                        <el-table-column :align="'center'" prop="file_name" label="文件名" width="700" />
                         <el-table-column :align="'center'" prop="update_status" label="升级状态">
                             <template #default="scope">
                                 <div>
@@ -30,10 +30,10 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column :align="'center'" prop="username" label="创建者" />
-                        <el-table-column :align="'center'" prop="create_time" label="创建日期" />
-                        <el-table-column :align="'center'" prop="upgrade_begin_date" label="设定升级起始日期" />
-                        <el-table-column :align="'center'" prop="upgrade_end_date" label="设定升级结束日期" />
+                        <el-table-column :align="'center'" prop="username" label="创建者" width="100" />
+                        <el-table-column :align="'center'" prop="create_time" label="创建日期"  width="200"  />
+                        <el-table-column :align="'center'" prop="upgrade_begin_date" label="设定升级起始日期" width="200" />
+                        <el-table-column :align="'center'" prop="upgrade_end_date" label="设定升级结束日期" width="200" />
                         <el-table-column :align="'center'" prop="description" label="描述" />
                     </el-table>
                 </div>

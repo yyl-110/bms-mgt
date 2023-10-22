@@ -32,7 +32,7 @@ const init = () => {
 
     let arrayObj = new Array();
     let icon = new T.Icon({
-        iconUrl: new URL("/@/assets/img/car.png", import.meta.url).href
+        iconUrl: 'http://114.55.33.117/libs/map/img/icon-accident.png'
     })
     let datas: any = []
     for (let i in props.pos_info) {

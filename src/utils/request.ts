@@ -5,7 +5,7 @@ import { ElLoading, ElNotification } from 'element-plus'
 import i18n from '../i18n'
 
 let loading:{close():void}
-const baseURL = "/api"
+const baseURL = import.meta.env.MODE === 'development' ? '/api' : import.meta.env.VITE_BASE_API as string | undefined
 // import.meta.env.VITE_BASE_API as string | undefined,
 const {t,locale} = i18n.global
 // 创建 axios 实例
@@ -83,7 +83,7 @@ request.interceptors.response.use((response:AxiosResponse<IResponse>) => {
 
 export const downloadHistory = (params:any) => {
     const { getStatus } = useLayoutStore()
-    return axios({method:'post', url:baseURL + '/api/device/history/download',data:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
+    return axios({method:'get', url:baseURL + '/api/device/history/download',params:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
 }
 
 export default request
