@@ -16,7 +16,7 @@ export default {
         title5:'故障信息',
         title6:'设备列表',
         onlineShow:'显示在线',
-   
+        editInfo:'修改信息',
         cd:'充电量',
         fd:'放电量',
         runTime:'运行时长',
@@ -70,7 +70,15 @@ export default {
         pName:'项目名',
         upSuccess:'升级成功',
         kx:'可选设备',
-        bindSuccess:'绑定成功！'
+        bindSuccess:'绑定成功！',
+        password:'密码',
+        confirmPwd:'确认密码',
+        delChild:'删除子账户',
+        confirmDel:'确定删除子用户？',
+        confirmUnbind:'确定解除绑定？',
+        success:'操作成功',
+        fail:'操作失败',
+        enterCompany:'请填写公司名',
     },
     btn:{
         confirm:'确定',

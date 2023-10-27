@@ -170,11 +170,13 @@ const time = computed(() => {
 })
 
 const searchRunHistory = () => {
-    handleRunHistorySearch({ type: type.value, start_time: dayjs(start_time.value).format('YYYY-MM-DD HH:mm:ss'), end_time: dayjs(end_time.value).format('YYYY-MM-DD HH:mm:ss') })
+    handleRunHistorySearch({
+        type: type.value, start_time: start_time.value ? dayjs(start_time.value).format('YYYY-MM-DD HH:mm:ss') : '',
+        end_time: end_time.value ? dayjs(end_time.value).format('YYYY-MM-DD HH:mm:ss') : ''
+    })
 }
 const searchRunHistoryChart = () => {
-    console.log(timeArr2.value, 999)
-    handleRunHistoryChartSearch({ start_time: dayjs(timeArr2.value[1]).format('YYYY-MM-DD HH:mm:ss'), end_time: dayjs(timeArr2.value[2]).format('YYYY-MM-DD HH:mm:ss') })
+    handleRunHistoryChartSearch({ start_time: dayjs(timeArr2.value[0]).format('YYYY-MM-DD HH:mm:ss'), end_time: dayjs(timeArr2.value[1]).format('YYYY-MM-DD HH:mm:ss') })
 }
 
 const props = defineProps({

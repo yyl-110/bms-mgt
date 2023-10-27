@@ -12,7 +12,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, onUnmounted, ref, onBeforeUnmount, onBeforeMount } from 'vue'
 import MenubarItem from '/@/layout/components/menubarItem.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { IMenubarList } from '/@/type/store/layout'
@@ -55,12 +55,16 @@ export default defineComponent({
         let isShowHomeChild = hiddenName.includes(route.name)
         const filterMenubarData = filterMenubar(getMenubar.menuList, isShowHomeChild)
         setRoutes(filterMenubarData)
+        const timer = ref(null)
 
         const activeMenu = computed(() => {
             switch (route?.name) {
                 case 'Device':
                     getDeviceIndex()
                     changeProjectBarStatus(1)
+                    timer.value = setInterval(() => {
+                        getDeviceIndex()
+                    }, 5000)
                     break;
                 case 'PositionInfo':
                     handelGetMapInfo()
@@ -89,11 +93,17 @@ export default defineComponent({
             if (route.meta.activeMenu) return route.meta.activeMenu
             return route.path
         })
+        router.beforeEach((to) => {
+            if (to.path !== "/device" && timer.value) {
+                clearInterval(timer.value)
+            }
+        })
         const onOpenChange = (d: any) => {
             router.push({ path: d })
             getMenubar.status === 2 && changeCollapsed()
         }
         return {
+            onUnmounted,
             getMenubar,
             filterMenubarData,
             activeMenu,

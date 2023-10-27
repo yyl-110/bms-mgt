@@ -1,26 +1,30 @@
 <template>
     <div class="pb-5">
         <el-row :gutter='20'>
-            <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18'>
+            <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class="mb-5">
                 <CardContainer title="系统状态">
                     <template #content>
                         <DeviceState />
                     </template>
                 </CardContainer>
             </el-col>
-            <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6'>
+            <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6' class="mb-5">
                 <CardContainer title="故障信息">
                     <template #content>
                         <div
                             class="failcontent flex flex-col pt-[7px] text-[16px] h-[600px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto">
                             <div class="w-full flex items-center h-10 text-[12px] xl:text-[14px]"
-                                v-for="(item, index) in projectInfo?.flt_info" :key="item?.code"><span
-                                    :class="item?.lvl === '1' ? 'one' : (item?.lvl === '2' ? 'two' : 'three')"
+                                v-for="(item, index) in projectInfo?.flt_info" :key="item?.code">
+                                <div class="w-[10%] text-center text-[#666666] text-[14px]">{{ index + 1 }}</div>
+
+                                <div
+                                    class="id w-[80%]  cursor-pointer text-center overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {{
+                                        getFltDesc(item?.code) }}</div>
+
+                                <span :class="item?.lvl === '1' ? 'one' : (item?.lvl === '2' ? 'two' : 'three')"
                                     class="rankNum  w-5 h-5 rounded-[50%] flex items-center justify-around text-[14px] flex-shrink-0  text-white">{{
-                                        index + 1 }}</span>
-                                <div class="id w-[70%]  cursor-pointer text-center">{{
-                                    getFltDesc(item?.code) }}</div>
-                                <div class="w-[20%] text-center text-[#666666] text-[14px]">{{ item?.lvl }}</div>
+                                        item?.lvl }}</span>
                             </div>
                         </div>
                     </template>
@@ -28,7 +32,7 @@
             </el-col>
         </el-row>
         <div class="w-full">
-            <CardContainer title="运行状态" :collapseHeader="true">
+            <CardContainer title="运行状态" :collapseHeader="true"  class="mb-5">
                 <template #header>
                     <div class="rounded-[10px] overflow-hidden">
                         <el-collapse v-model="activeNames1">
@@ -47,7 +51,7 @@
                 </template>
             </CardContainer>
         </div>
-        <CardContainer title="单体电压" :collapseHeader="true">
+        <CardContainer title="单体电压" :collapseHeader="true"  class="mb-5">
             <template #header>
                 <div class="rounded-[10px] overflow-hidden">
                     <el-collapse v-model="activeNames2">
@@ -65,7 +69,7 @@
                 </div>
             </template>
         </CardContainer>
-        <CardContainer title="单体温度" :collapse-header="true">
+        <CardContainer title="单体温度" :collapse-header="true"  class="mb-5">
             <template #header>
                 <div class="rounded-[10px] overflow-hidden">
                     <el-collapse v-model="activeNames3">

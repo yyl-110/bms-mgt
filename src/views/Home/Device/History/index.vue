@@ -1,13 +1,15 @@
 <template>
     <div class="pb-5">
         <div class="p-5 bg-[#fff] rounded-[6px]">
-            <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe
+            <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe height="700"
                 @sort-change="handleSort">
                 <el-table-column :align="'center'" type="index" label="序号" fixed width="80" :index="indexMethod" />
-                <el-table-column :align="'center'" :fixed="index < 1" :label="item.title" v-for="(item, index) in  header">
+                <el-table-column :align="'center'" fixed label="Datetime" prop="Datetime" width="180" />
+                <el-table-column :align="'center'" :label="item.title" v-for="(item, index) in  header">
                     <el-table-column :align="'center'" :label="val" v-for="(val) in  item?.children" :prop="val"
                         width="180"></el-table-column>
                 </el-table-column>
+                <el-table-column :align="'center'" label="Error Detail" prop="Error Detail" width="180" />
             </el-table>
             <div class="pageWrap h-[70px] flex justify-end items-center">
                 <el-pagination v-model:current-page="page" background v-model:page-size="list_rows"
@@ -51,13 +53,16 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
 
         /* 数据处理 */
         const header1 = res.data?.header?.header1
+        header1.pop()
         const header2 = res.data?.header?.header2
-        const Datetime = header2[0]
-        header1.unshift({ title: Datetime, col_nums: 1 })
+        header2.shift()
+        header2.pop()
         header.value = header1.map(i => {
+            console.log('i:', i)
             const list = header2.splice(0, i.col_nums)
             return { ...i, children: list }
         })
+        console.log('header.value :', header.value)
 
     }
 }

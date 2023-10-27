@@ -26,6 +26,8 @@ const api = {
     historyDownload : '/api/device/history/download',
     qrcode:'/api/qr_code',
     historyTotal:'/api/device/history/total',
+    childUpdateApi:'/api/child/index/update',
+    projectUpdateApi:'/api/project/update',
 }
 /*
 ** 子用户设备列表
@@ -140,7 +142,7 @@ export function deviceIndexApi(params:any): Promise<AxiosResponse<IResponse<stri
     return request({
         url: api.deviceIndexApi,
         method: 'post',
-        data: params
+        data: {...params, hideLoading:true}
     })
 }
 /* 获取地图信息 */
@@ -207,6 +209,26 @@ export function getQrcode(params:any): Promise<AxiosResponse<IResponse<string>>>
 export function getHistoryTotal(params:any): Promise<AxiosResponse<IResponse<string>>> {
     return request({
         url: api.historyTotal,
+        method: 'post',
+        data: params
+    })
+}
+/* 
+* 更新子账户信息
+ */
+export function childUpdateCompany(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.childUpdateApi,
+        method: 'post',
+        data: params
+    })
+}
+/* 
+* 更新项目信息
+ */
+export function projectUpdate(params:any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.projectUpdateApi,
         method: 'post',
         data: params
     })

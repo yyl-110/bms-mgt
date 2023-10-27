@@ -40,6 +40,7 @@ const errorHandler = (error:{message:string}) => {
 request.interceptors.request.use(config => {
     let {data, params, method} = config
     console.log('config:', config)
+    const {hideLoading = false} = data || {}
     if(method === 'get') {
         params.lang = locale.value
         config.params = params
@@ -49,12 +50,14 @@ request.interceptors.request.use(config => {
         config.data = data
     }
     const { getStatus } = useLayoutStore()
-    loading = ElLoading.service({
-        lock: true,
-        text: 'Loading',
-        // spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.4)'
-    })
+    if(!hideLoading) {
+        loading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+            // spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.4)'
+        })
+    }
     // config.headers['Content-Type'] = 'application/x-www-form-urlencode'
     const token = getStatus.ACCESS_TOKEN
     // 如果 token 存在
@@ -68,7 +71,7 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response:AxiosResponse<IResponse>) => {
     const { data } = response
-    loading.close()
+    loading?.close()
     if(data.code !== 1) {
         const title = t('config.requestFail')
         ElNotification({

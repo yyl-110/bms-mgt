@@ -64,6 +64,8 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
     const device_code = sessionStorage.getItem('device_code')
     const _order = order.value.filed ? order.value : {}
     const res: any = await runHistory({ code: device_code, page: pages, list_rows: size, ...runHistorySearch.value, ..._order })
+    page.value = res.data?.current_page
+    list_rows.value = res.data?.per_page
     history_list.value = res.data
     tableList.value = res.data?.data
 }
@@ -110,7 +112,7 @@ const changePagination = (value: { type: string, val: number }) => {
 const getHistoryChartList = async () => {
     const device_code = sessionStorage.getItem('device_code')
     const res = await getHistoryChart({ code: device_code })
-    if(res.code === 1) {
+    if (res.code === 1) {
         chartData.value = res.data
     }
 }

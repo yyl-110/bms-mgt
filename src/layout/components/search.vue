@@ -2,9 +2,9 @@
     <div class='layout-navbar-search hidden-xs-only cursor-pointer flex flex-center px-2' :class='{ "open": isShow }'>
         <!-- @click.stop='changeStatus'  -->
         <div class='layout-navbar-search-select'>
-            <el-select ref='elSelect' v-model='href' filterable placeholder='search' remote :remote-method='searchText'
-                @change='changeRoute'>
-                <el-option v-for='item in searchList' :key='item.path' :label='item.searchLabel' :value='item.path' />
+            <el-select v-model="searchVal" filterable remote reserve-keyword placeholder="Search"
+                :remote-method="remoteMethod" :loading="loading" @change="changeDevice">
+                <el-option v-for="item in searchList" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
         </div>
         <svg-icon class-name='svg-icon' icon-class='svg-search' @click.stop='changeStatus' />
@@ -14,6 +14,7 @@
 import { defineComponent, Ref, ref, watch } from 'vue'
 import { useLayoutStore } from '/@/store/modules/layout'
 import { IMenubarList, ISetting } from '/@/type/store/layout'
+import { homeSearch } from '/@/api/home'
 import { useRouter } from 'vue-router'
 import Fuse from 'fuse.js'
 
@@ -117,21 +118,62 @@ const changeSearchStatus = (searchList: Ref<ISearchList[]>) => {
         hideSearch
     }
 }
-
 export default defineComponent({
     name: 'Search',
     setup() {
+        const loading = ref(false)
         const { getMenubar, getSetting } = useLayoutStore()
         const searchList: Ref<ISearchList[]> = ref([])
         const searchText: Ref<null | ((query: string) => void)> = ref(null)
+        const searchVal = ref('')
 
         search(searchList, getMenubar.menuList, getSetting).then(data => {
             searchText.value = data
         })
 
+        const searchFetchData = async (searchValue) => {
+            try {
+                console.log('{ search: searchVal.value }:', { search: searchValue })
+                const res = await homeSearch({ search: searchValue })
+                return Promise.resolve(res)
+            } catch (error) {
+                return Promise.reject()
+            }
+        }
+
+        const changeDevice = (val) => {
+            sessionStorage.setItem('device_code', val)
+            window.location.href = '/device'
+        }
+
+        const remoteMethod = async (query) => {
+            if (query) {
+                loading.value = true
+                try {
+                    const res = await searchFetchData(query)
+                    console.log('res:', res)
+                    searchList.value = res?.data.map((item) => {
+                        return { value: item, label: item, key: item }
+                    })
+                } catch (error) {
+                    searchList.value = []
+                } finally {
+                    loading.value = false
+                }
+            } else {
+                searchList.value = []
+            }
+
+        }
+
         return {
             searchList,
             searchText,
+            searchFetchData,
+            changeDevice,
+            loading,
+            searchVal,
+            remoteMethod,
             ...changeSearchStatus(searchList)
         }
     }

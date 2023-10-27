@@ -1,7 +1,7 @@
 <template>
     <div class="pb-5">
         <OverviewCard :list='list' />
-        <el-row :gutter='20'>
+        <el-row :gutter='20' class="mb-5">
             <el-col :xs='24' :sm='12' :md='12' :lg='6' :xl='6' class='mb-1'>
                 <CardContainer :title="$t('home.title1')" :collapseHeader="true">
                     <template #header>
@@ -13,7 +13,7 @@
                                             {{ $t('home.title1') }}
                                         </div>
                                     </template>
-                                    <div class="h-[308px] w-full">
+                                    <div class="h-[308px] w-full bg-[#fff]">
                                         <PieChart :pieData="socData" ref="pieChartRef1" />
                                     </div>
                                 </el-collapse-item>
@@ -21,7 +21,6 @@
                         </div>
                     </template>
                 </CardContainer>
-
             </el-col>
             <el-col :xs='24' :sm='12' :md='12' :lg='6' :xl='6' class='mb-1'>
                 <CardContainer :title="$t('home.title2')" :collapseHeader="true">
@@ -34,7 +33,7 @@
                                             {{ $t('home.title2') }}
                                         </div>
                                     </template>
-                                    <div class="h-[308px] w-full">
+                                    <div class="h-[308px] w-full bg-[#fff]">
                                         <PieChart :pieData="pie_flt" :chart-type="2" ref="pieChartRef2" />
                                     </div>
                                 </el-collapse-item>
@@ -53,92 +52,80 @@
                 </div>
             </el-col>
         </el-row>
-        <el-row :gutter='20'>
-            <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class='mb-1'>
-                <CardContainer :title="$t('home.title4')" :collapseHeader="true">
-                    <template #header>
-                        <div class="rounded-[10px] overflow-hidden">
-                            <el-collapse v-model="activeNames4">
-                                <el-collapse-item name="1">
-                                    <template #title>
-                                        <div class="w-full flex justify-between items-center">
-                                            <div class="px-5  text-t3 font-[500] text-xl flex items-center">
-                                                {{ $t('home.title4') }}
-                                            </div>
-                                            <div class="flex items-center pr-5">
-                                                <el-checkbox v-model="showMap" :label="$t('home.onlineShow')" size="large"
-                                                    @change="changeOnline" />
-                                                <Screenfull />
-                                            </div>
+        <el-collapse v-model="activeNames1" class="mb-5">
+            <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
+                <el-row :gutter='20'>
+                    <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class="mb-1">
+                        <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''">
+                            <template #header>
+                                <div class="flex items-center pr-5">
+                                    <el-checkbox v-model="showMap" :label="$t('home.onlineShow')" size="large"
+                                        @change="changeOnline" />
+                                    <Screenfull />
+                                    <!-- <svg-icon class-name='cursor-pointer' icon-class='svg-fullscreen' class="ml-10" /> -->
+                                </div>
+                            </template>
+                            <template #content>
+                                <div class="map w-full px-2 h-[758px] pb-2">
+                                    <Map :pos_info="pos_info" />
+                                </div>
+                            </template>
+                        </CardContainer>
+                    </el-col>
+                    <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6' class="mb-1">
+                        <CardContainer :title="$t('home.title5')">
+                            <template #content>
+                                <div
+                                    class="failcontent flex flex-col pt-[0px] text-[16px] h-[758px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto pb-5">
+                                    <div class="w-full flex items-center h-10 text-[12px] xl:text-[14px]"
+                                        v-for="(item, index) in flt_info" :key="item?.identify_code">
+                                        <div class="w-[20%] text-center text-[#666666] text-[14px]">{{ index + 1 }}
                                         </div>
-
-                                    </template>
-                                    <div class="map w-full px-2 h-[758px] pb-2">
-                                        <Map :pos_info="pos_info" />
+                                        <div class="id w-[70%] text-primary cursor-pointer text-center"
+                                            @click="goTo(item?.identify_code)">{{
+                                                item?.identify_code }}</div>
+                                        <span
+                                            :class="item?.flt_lvl === '1' ? 'one' : (item?.flt_lvl === '2' ? 'two' : 'three')"
+                                            class="rankNum  w-5 h-5 rounded-[50%] flex items-center justify-around text-[14px] flex-shrink-0  text-white">{{
+                                                item?.flt_lvl }}</span>
                                     </div>
-                                </el-collapse-item>
-                            </el-collapse>
-                        </div>
-                    </template>
-                </CardContainer>
+                                </div>
+                            </template>
+                        </CardContainer>
+                    </el-col>
+                </el-row>
+            </el-collapse-item>
+        </el-collapse>
 
-            </el-col>
-            <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6' class='mb-1'>
-                <CardContainer :title="$t('home.title5')" :collapseHeader="true">
-                    <template #header>
-                        <div class="rounded-[10px] overflow-hidden">
-                            <el-collapse v-model="activeNames1">
-                                <el-collapse-item name="1">
-                                    <template #title>
-                                        <div class="px-5  text-t3 font-[500] text-xl flex items-center">
-                                            {{ $t('home.title5') }}
-                                        </div>
-                                    </template>
-                                    <div
-                                        class="failcontent flex flex-col pt-[7px] text-[16px] h-[758px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto pb-5">
-                                        <div class="w-full flex items-center h-10 text-[12px] xl:text-[14px]"
-                                            v-for="(item, index) in flt_info" :key="item?.identify_code"><span
-                                                :class="item?.flt_lvl === '1' ? 'one' : (item?.flt_lvl === '2' ? 'two' : 'three')"
-                                                class="rankNum  w-5 h-5 rounded-[50%] flex items-center justify-around text-[14px] flex-shrink-0  text-white">{{
-                                                    index + 1 }}</span>
-                                            <div class="id w-[70%] text-primary cursor-pointer text-center"
-                                                @click="goTo(item?.identify_code)">{{
-                                                    item?.identify_code }}</div>
-                                            <div class="w-[20%] text-center text-[#666666] text-[14px]">{{ item?.flt_lvl }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </el-collapse-item>
-                            </el-collapse>
+        <el-collapse v-model="activeNames4" class="mb-5">
+            <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
+                <el-row :gutter='20' class='mb-5'>
+                    <el-col :xs='24' :sm='5' :md='5' :lg='5' :xl='5' class="mb-1">
+                        <div class="h-[490px] w-full rounded-[10px] overflow-y-auto bg-white">
+                            <div :class="(index % 2 === 0) ? 'bg-[#FAFAFA]' : 'bg-[#fff]'"
+                                class="item w-full flex items-center h-[70px] bg-[#FAFAFA]"
+                                v-for="(val, key, index) in  totalInfo " :key="key">
+                                <span
+                                    class="flex-shrink-0 w-[75%] xl:w-[55%] text-center text-[14px] xl:text-[16px] text-[#666] ">{{
+                                        totalDataEnum[key]
+                                    }}</span>
+                                <span class="flex-shrink-0 w-[25%] xl:w-[45%] text-center text-[14px] text-t3 font-[500]">{{
+                                    val }}</span>
+                            </div>
                         </div>
-                    </template>
-                </CardContainer>
-            </el-col>
-        </el-row>
-        <el-row :gutter='20' class='mb-5'>
-            <el-col :xs='24' :sm='5' :md='5' :lg='5' :xl='5' class='mb-2'>
-                <div class="h-[490px] w-full rounded-[10px] overflow-y-auto bg-white">
-                    <div :class="(index % 2 === 0) ? 'bg-[#FAFAFA]' : 'bg-[#fff]'"
-                        class="item w-full flex items-center h-[70px] bg-[#FAFAFA]" v-for="(val, key, index) in  totalInfo "
-                        :key="key">
-                        <span
-                            class="flex-shrink-0 w-[75%] xl:w-[55%] text-center text-[14px] xl:text-[16px] text-[#666] ">{{
-                                totalDataEnum[key]
-                            }}</span>
-                        <span class="flex-shrink-0 w-[25%] xl:w-[45%] text-center text-[14px] text-t3 font-[500]">{{
-                            val }}</span>
-                    </div>
-                </div>
-            </el-col>
-            <el-col :xs='24' :sm='19' :md='19' :lg='19' :xl='19' class='mb-2'>
-                <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px]">
-                    <SingleLineChart :lineData="runData" ref="SingleLineChartRef" />
-                </div>
-            </el-col>
-        </el-row>
+                    </el-col>
+                    <el-col :xs='24' :sm='19' :md='19' :lg='19' :xl='19'>
+                        <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px]">
+                            <SingleLineChart :lineData="runData" ref="SingleLineChartRef" />
+                        </div>
+                    </el-col>
+                </el-row>
+            </el-collapse-item>
+        </el-collapse>
+
         <!-- 设备列表 -->
         <div class="sbList w-full">
-            <CardContainer :title="$t('home.title6')" class="h-full">
+            <CardContainer :title="$t('home.title6')" class="h-full" :hasSearch="true" @handleSearch="handleSearch">
                 <template #header>
                     <div class="flex items-center pr-5 options">
                         <el-popover placement="bottom-end" title="" trigger="click">
@@ -166,7 +153,7 @@
                 <template #content>
                     <div class=" bg-white min-h-[500px] px-5">
                         <DeviceTable :device_list="device_list" @changePagination="changePagination" :checkList="checkList"
-                            @handleSort="handleSort" />
+                            @handleSort="handleSort" @refresh="getDeviceList" />
                     </div>
                 </template>
             </CardContainer>
@@ -226,6 +213,7 @@ const socData = ref({})
 const pie_flt = ref({})
 const list_rows = ref(10)
 const runData = ref({}) //运行历史
+const searchVal = ref('')
 const page = ref(1)
 let order = reactive({ value: { filed: '', order: '' } })
 const device_list = ref({})
@@ -283,7 +271,7 @@ const pointTable = () => {
     })
 }
 
-const changeOnline = () => {
+const changeOnline = (e) => {
     getHomeData()
 }
 
@@ -293,6 +281,10 @@ const handleSort = (val) => {
     getDeviceList()
 }
 
+const handleSearch = (val) => {
+    searchVal.value = val
+    getDeviceList(val)
+}
 
 /**
  * 修改分页
@@ -337,9 +329,11 @@ const handleGetHomeTotal = async () => {
     list.value[3].num = res.data?.flt_num
 }
 
-const getDeviceList = async (pages = page.value, size = list_rows.value) => {
+const getDeviceList = async (pages = page.value, size = list_rows.value, search = searchVal.value) => {
     const _order = order.value.filed ? order.value : {}
-    const res: any = await getHomeDeviceList({ page: pages, list_rows: size, ..._order, })
+    const res: any = await getHomeDeviceList({ page: pages, list_rows: size, ..._order, search })
+    page.value = res.data?.current_page
+    list_rows.value = res.data?.per_page
     device_list.value = res.data
     tableList.value = res.data.data
 }
@@ -401,5 +395,6 @@ onMounted(() => {
 
 :deep(.el-collapse-item__content) {
     padding-bottom: 0;
+    background-color: #f0f2f5;
 }
 </style>

@@ -4,7 +4,7 @@
         <template #header>
             <div
                 class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                子用户绑定设备
+                {{ $t('subUser.subUserBindDevice') }}
                 <img src="/@/assets/img/close.png" class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                     @click="handleClose" alt="">
             </div>

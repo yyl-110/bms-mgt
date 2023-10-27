@@ -15,7 +15,15 @@
                 </template>
             </el-table-column>
             <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" sortable
-                v-if="checkList.includes($t('table.desc'))" />
+                v-if="checkList.includes($t('table.desc'))">
+                <template #default="scope">
+                    <div class="flex items-center justify-center">
+                        {{ scope.row.des }}
+                        <img src="/@/assets/img/edit.png" class="w-4 h-4 ml-5 cursor-pointer" alt=""
+                            @click="showModal(scope.row.des, scope.row.device_id)">
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column :align="'center'" prop="version" :label="$t('table.version')" sortable width="180"
                 v-if="checkList.includes($t('table.version'))" />
             <el-table-column :align="'center'" prop="iccid" label="SIM" sortable width="200"
@@ -32,19 +40,57 @@
                 :page-sizes="[5, 10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper"
                 :total="device_list?.total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
+        <el-dialog v-model="visible" :show-close="false" :width='largerThan2xl ? "800" : largerThanMd ? "50%" : "90%"'
+            :destroy-on-close="true" :close-on-click-modal="false">
+            <template #header>
+                <div
+                    class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
+                    {{ $t('home.editInfo') }}
+                    <img src="/@/assets/img/close.png"
+                        class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]" @click="visible = false"
+                        alt="">
+                </div>
+            </template>
+            <div>
+                <el-form label-position="right" label-width="60px" ref="addForm" :model="formValue" size="large">
+                    <el-form-item label="描述" prop="value">
+                        <el-input v-model="formValue.value" placeholder="填写描述" />
+                    </el-form-item>
+                </el-form>
+            </div>
+            <template #footer>
+                <span class="dialog-footer flex justify-center items-center">
+                    <el-button type="primary" class="w-[150px] h-[40px] xl:h-[50px] rounded-[10px]" size="large"
+                        @click="editInfo">
+                        {{ $t('btn.confirm') }}
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+import { ElMessage } from 'element-plus';
 import { computed, ref } from 'vue';
+import { HomeUpdate } from '/@/api/home';
 
 const props = defineProps({
     device_list: { type: Object, default: () => { } },
     checkList: { type: Array, default: () => [] },
 })
-const emits = defineEmits(['changePagination', 'handleOption', 'handleSort'])
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const largerThan2xl = breakpoints.greater('2xl') // only larger than sm
+const largerThanMd = breakpoints.greater('md') // only larger than sm
+const emits = defineEmits(['changePagination', 'handleOption', 'handleSort', 'refresh'])
 const currentPage = ref(1)
 const pageSize = ref(10)
+const visible = ref(false)
+const handleId = ref('')
+const formValue = ref({
+    value: ''
+})
 
 const tableData = computed(() => {
     return props.device_list?.data
@@ -71,10 +117,50 @@ const goTo = (code: string) => {
     window.location.href = '/device'
 }
 
+const showModal = (des, id) => {
+    handleId.value = id
+    formValue.value.value = des
+    visible.value = true
+}
+
+const editInfo = async () => {
+    if (!formValue.value.value) {
+        ElMessage({
+            message: '填写描述',
+            type: 'error',
+        })
+        return
+    }
+    const res = await HomeUpdate({ field: 'description', ids: handleId.value, value: formValue.value.value, })
+    if (res?.code === 1) {
+        ElMessage({
+            message: '修改成功',
+            type: 'success',
+        })
+        visible.value = false
+        emits('refresh')
+    }
+}
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .el-table {
     border: 1px solid #E5E5E5;
+}
+
+:deep(.el-dialog) {
+    border-radius: 20px;
+    overflow: hidden;
+
+    .el-button--large {
+        border-radius: 8px;
+        // height: 50px;
+    }
+}
+
+:deep(.el-dialog__header) {
+    padding: 0;
+    margin-right: 0;
 }
 </style>

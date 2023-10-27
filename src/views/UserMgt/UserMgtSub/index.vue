@@ -48,7 +48,7 @@
                 </div>
             </div>
             <UserTable :userList="userList" @changePagination="changePagination" @handleOption="handleOption"
-                :search="searchVal" :checkList="checkList" @handleSort="handleSort" />
+                :search="searchVal" :checkList="checkList" @handleSort="handleSort" @refresh="getChildDeviceList" />
 
             <!-- 新增 -->
             <el-dialog v-model="dialogVisible" :width='largerThanSm ? "460" : "90%"' :show-close="false"
@@ -56,7 +56,7 @@
                 <template #header>
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                        {{ isAdd ? '添加子用户' : '修改密码' }}
+                        {{ isAdd ? $t('subUser.addSubUser') : $t('table.changePassword') }}
                         <img src="/@/assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogVisible = false" alt="">
@@ -65,13 +65,13 @@
                 <div class="content pt-[20px]">
                     <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large"
                         :rules="rules">
-                        <el-form-item label="子用户名" prop="username">
+                        <el-form-item :label="$t('table.subUserName')" prop="username">
                             <el-input v-model="formValue.username" :disabled="!isAdd" />
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
+                        <el-form-item :label="$t('table.password')" prop="password">
                             <el-input v-model="formValue.password" type="password" />
                         </el-form-item>
-                        <el-form-item label="确认密码" class="mb-2.5" prop="password2">
+                        <el-form-item :label="$t('table.confirmPwd')" class="mb-2.5" prop="password2">
                             <el-input v-model="formValue.password2" type="password" />
                         </el-form-item>
                     </el-form>
@@ -90,7 +90,7 @@
                 <template #header>
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                        {{ popType === 1 ? '删除子账户' : '解除绑定' }}
+                        {{ popType === 1 ? $t('table.delChild') : $t('table.unbind') }}
                         <img src="/@/assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogDelVisible = false" alt="">
@@ -98,7 +98,7 @@
                 </template>
                 <div
                     class="text-center text-t3 text-[16px] sm:text-[20px] xl:h-[90px] h-[50px] flex justify-center items-center">
-                    {{ popType === 1 ? '确定删除子用户？' : '确定解除绑定？' }}
+                    {{ popType === 1 ? $t('table.confirmDel') : $t('table.confirmUnbind') }}
                 </div>
                 <template #footer>
                     <span class="dialog-footer flex justify-center items-center">

@@ -19,7 +19,7 @@
                 </el-button>
             </div>
             <ProjectTable :device_list="device_list" @changePagination="changePagination" :search="searchVal"
-                @handleSort="handleSort" @checked-project="checkedProject" />
+                @handleSort="handleSort" @checked-project="checkedProject" @refresh="getProjectData" />
         </div>
         <DeviceTable :projectName="projectName" v-else />
         <div class="mapWrap mt-5">
@@ -83,8 +83,11 @@ const getProjectData = async (pages = page.value, size = list_rows.value) => {
         list.value[0].num = res.data?.project_num
         list.value[1].num = res.data?.device_num
         list.value[2].num = res.data?.online_num
+        list.value[3].num = res.data?.flt_num
         pos_info.value = res.data?.pos_info
         device_list.value = res.data?.data
+        page.value = res.data?.data?.current_page
+        list_rows.value = res.data?.data?.per_page
     }
 }
 const handleSort = (val) => {

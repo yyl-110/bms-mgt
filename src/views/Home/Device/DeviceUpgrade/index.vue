@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CardContainer title="固件升级">
+        <CardContainer title="固件升级" class="mb-5">
             <template #content>
                 <div class="h-[100px] w-full  px-5">
                     <div class="flex gap-[23px] items-center">
@@ -15,7 +15,7 @@
                 </div>
             </template>
         </CardContainer>
-        <CardContainer title="操作历史">
+        <CardContainer title="操作历史" class="mb-5">
             <template #content>
                 <div class=" w-full">
                     <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe>
@@ -79,7 +79,7 @@ const getStatusDsc = (status) => {
     if (status === 1) return '完成'
     if (status === 2) return '升级失败'
     if (status === 3) return '升级超时'
-    return '升级校验'
+    return '未升级'
 }
 
 const updateDtu = async () => {

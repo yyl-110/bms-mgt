@@ -1,14 +1,59 @@
 <template>
-    <div ref="chartDom" class="w-full h-[440px]" />
+    <div ref="chartDom" class="w-full px-3 h-[440px]" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { echarts } from '/@/components/Echart';
 
+const props = defineProps({
+    type: {
+        type: Number,
+        default: 1,
+    },
+    title: {
+        type: String,
+        default: '',
+    },
+    time: {
+        type: Array,
+        detault: () => []
+    },
+    tableData: {
+        type: Array,
+        detault: () => []
+    },
+    legend: {
+        type: Array,
+        detault: () => []
+    }
+})
 const chartDom = ref(null)
 
 const initOptions = () => {
+    const colorArr = ['#FF4F68', '#1182FB']
+    props.tableData?.map((item, index) => {
+        return {
+            name: props.legend[index],
+            type: 'line',
+            showAllSymbol: true, //显示所有图形。
+            //标记的图形为实心圆
+            symbolSize: 3, //标记的大小
+            itemStyle: {
+                //折线拐点标志的样式
+                color: 'white',
+                borderWidth: '2',
+                borderColor: colorArr[index],
+                normal: {
+                    color: colorArr[index]//拐点颜色
+                }
+            },
+            lineStyle: {
+                color: colorArr[index]
+            },
+            data: item
+        }
+    })
     return {
         grid: {
             top: '14%',
@@ -29,7 +74,7 @@ const initOptions = () => {
             top: 'top',
             right: '10%',
             orient: 'horizontal',
-            data: ['最高电压', '最低电压'],
+            data: props.legend,
             itemWidth: 15,
             itemHeight: 10,
             itemGap: 15,
@@ -42,7 +87,7 @@ const initOptions = () => {
         }],
         xAxis: {
             type: 'category',
-            data: ['13:00', '14:00', '15:00', '16:00', '17:00'],
+            data: props.time,
             axisLine: {
                 show: true,
                 lineStyle: {
@@ -62,7 +107,7 @@ const initOptions = () => {
         yAxis: [
             {
                 type: 'value',
-                name: '最高电压/最低电压（V）',
+                name: props.title,
                 nameTextStyle: {
                     color: '#666666',
                     fontSize: 14,
@@ -88,45 +133,26 @@ const initOptions = () => {
 
         ],
         series: [
-            {
-                name: '最高电压',
-                type: 'line',
-                showAllSymbol: true, //显示所有图形。
-                //标记的图形为实心圆
-                symbolSize: 3, //标记的大小
-                itemStyle: {
-                    //折线拐点标志的样式
-                    color: 'white',
-                    borderWidth: '2',
-                    borderColor: '#FF4F68',
-                    normal: {
-                        color: '#FF4F68'//拐点颜色
-                    }
-                },
-                lineStyle: {
-                    color: '#FF4F68'
-                },
-                data: [175, 160, 153, 121, 156]
-            },
-            {
-                name: '最低电压',
-                type: 'line',
-                showAllSymbol: true, //显示所有图形。
-                symbolSize: 3, //标记的大小
-                itemStyle: {
-                    //折线拐点标志的样式
-                    color: 'white',
-                    borderWidth: '2',
-                    borderColor: '#1182FB',
-                    normal: {
-                        color: '#1182FB'//拐点颜色
-                    }
-                },
-                lineStyle: {
-                    color: '#1182FB'
-                },
-                data: [200, 140, 205, 162, 175]
-            }
+
+            // {
+            //     name: '最低电压',
+            //     type: 'line',
+            //     showAllSymbol: true, //显示所有图形。
+            //     symbolSize: 3, //标记的大小
+            //     itemStyle: {
+            //         //折线拐点标志的样式
+            //         color: 'white',
+            //         borderWidth: '2',
+            //         borderColor: '#1182FB',
+            //         normal: {
+            //             color: '#1182FB'//拐点颜色
+            //         }
+            //     },
+            //     lineStyle: {
+            //         color: '#1182FB'
+            //     },
+            //     data: [200, 140, 205, 162, 175]
+            // }
         ]
     }
 }
@@ -135,11 +161,21 @@ const initOptions = () => {
 const chartInit = () => {
     let myChart = echarts.init(chartDom.value as unknown as HTMLElement)
     myChart.setOption(initOptions())
+    window.onresize = () => {
+        myChart.resize()
+    }
 }
 
 onMounted(() => {
-    chartInit()
+    if (props.tableData?.length) {
+        chartInit()
+    }
 })
+
+watch(() => props.tableData, (val) => {
+    chartInit()
+}, { deep: true })
+
 
 </script>
 

@@ -6,6 +6,8 @@ const api = {
     home_history: '/api/home/run',
     home_total:'/api/home/total',
     homeDeviceList:'/api/home/device_list',
+    homeUpdateApi:'/api/home/update',
+    homeSearchApi:'/api/home/search'
 }
 
 interface IHomeParam {
@@ -46,5 +48,19 @@ export function getHomeDeviceList(param: any): Promise<AxiosResponse<IResponse<s
         url: api.homeDeviceList,
         method: 'post',
         data: param
+    })
+}
+export function HomeUpdate(param: any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.homeUpdateApi,
+        method: 'post',
+        data: param
+    })
+}
+export function homeSearch(param: any): Promise<AxiosResponse<IResponse<string>>> {
+    return request({
+        url: api.homeSearchApi,
+        method: 'post',
+        data: {...param,hideLoading:true}
     })
 }

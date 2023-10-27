@@ -15,11 +15,11 @@
                     <div class="flex items-center mt-5 sm:mt-0">
                         <el-button class="text-[#fff] w-[100px] rounded-5 md:ml-5" size="large" type="primary"
                             @click="addChildAccount">
-                            添加子用户
+                            {{ $t('subUser.addSubUser') }}
                         </el-button>
                         <el-button class="text-[#fff] w-[130px] bg-[#05D0CE]" type="info" size="large"
                             @click="bindVisible = true">
-                            子用户绑定设备
+                            {{ $t('subUser.subUserBindDevice') }}
                         </el-button>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                 <template #header>
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                        {{ isAdd ? '添加子用户' : '修改密码' }}
+                        {{ isAdd ? $t('subUser.addSubUser') : $t('table.changePassword') }}
                         <img src="../../assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogVisible = false" alt="">
@@ -56,13 +56,13 @@
                 <div class="content pt-[20px]">
                     <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large"
                         :rules="rules">
-                        <el-form-item label="子用户名" prop="username">
+                        <el-form-item :label="$t('table.subUserName')" prop="username">
                             <el-input v-model="formValue.username" :disabled="!isAdd" />
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
+                        <el-form-item :label="$t('table.password')" prop="password">
                             <el-input v-model="formValue.password" type="password" />
                         </el-form-item>
-                        <el-form-item label="确认密码" class="mb-2.5" prop="password2">
+                        <el-form-item :label="$t('table.confirmPwd')" class="mb-2.5" prop="password2">
                             <el-input v-model="formValue.password2" type="password" />
                         </el-form-item>
                     </el-form>
@@ -81,7 +81,7 @@
                 <template #header>
                     <div
                         class="my-header w-full h-[50px] md:h-[60px] bg-[#F5F5FD] flex justify-center items-center text-[18px] xl:text-[22px] text-t3 relative">
-                        {{ popType === 1 ? '删除子账户' : '解除绑定' }}
+                        {{ popType === 1 ? $t('table.delChild') : $t('table.unbind') }}
                         <img src="../../assets/img/close.png"
                             class="w-[14px] h-[14px] cursor-pointer absolute right-[25px] top-[23px]"
                             @click="dialogDelVisible = false" alt="">
@@ -89,7 +89,7 @@
                 </template>
                 <div
                     class="text-center text-t3 text-[16px] sm:text-[20px] xl:h-[90px] h-[50px] flex justify-center items-center">
-                    {{ popType === 1 ? '确定删除子用户？' : '确定解除绑定？' }}
+                    {{ popType === 1 ? $t('table.confirmDel') : $t('table.confirmUnbind') }}
                 </div>
                 <template #footer>
                     <span class="dialog-footer flex justify-center items-center">
@@ -127,7 +127,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 
-const list = ref([{ title: '项目数', num: 0 }, { title: '设备数', num: 0 }, { title: '在线数', num: 0 }, { title: '故障数', num: 0 }])
+const list = ref([{ title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }, { title: t('home.faults'), num: 0 }])
 const searchVal = ref('')
 const userList = ref({})
 const childList = ref([])
@@ -148,21 +148,21 @@ const rules = {
     username: [
         {
             required: true,
-            message: '请填子用户名',
+            message: t('table.addUserSub'),
             trigger: 'blur',
         },
     ],
     password: [
         {
             required: true,
-            message: '密码不能为空',
+            message: t('table.emptyPwd'),
             trigger: 'change',
         },
     ],
     password2: [
         {
             required: true,
-            message: '请再次输入密码',
+            message: t('table.enterPwd'),
             trigger: 'change',
         },
     ],
@@ -193,7 +193,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     const res = await addChild({ ...formValue.value })
                     if (res?.code === 1) {
                         ElMessage({
-                            message: '添加成功',
+                            message: t('table.success'),
                             type: 'success',
                         })
                         getChildDeviceList()
@@ -203,7 +203,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 } catch (error) {
                     console.log('error:', error)
                     ElMessage({
-                        message: '添加失败',
+                        message: t('table.fail'),
                         type: 'error',
                     })
                 }
@@ -213,7 +213,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 const res = await childUpdate({ ...formValue.value, ids: handelId.value })
                 if (res?.code === 1) {
                     ElMessage({
-                        message: '修改成功',
+                        message: t('table.success'),
                         type: 'success',
                     })
                     getChildDeviceList()
@@ -223,7 +223,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             } catch (error) {
                 console.log('error:', error)
                 ElMessage({
-                    message: '修改失败',
+                    message: t('table.fail'),
                     type: 'error',
                 })
             }
