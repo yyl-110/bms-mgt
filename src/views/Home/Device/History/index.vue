@@ -3,7 +3,7 @@
         <div class="p-5 bg-[#fff] rounded-[6px]">
             <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe height="700"
                 @sort-change="handleSort">
-                <el-table-column :align="'center'" type="index" label="序号" fixed width="80" :index="indexMethod" />
+                <el-table-column :align="'center'" type="index" :label="$t('table.index')" fixed width="120" :index="indexMethod" />
                 <el-table-column :align="'center'" fixed label="Datetime" prop="Datetime" width="180" />
                 <el-table-column :align="'center'" :label="item.title" v-for="(item, index) in  header">
                     <el-table-column :align="'center'" :label="val" v-for="(val) in  item?.children" :prop="val"
@@ -58,17 +58,15 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
         header2.shift()
         header2.pop()
         header.value = header1.map(i => {
-            console.log('i:', i)
             const list = header2.splice(0, i.col_nums)
             return { ...i, children: list }
         })
-        console.log('header.value :', header.value)
 
     }
 }
 
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (page.value - 1) * list_rows.value + 1;
 }
 
 

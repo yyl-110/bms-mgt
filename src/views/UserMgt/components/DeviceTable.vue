@@ -2,14 +2,14 @@
     <div class="w-full" id="TableWrap">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
             <el-table-column type="selection" width="55" />
-            <el-table-column :align="'center'" sortable type="index" :label="$t('table.index')" width="80"
+            <el-table-column :align="'center'" sortable type="index" :label="$t('table.index')" width="120"
                 :index="indexMethod" v-if="checkList.includes($t('table.index'))" />
             <el-table-column :align="'center'" prop="identify_code" sortable :label="$t('table.identify_code')"
-                v-if="checkList.includes($t('table.identify_code'))" />
+                v-if="checkList.includes($t('table.identify_code'))" min-width="160" />
             <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" sortable
-                v-if="checkList.includes($t('table.project_name'))" />
+                v-if="checkList.includes($t('table.project_name'))" min-width="160" />
             <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" sortable
-                v-if="checkList.includes($t('table.desc'))">
+                v-if="checkList.includes($t('table.desc'))" min-width="400">
                 <template #default="scope">
                     <div class="flex items-center justify-center">
                         {{ scope.row.des }}
@@ -19,7 +19,7 @@
             </el-table-column>
             <el-table-column :align="'center'" prop="status" :label="$t('table.status')" sortable width="100"
                 v-if="checkList.includes($t('table.status'))" />
-            <el-table-column :label="$t('table.operate')" align="center" v-if="checkList.includes($t('table.operate'))">
+            <el-table-column :label="$t('table.operate')" :align="'center'"  width="160" v-if="checkList.includes($t('table.operate'))">
                 <template #default="scope">
                     <el-button type="danger" @click="handleOption(scope.row.device_id)">
                         <svg-icon class-name='cursor-pointer' icon-class='svg-unbind' class="text-lg" />
@@ -62,7 +62,7 @@ const tableData = computed(() => {
 // }
 // )
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 const handleSizeChange = (val) => {
     emits('changePagination', { type: 'size', val })

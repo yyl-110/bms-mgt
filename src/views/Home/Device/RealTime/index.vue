@@ -2,14 +2,14 @@
     <div class="pb-5">
         <el-row :gutter='20'>
             <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class="mb-5">
-                <CardContainer title="系统状态">
+                <CardContainer :title="$t('device.systemState')">
                     <template #content>
                         <DeviceState />
                     </template>
                 </CardContainer>
             </el-col>
             <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6' class="mb-5">
-                <CardContainer title="故障信息">
+                <CardContainer :title="$t('home.title5')">
                     <template #content>
                         <div
                             class="failcontent flex flex-col pt-[7px] text-[16px] h-[600px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto">
@@ -32,18 +32,18 @@
             </el-col>
         </el-row>
         <div class="w-full">
-            <CardContainer title="运行状态" :collapseHeader="true"  class="mb-5">
+            <CardContainer :title="$t('device.runState')" :collapseHeader="true" class="mb-5">
                 <template #header>
                     <div class="rounded-[10px] overflow-hidden">
                         <el-collapse v-model="activeNames1">
                             <el-collapse-item name="1">
                                 <template #title>
                                     <div class="px-5  text-t3 font-[500] text-xl flex items-center">
-                                        运行状态
+                                        {{ $t('device.runState') }}
                                     </div>
                                 </template>
                                 <div class="min-h-[310px] rounded-[10px]">
-                                    <RunState />
+                                    <RunState :data="projectInfo.sys_info" />
                                 </div>
                             </el-collapse-item>
                         </el-collapse>
@@ -51,14 +51,14 @@
                 </template>
             </CardContainer>
         </div>
-        <CardContainer title="单体电压" :collapseHeader="true"  class="mb-5">
+        <CardContainer :title="$t('device.nav6')" :collapseHeader="true" class="mb-5">
             <template #header>
                 <div class="rounded-[10px] overflow-hidden">
                     <el-collapse v-model="activeNames2">
                         <el-collapse-item name="1">
                             <template #title>
                                 <div class="px-5  text-t3 font-[500] text-xl flex items-center">
-                                    单体电压
+                                    {{ $t('device.nav6') }}
                                 </div>
                             </template>
                             <div class="max-h-[530px] min-h-[300px] rounded-[10px]">
@@ -69,14 +69,14 @@
                 </div>
             </template>
         </CardContainer>
-        <CardContainer title="单体温度" :collapse-header="true"  class="mb-5">
+        <CardContainer :title="$t('device.nav7')" :collapse-header="true" class="mb-5">
             <template #header>
                 <div class="rounded-[10px] overflow-hidden">
                     <el-collapse v-model="activeNames3">
                         <el-collapse-item name="1">
                             <template #title>
                                 <div class="px-5  text-t3 font-[500] text-xl flex items-center">
-                                    单体温度
+                                    {{ $t('device.nav7') }}
                                 </div>
                             </template>
                             <div class="min-h-[230px] rounded-[10px]">
@@ -107,7 +107,6 @@ import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()
 const indexStore = useIndexStore()
 const projectData = storeToRefs(indexStore)
-console.log('projectData:', projectData.projectInfo.value)
 
 const projectInfo = computed(() => {
     return projectData.projectInfo.value

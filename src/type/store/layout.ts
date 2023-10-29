@@ -49,6 +49,7 @@ export interface ILayout {
 }
 export interface IMenubarList {
     parentId?: number | string
+    parentid?: number | string
     pid?: number | string
     title?: string
     display?:number,

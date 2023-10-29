@@ -10,7 +10,7 @@
             </div>
         </template>
         <div class="content pt-[20px]">
-            <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large">
+            <el-form label-position="right" label-width="140" ref="addForm" :model="formValue" size="large">
                 <el-form-item :label="$t('table.project_name')" prop="projectId">
                     <el-select v-model="formValue.projectId" placeholder="Select" filterable class="w-full" size="large"
                         @change="getDtuList()">
@@ -108,7 +108,6 @@ const generateData = (_data: IGj[]): Option[] => {
             disabled: false,
         })
     }
-    console.log('data:', data)
     return data
 }
 
@@ -133,7 +132,6 @@ const getDtuList = async () => {
                 obj[next.device_id] ? '' : obj[next.device_id] = true && item.push(next);
                 return item;
             }, []);
-            console.log('arrData:', arrData)
             data.value = generateData(arrData)
         }
     }
@@ -146,7 +144,6 @@ const handleClose = () => {
 }
 
 const handelBind = async () => {
-    console.log('formValue:', formValue.value)
     if (!formValue.value.device_code) {
         ElMessage({
             message: '请选择设备',
@@ -154,13 +151,10 @@ const handelBind = async () => {
         })
         return
     }
-    console.log('device_ids:', formValue.value.device_code)
-    // console.log({ project_id: formValue.value.projectId, device_ids, filename: uploadData.value })
     const fd = new FormData()
     // leftValue.value.forEach((value, index) => {
     //     fd.append(`device_ids[${index}]`, Number(value))
     // })
-    console.log('fd:', fd)
     const res = await handleDtuUpdate({ firmware_id: props.handelId, code: "864708060986265" });
     if (res.code === 1) {
         ElMessage({

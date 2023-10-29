@@ -1,8 +1,8 @@
 <template>
     <div class="w-full px-6">
         <el-tabs type="border-card" v-model="tabVal">
-            <el-tab-pane label="曲线" name="1"></el-tab-pane>
-            <el-tab-pane label="表格" name="2"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav8')" name="1"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav9')" name="2"></el-tab-pane>
         </el-tabs>
         <div v-show="tabVal === '1'" class="w-full">
             <div class="map w-full">
@@ -13,14 +13,14 @@
             <table id="table_volt" class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体电压(V)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体电压(V)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体电压(V)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体电压(V)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav6') }}(V)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav6') }}(V)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav6') }}(V)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav6') }}(V)</th>
                     </tr>
                 </thead>
                 <tbody id="signal_cell_volts" class="cell-info-tbl">
@@ -47,7 +47,6 @@ const indexStore = useIndexStore()
 const projectData = storeToRefs(indexStore)
 
 const projectInfo = computed(() => {
-    console.log('projectInfo:', projectData.projectInfo.value.cell_volt_info)
     return projectData.projectInfo.value
 })
 

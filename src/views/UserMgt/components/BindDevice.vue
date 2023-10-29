@@ -23,7 +23,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('table.kx')">
-                    <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
+                    <el-transfer v-model="leftValue" filterable :titles="[$t('table.noSelect'), $t('table.selected')]" :data="data"
                         :filter-placeholder="$t('table.searchText')" @change="handleChange" />
                 </el-form-item>
             </el-form>
@@ -135,7 +135,6 @@ const handleChange = (
     direction: 'left' | 'right',
     movedKeys: string[] | number[]
 ) => {
-    console.log(leftValue.value, direction, movedKeys)
 }
 
 const handleClose = () => {
@@ -155,7 +154,6 @@ const getDevice = async () => {
                 obj[next.device_id] ? '' : obj[next.device_id] = true && item.push(next);
                 return item;
             }, []);
-            console.log('arrData:', arrData)
 
             data.value = generateData(arrData)
         }

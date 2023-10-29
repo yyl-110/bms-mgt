@@ -225,7 +225,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
                         formValue.value = { username: '', password: '', password2: '' }
                     }
                 } catch (error) {
-                    console.log('error:', error)
                     ElMessage({
                         message: '添加失败',
                         type: 'error',
@@ -245,7 +244,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     formValue.value = { username: '', password: '', password2: '' }
                 }
             } catch (error) {
-                console.log('error:', error)
                 ElMessage({
                     message: '修改失败',
                     type: 'error',
@@ -254,7 +252,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 
         } else {
-            console.log('error submit!')
             return false
         }
     })
@@ -325,7 +322,6 @@ const changePagination = (value: { type: string, val: number }) => {
 const pointTable = () => {
     let fields = checkList.value.map(i => filterList.value.find(item => item.label === i)?.key)
     fields.splice(fields.findIndex(i => i === 'index'), 1)
-    console.log('fields:', fields)
     print.printJson({
         title: '', // 打印出来的标题
         data: childList.value, // 需要打印的数据

@@ -238,10 +238,29 @@ export const useLayoutStore = defineStore({
         //     this.userInfo.role = userInfo.role
         // },
         async GenerateRoutes():Promise<void> {
-            const res = await getRouterList({lang:'en'})
+            const res = await getRouterList({})
             const { data } = res as {data:any}
-            console.log('data:', data,route)
-            generatorDynamicRouter(route)
+            /* 过滤display：1 */
+            const _data = data.filter(item => item.display === 1)
+            const newData = _data.map(item => {
+                if(item.name === 'Home') {
+                    return {...item, path:'/'}
+                }
+                if(item.name === 'HomePage') {
+                    return {...item, meta:{...item.meta,hidden:true}}
+                }
+                if(item.name === 'UserMgtSubList') {
+                    return {...item, display:1,meta:{...item.meta,hidden:true,activeMenu:'/user-mgt/sub'}}
+                }
+                if(item.name === 'UserMgt') {
+                    return {...item, meta:{...item.meta,alwaysShow: true}}
+                }
+                if(item.name === 'FirmwareMgt') {
+                    return {...item, meta:{...item.meta,alwaysShow:true}}
+                }
+                return  item
+            })
+            generatorDynamicRouter(newData)
         }
     }
 })

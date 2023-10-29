@@ -13,7 +13,7 @@
                 <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe
                     @sort-change="handleSort">
                     <el-table-column type="selection" width="55" />
-                    <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80"
+                    <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="120"
                         :index="indexMethod" />
                     <el-table-column :align="'center'" prop="file_name" :label="$t('table.pName')" width="700" sortable />
                     <el-table-column :align="'center'" prop="id" :label="$t('table.project_name')" sortable />
@@ -95,7 +95,7 @@ const updateVisible = ref<boolean>(false)
 const handelId = ref<number | null>(null)
 
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 
 const bindSucess = () => {
@@ -147,7 +147,6 @@ const fetchData = async (pages = currentPage.value, size = pageSize.value) => {
         currentPage.value = res.data?.current_page
         pageSize.value = res.data?.per_page
         tableData.value = res.data?.data
-        console.log('res:', res)
     }
 
 }

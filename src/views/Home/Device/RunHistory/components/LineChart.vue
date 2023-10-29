@@ -6,6 +6,8 @@
 import { defineComponent, onMounted, watch, ref, defineProps } from 'vue'
 import { echarts, ECOption } from '/@/components/Echart'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const props = defineProps({
     lineData: {
@@ -44,7 +46,7 @@ const chartPie = () => {
             containLabel: true,
         },
         legend: {
-            data: ['充电量', '放电量'],
+            data: [t('home.cd'), t('home.fd')],
             right: "5%",
             top: 20,
             itemWidth: 15,
@@ -102,7 +104,7 @@ const chartPie = () => {
             }
         },
         series: [{
-            name: '充电量',
+            name: t('home.cd'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '100',
@@ -122,7 +124,7 @@ const chartPie = () => {
             data: cdData
         },
         {
-            name: '放电量',
+            name: t('home.fd'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '20%',

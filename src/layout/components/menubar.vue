@@ -23,8 +23,7 @@ import { useIndexStore } from '/@/store/modules'
 const filterMenubar = (menuList: IMenubarList[], isShowHomeChild: boolean) => {
     const f = (menuList: IMenubarList[]) => {
         let arr: IMenubarList[] = []
-        const _menuList = !isShowHomeChild ? menuList.filter(v => (!v.meta.hidden && (v.parentId !== 1))) : menuList.filter(v => (!v.meta.hidden))
-        console.log('_menuList:', _menuList)
+        const _menuList = !isShowHomeChild ? menuList.filter(v => (!v.meta.hidden && (v.parentid !== 1))) : menuList.filter(v => (!v.meta.hidden))
         _menuList.forEach(v => {
             let child = v.children && v.children.filter(v => !v.meta.hidden)
             let currentItem = v
@@ -54,7 +53,6 @@ export default defineComponent({
         const { getDeviceIndex, handelGetMapInfo } = useIndexStore()
         let isShowHomeChild = hiddenName.includes(route.name)
         const filterMenubarData = filterMenubar(getMenubar.menuList, isShowHomeChild)
-        setRoutes(filterMenubarData)
         const timer = ref(null)
 
         const activeMenu = computed(() => {

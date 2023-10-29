@@ -15,13 +15,13 @@
             </div>
             <div class="row text-[16px] text-t3 ">
                 <span class="text-[16px]">状态：</span>
-                <span>离线{{ status }}天</span>
+                <span>{{ status }}</span>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
     id: { type: String, default: '' },
     time: { type: String, default: '' },

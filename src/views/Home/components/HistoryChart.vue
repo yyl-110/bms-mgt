@@ -32,7 +32,7 @@ const chartDom = ref(null)
 
 const initOptions = () => {
     const colorArr = ['#FF4F68', '#1182FB']
-    props.tableData?.map((item, index) => {
+    const series = props.tableData?.map((item, index) => {
         return {
             name: props.legend[index],
             type: 'line',
@@ -51,7 +51,7 @@ const initOptions = () => {
             lineStyle: {
                 color: colorArr[index]
             },
-            data: item
+            data: item.map(i => Number(i))
         }
     })
     return {
@@ -132,28 +132,7 @@ const initOptions = () => {
             }
 
         ],
-        series: [
-
-            // {
-            //     name: '最低电压',
-            //     type: 'line',
-            //     showAllSymbol: true, //显示所有图形。
-            //     symbolSize: 3, //标记的大小
-            //     itemStyle: {
-            //         //折线拐点标志的样式
-            //         color: 'white',
-            //         borderWidth: '2',
-            //         borderColor: '#1182FB',
-            //         normal: {
-            //             color: '#1182FB'//拐点颜色
-            //         }
-            //     },
-            //     lineStyle: {
-            //         color: '#1182FB'
-            //     },
-            //     data: [200, 140, 205, 162, 175]
-            // }
-        ]
+        series,
     }
 }
 

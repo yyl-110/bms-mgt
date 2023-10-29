@@ -3,9 +3,9 @@
         <div class='header h-[52px] w-full text-t3 font-[500] text-xl flex items-center pl-5 justify-between'
             v-if="!collapseHeader">
             <div class="flex items-center">
-                <span>{{ title }}</span>
+                <span class="shrink-0">{{ title }}</span>
                 <div class="input w-[70%]" v-if="hasSearch">
-                    <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large" class="ml-[10px] rounded-[10px]"
+                    <el-input v-model="searchVal" :placeholder="$t('table.searchText')" size="large" class="ml-[10px] rounded-[10px]"
                         @keyup.enter.native="search">
                         <template #append>
                             <el-button :icon="Search" @click="search" />

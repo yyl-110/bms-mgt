@@ -65,8 +65,6 @@ const breadcrumb = (route: RouteLocationNormalizedLoaded) => {
     const fn = () => {
         const breadcrumbList: Array<IBreadcrumbList> = []
         const notShowBreadcrumbList = ['HomePage', 'RedirectPage'] // 不显示面包屑的导航
-        console.log('route:', route)
-        console.log('breadcrumbList:', breadcrumbList)
         if (route.matched[0] && (notShowBreadcrumbList.includes(route.matched[1].name as string))) return breadcrumbList
         route.matched.forEach(v => {
             const obj: IBreadcrumbList = {

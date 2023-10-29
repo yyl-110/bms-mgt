@@ -21,7 +21,7 @@
             <ProjectTable :device_list="device_list" @changePagination="changePagination" :search="searchVal"
                 @handleSort="handleSort" @checked-project="checkedProject" @refresh="getProjectData" />
         </div>
-        <DeviceTable :projectName="projectName" v-else />
+        <DeviceTable :projectName="projectName" :project_id="project_id" v-else />
         <div class="mapWrap mt-5">
             <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''">
                 <template #header>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onActivated, onMounted, reactive, ref } from 'vue';
 import { projectData } from '/@/api/project/index'
 import { Search } from '@element-plus/icons-vue';
 import ProjectTable from './components/ProjectTable.vue'
@@ -57,7 +57,6 @@ const { t, locale } = useI18n()
 
 const indexStore = useIndexStore()
 const indexStoreState = storeToRefs(indexStore)
-console.log('indexStoreState:', indexStoreState?.isFullscreenState.value)
 
 const isFullscreen = computed(() => {
     return indexStoreState?.isFullscreenState.value
@@ -74,6 +73,7 @@ const page = ref(1)
 let order = reactive({ value: { filed: '', order: '' } })
 const showMap = ref<boolean>(false)
 const projectName = ref('')
+const project_id = ref(0)
 
 
 const getProjectData = async (pages = page.value, size = list_rows.value) => {
@@ -103,8 +103,10 @@ const changeOnline = () => {
     getProjectData()
 }
 
-const checkedProject = (name) => {
+const checkedProject = (data) => {
+    const { name, id } = data
     projectName.value = name
+    project_id.value = id
 }
 
 /**
@@ -126,7 +128,11 @@ const changePagination = (value: { type: string, val: number }) => {
 }
 
 onMounted(() => {
+    projectName.value = ''
     getProjectData()
+})
+onActivated(() => {
+    projectName.value = ''
 })
 
 </script>

@@ -44,3 +44,20 @@ export const flt_content = [
     { code: '43', zhInfo: '自定义1', enInfo: 'UserDef1' },
     { code: '44', zhInfo: '自定义2', enInfo: 'UserDef2' },
 ]
+
+export const run_status = [
+    {zhInfo:'充电容量',enInfo:'ChgCap'},
+    {zhInfo:'累计充电容量',enInfo:'ChgCapSum'},
+    {zhInfo:'充电能量',enInfo:'ChgEnergy'},
+    {zhInfo:'累计充电能量',enInfo:'ChgEnergySum'},
+    {zhInfo:'充电时间',enInfo:'ChgTime'},
+    {zhInfo:'累计充电时间',enInfo:'ChgTimeSum'},
+    {zhInfo:'放电容量',enInfo:'DsgCap'},
+    {zhInfo:'累计放电容量',enInfo:'DsgCapSum'},
+    {zhInfo:'放电能量',enInfo:'DsgEnergy'},
+    {zhInfo:'累计放电能量',enInfo:'DsgEnergySum'},
+    {zhInfo:'累计放电时间',enInfo:'DsgTimeSum'},
+    {zhInfo:'放电时间',enInfo:'DsgTime'},
+    {zhInfo:'累计运行时间',enInfo:'RunTimeSum'},
+    {zhInfo:'运行时间',enInfo:'RunTime'},
+]

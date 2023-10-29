@@ -180,7 +180,6 @@ import { storeToRefs } from 'pinia'
 const { t, locale } = useI18n()
 const indexStore = useIndexStore()
 const indexStoreState = storeToRefs(indexStore)
-console.log('indexStoreState:', indexStoreState?.isFullscreenState.value)
 
 const isFullscreen = computed(() => {
     return indexStoreState?.isFullscreenState.value
@@ -193,13 +192,13 @@ const activeNames4 = ref(['1'])
 const activeNames5 = ref(['1'])
 
 const totalDataEnum = {
-    ChgCapSum: '累计充电容量(Ah)',
-    ChgEnergySum: '累计充电能量(kWh)',
-    ChgTimeSum: '累计充电时间(h)',
-    DsgCapSum: '累计放电容量(Ah)',
-    DsgEnergySum: '累计放电能量(kWh)',
-    DsgTimeSum: '累计放电时间(h)',
-    RunTimeSum: '累计运行时间(h)',
+    ChgCapSum: t('runStatus.total9'),
+    ChgEnergySum: t('runStatus.total11'),
+    ChgTimeSum: t('runStatus.base3'),
+    DsgCapSum: t('runStatus.total10'),
+    DsgEnergySum: t('runStatus.total12'),
+    DsgTimeSum: t('runStatus.base4'),
+    RunTimeSum: t('runStatus.base2'),
 }
 const list = ref([{ title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }, { title: t('home.faults'), num: 0 }])
 const chargeData = ref({})

@@ -1,8 +1,8 @@
 <template>
     <div class="w-full px-6">
         <el-tabs type="border-card" v-model="tabVal">
-            <el-tab-pane label="曲线" name="1"></el-tab-pane>
-            <el-tab-pane label="表格" name="2"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav8')" name="1"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav9')" name="2"></el-tab-pane>
         </el-tabs>
         <div v-show="tabVal === '1'" class="w-full">
             <div class="map w-full">
@@ -13,14 +13,14 @@
             <table id="table_temp" class="table table-striped table-bordered" style="position: relative;">
                 <thead>
                     <tr style="text-align: center;">
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体温度(℃)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体温度(℃)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体温度(℃)</th>
-                        <th style="text-align: center;">序号</th>
-                        <th style="text-align: center;">单体温度(℃)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav7') }}(℃)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav7') }}(℃)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav7') }}(℃)</th>
+                        <th style="text-align: center;">{{ $t('device.nav5') }}</th>
+                        <th style="text-align: center;">{{ $t('device.nav7') }}(℃)</th>
                     </tr>
                 </thead>
                 <tbody id="signal_cell_volts" class="cell-info-tbl">
@@ -29,20 +29,6 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- <div class="flex" v-for="(item, index) in projectInfo.cell_temp_info" :key="index">
-                <div class="flex flex-col">
-                    <div
-                        class="bg-[#F6F7FC] text-[#666666] min-w-[120px] h-10 flex items-center justify-center text-[14px]">
-                        序号</div>
-                    <div class="h-10 bg-[#fff] flex items-center justify-center text-t3 text-[14px]">{{ index + 1 }}</div>
-                </div>
-                <div class="flex flex-col">
-                    <div
-                        class="bg-[#F6F7FC] text-[#666666] min-w-[120px] h-10 flex items-center justify-center text-[14px]">
-                        单体电压(V)</div>
-                    <div class="h-10 bg-[#fff] flex items-center justify-center text-t3 text-[14px]">{{ item }}</div>
-                </div>
-            </div> -->
         </div>
     </div>
 </template>
@@ -71,7 +57,6 @@ function sliceArray(arr, size) {
 
 const tempInfo = computed(() => {
     const data = projectData.projectInfo.value.cell_temp_info
-    console.log('data:', data)
     const arr = sliceArray(data, 4)
     const newArr: any = []
     arr.forEach((item, index) => {

@@ -1,123 +1,55 @@
 <template>
     <div class="w-full px-6">
         <el-tabs type="border-card" v-model="tabVal">
-            <el-tab-pane label="基本" name="1"></el-tab-pane>
-            <el-tab-pane label="充电" name="2"></el-tab-pane>
-            <el-tab-pane label="统计" name="3"></el-tab-pane>
-            <el-tab-pane label="全部" name="4"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav1')" name="1"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav2')" name="2"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav3')" name="3"></el-tab-pane>
+            <el-tab-pane :label="$t('device.nav4')" name="4"></el-tab-pane>
         </el-tabs>
-        <div v-show="tabVal === '2'" class="w-full mt-[15px] px-5">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr style="text-align: center;">
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                    </tr>
-                </thead>
-                <tbody class="cell-info-tbl">
-                    <tr style="text-align: center;">
-                        <th>A+(V)</th>
-                        <td>N/A</td>
-                        <th>充电机通信状态</th>
-                        <td>N/A</td>
-                        <th>充放电状态</th>
-                        <td>N/A</td>
-                        <th>加热状态</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>请求充电电压(V)</th>
-                        <td>N/A</td>
-                        <th>请求充电电流(A)</th>
-                        <td>N/A</td>
-                        <th>充电机输出电压(V)</th>
-                        <td>N/A</td>
-                        <th>充电机输出电流(A)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>累计放电时间(h)</th>
-                        <td>N/A</td>
-                        <th>本次充电时间(h)</th>
-                        <td>N/A</td>
-                        <th>本次充电容量(Ah)</th>
-                        <td>N/A</td>
-                        <th>本次充电能量(kWh)</th>
-                        <td>N/A</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <div v-show="tabVal === '1'" class="w-full mt-[15px] px-5">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="cell-info-tbl">
-                    <tr style="text-align: center;">
-                        <th>循环次数</th>
-                        <td>N/A</td>
-                        <th>累计运行时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计充电时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计放电时间(h)</th>
-                        <td>N/A</td>
+                    <tr style="text-align: center;" v-for="(item, index) in baseArr" :key="index">
+                        <template v-for="(val, inx) in item" :key="inx">
+                            <th>{{ $t(`runStatus.base${inx + 1 + (4 * index)}`) }}</th>
+                            <td>{{ val || 'N/A' }}</td>
+                        </template>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-show="tabVal === '2'" class="w-full mt-[15px] px-5">
+            <table class="table table-striped table-bordered">
+                <thead>
                     <tr style="text-align: center;">
-                        <th>充放电状态</th>
-                        <td>N/A</td>
-                        <th>加热状态</th>
-                        <td>N/A</td>
-                        <th>系统状态</th>
-                        <td>N/A</td>
-                        <th>自检代码</th>
-                        <td>N/A</td>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
-                    <tr style="text-align: center;">
-                        <th>高压检测1(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测2(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测3(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测4(V)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>RL1</th>
-                        <td>N/A</td>
-                        <th>RL2</th>
-                        <td>N/A</td>
-                        <th>RL3</th>
-                        <td>N/A</td>
-                        <th>RL4</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>RL5</th>
-                        <td>N/A</td>
-                        <th>RL6</th>
-                        <td>N/A</td>
-                        <th>RL7</th>
-                        <td>N/A</td>
-                        <th>RL8</th>
-                        <td>N/A</td>
+                </thead>
+                <tbody class="cell-info-tbl">
+                    <tr style="text-align: center;" v-for="(item, index) in cdArr" :key="index">
+                        <template v-for="(val, inx) in item" :key="inx">
+                            <th>{{ $t(`runStatus.cd${inx + 1 + (4 * index)}`) }}</th>
+                            <td>{{ val || 'N/A' }}</td>
+                        </template>
                     </tr>
                 </tbody>
             </table>
@@ -126,56 +58,22 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="cell-info-tbl">
-                    <tr style="text-align: center;">
-                        <th>循环次数</th>
-                        <td>N/A</td>
-                        <th>累计运行时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计充电时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计放电时间(h)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>本次充电容量(Ah)</th>
-                        <td>N/A</td>
-                        <th>本次放电容量(Ah)</th>
-                        <td>N/A</td>
-                        <th>本次充电能量(kWh)</th>
-                        <td>N/A</td>
-                        <th>本次放电能量(kWh)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>累计充电容量(Ah)</th>
-                        <td>N/A</td>
-                        <th>累计放电容量(Ah)</th>
-                        <td>N/A</td>
-                        <th>累计充电能量(kWh)</th>
-                        <td>N/A</td>
-                        <th>累计放电能量(kWh)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>本次充电时间(h)</th>
-                        <td>N/A</td>
-                        <th>本次放电时间(h)</th>
-                        <td>N/A</td>
-                        <th>本次运行时间(h)</th>
-                        <td>N/A</td>
-                        <th>SOH(%)</th>
-                        <td>100</td>
+                    <tr style="text-align: center;" v-for="(item, index) in totalArr" :key="index">
+                        <template v-for="(val, inx) in item" :key="inx">
+                            <th>{{ $t(`runStatus.total${inx + 1 + (4 * index)}`) }}</th>
+                            <td>{{ val || 'N/A' }}</td>
+                        </template>
                     </tr>
                 </tbody>
             </table>
@@ -185,171 +83,156 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
-                        <th>名称</th>
-                        <th style="text-align: center;">状态</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
+                        <th>{{$t('table.name')}}</th>
+                        <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
                 <tbody class="cell-info-tbl">
-                    <tr style="text-align: center;">
-                        <th>RL1</th>
-                        <td>N/A</td>
-                        <th>RL2</th>
-                        <td>N/A</td>
-                        <th>RL3</th>
-                        <td>N/A</td>
-                        <th>RL4</th>
-                        <td>N/A</td>
+                    <tr style="text-align: center;" v-for="(item, index) in allArr" :key="index">
+                        <template v-for="(val, inx) in item" :key="inx">
+                            <th>{{ $t(`runStatus.all${inx + 1 + (4 * index)}`) }}</th>
+                            <td>{{ val || 'N/A' }}</td>
+                        </template>
                     </tr>
-                    <tr style="text-align: center;">
-                        <th>RL5</th>
-                        <td>N/A</td>
-                        <th>RL6</th>
-                        <td>N/A</td>
-                        <th>RL7</th>
-                        <td>N/A</td>
-                        <th>RL8</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>循环次数</th>
-                        <td>N/A</td>
-                        <th>累计运行时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计充电时间(h)</th>
-                        <td>N/A</td>
-                        <th>累计放电时间(h)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>充放电状态</th>
-                        <td>N/A</td>
-                        <th>加热状态</th>
-                        <td>N/A</td>
-                        <th>系统状态</th>
-                        <td>N/A</td>
-                        <th>自检代码</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>A+(V)</th>
-                        <td>N/A</td>
-                        <th>充电机通信状态</th>
-                        <td>N/A</td>
-                        <th>请求充电电压(V)</th>
-                        <td>N/A</td>
-                        <th>请求充电电流(A)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>充电机输出电压(V)</th>
-                        <td>N/A</td>
-                        <th>充电机输出电流(A)</th>
-                        <td>N/A</td>
-                        <th>休眠计时时间(min)</th>
-                        <td>N/A</td>
-                        <th>休眠剩余时间(min)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>高压检测1(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测2(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测3(V)</th>
-                        <td>N/A</td>
-                        <th>高压检测4(V)</th>
-                        <td>N/A</td>
-                    </tr>
-                    <tr style="text-align: center;">
-                        <th>常电电压(V)</th>
-                        <td>N/A</td>
-                    <th>KeyOn(V)</th>
-                    <td>N/A</td>
-                    <th>粘连代码</th>
-                    <td>N/A</td>
-                    <th>CC2 电阻(Ω)</th>
-                    <td>N/A</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>CC 电阻(Ω)</th>
-                    <td>N/A</td>
-                    <th>CP 占空比(%)</th>
-                    <td>N/A</td>
-                    <th>国标状态1</th>
-                    <td>N/A</td>
-                    <th>国标状态2</th>
-                    <td>N/A</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>本次充电容量(Ah)</th>
-                    <td>N/A</td>
-                    <th>本次放电容量(Ah)</th>
-                    <td>N/A</td>
-                    <th>本次充电能量(kWh)</th>
-                    <td>N/A</td>
-                    <th>本次放电能量(kWh)</th>
-                    <td>N/A</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>累计充电容量(Ah)</th>
-                    <td>N/A</td>
-                    <th>累计放电容量(Ah)</th>
-                    <td>N/A</td>
-                    <th>累计充电能量(kWh)</th>
-                    <td>N/A</td>
-                    <th>累计放电能量(kWh)</th>
-                    <td>N/A</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>本次充电时间(h)</th>
-                    <td>N/A</td>
-                    <th>本次放电时间(h)</th>
-                    <td>N/A</td>
-                    <th>本次运行时间(h)</th>
-                    <td>N/A</td>
-                    <th>SOH(%)</th>
-                    <td>100</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>绝缘度(Ω/V)</th>
-                    <td>N/A</td>
-                    <th>绝缘电阻Rp(kΩ)</th>
-                    <td>N/A</td>
-                    <th>绝缘电阻Rn(kΩ)</th>
-                    <td>N/A</td>
-                    <th>保留</th>
-                    <td>N/A</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <th>NTC1(℃)</th>
-                    <td>N/A</td>
-                    <th>NTC2(℃)</th>
-                    <td>N/A</td>
-                    <th>保留</th>
-                    <td>N/A</td>
-                    <th>保留</th>
-                    <td>N/A</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
 
-</div></template>
+    </div>
+</template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import _ from 'lodash'
+const props = defineProps({
+    data: {
+        type: Object,
+        default: () => { }
+    }
+})
+
+const baseArr = computed(() => {
+    const arr = []
+    arr.push(props.data?.StatisticInfo_Type1?.CycleNums)
+    arr.push(props.data?.StatisticInfo_Type1?.RunTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1?.ChgTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1?.DsgTimeSum)
+    arr.push(props.data?.SysInfo_Type1?.ChgDsgSta)
+    arr.push(props.data?.SysInfo_Type1?.HeatSta)
+    arr.push(props.data?.SysInfo_Type1.SysSta)
+    arr.push(props.data?.SysInfo_Type1.SelfChkCode)
+    arr.push(props.data?.SysInfo_Type1.Hv1)
+    arr.push(props.data?.SysInfo_Type1.Hv2)
+    arr.push(props.data?.SysInfo_Type1.Hv3)
+    arr.push(props.data?.SysInfo_Type1.Hv4)
+    const newArr = arr.concat(props.data?.relay)
+    return _.chunk(newArr, 4)
+})
+
+const cdArr = computed(() => {
+    const arr = []
+    arr.push(props.data?.SysInfo_Type1.ChgOnVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerCommuSta)
+    arr.push(props.data?.SysInfo_Type1.ChgDsgSta)
+    arr.push(props.data?.SysInfo_Type1.HeatSta)
+    arr.push(props.data?.SysInfo_Type1.ChgerReqVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerReqCurr)
+    arr.push(props.data?.SysInfo_Type1.ChgerOutVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerOutCurr)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTime)
+    arr.push(props.data?.StatisticInfo_Type1.ChgCap)
+    arr.push(props.data?.StatisticInfo_Type1.ChgEnergy)
+    return _.chunk(arr, 4)
+})
+
+const allArr = computed(() => {
+    const arr = [...props.data?.relay]
+    arr.push(props.data?.StatisticInfo_Type1.CycleNums)
+    arr.push(props.data?.StatisticInfo_Type1.RunTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgTimeSum)
+    arr.push(props.data?.SysInfo_Type1.ChgDsgSta)
+    arr.push(props.data?.SysInfo_Type1.HeatSta)
+    arr.push(props.data?.SysInfo_Type1.SysSta)
+    arr.push(props.data?.SysInfo_Type1.SelfChkCode)
+    arr.push(props.data?.SysInfo_Type1.ChgOnVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerCommuSta)
+    arr.push(props.data?.SysInfo_Type1.ChgerReqVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerReqCurr)
+    arr.push(props.data?.SysInfo_Type1.ChgerOutVolt)
+    arr.push(props.data?.SysInfo_Type1.ChgerOutCurr)
+    arr.push(props.data?.SysInfo_Type1.SleepTimeCnt)
+    arr.push(props.data?.SysInfo_Type1.SleepLeftTime)
+    arr.push(props.data?.SysInfo_Type1.Hv1)
+    arr.push(props.data?.SysInfo_Type1.Hv2)
+    arr.push(props.data?.SysInfo_Type1.Hv3)
+    arr.push(props.data?.SysInfo_Type1.Hv4)
+    arr.push(props.data?.SysInfo_Type1.VccVolt)
+    arr.push(props.data?.SysInfo_Type1.KeyOnolt)
+    arr.push(props.data?.SysInfo_Type1.RlyDiagCode)
+    arr.push(props.data?.SysInfo_Type1.Cc2Res)
+    arr.push(props.data?.SysInfo_Type1.CcRes)
+    arr.push(props.data?.SysInfo_Type1.CpPwm)
+    arr.push(props.data?.SysInfo_Type1.Gb27930_Sta1)
+    arr.push(props.data?.SysInfo_Type1.Gb27930_Sta2)
+    arr.push(props.data?.StatisticInfo_Type1.ChgCap)
+    arr.push(props.data?.StatisticInfo_Type1.DsgCap)
+    arr.push(props.data?.StatisticInfo_Type1.ChgEnergy)
+    arr.push(props.data?.StatisticInfo_Type1.DsgEnergy)
+    arr.push(props.data?.StatisticInfo_Type1.ChgCapSum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgCapSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgEnergySum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgEnergySum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTime)
+    arr.push(props.data?.StatisticInfo_Type1.DsgTime)
+    arr.push(props.data?.StatisticInfo_Type1.RunTime)
+    arr.push(props.data?.soh)
+    arr.push(props.data?.SysInfo_Type1.Insu)
+    arr.push(props.data?.SysInfo_Type1.InsuRp)
+    arr.push(props.data?.SysInfo_Type1.InsuRn)
+    arr.push('N/A')
+    arr.push(props.data?.SysInfo_Type1.Ntc1Val)
+    arr.push(props.data?.SysInfo_Type1.Ntc2Val)
+    arr.push('N/A')
+    arr.push('N/A')
+    return _.chunk(arr, 4)
+})
+
+const totalArr = computed(() => {
+    const arr = []
+    arr.push(props.data?.StatisticInfo_Type1.CycleNums)
+    arr.push(props.data?.StatisticInfo_Type1.RunTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgTimeSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgCap)
+    arr.push(props.data?.StatisticInfo_Type1.DsgCap)
+    arr.push(props.data?.StatisticInfo_Type1.ChgEnergy)
+    arr.push(props.data?.StatisticInfo_Type1.DsgEnergy)
+    arr.push(props.data?.StatisticInfo_Type1.ChgCapSum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgCapSum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgEnergySum)
+    arr.push(props.data?.StatisticInfo_Type1.DsgEnergySum)
+    arr.push(props.data?.StatisticInfo_Type1.ChgTime)
+    arr.push(props.data?.StatisticInfo_Type1.DsgTime)
+    arr.push(props.data?.StatisticInfo_Type1.RunTime)
+    arr.push(props.data?.soh)
+    return _.chunk(arr, 4)
+})
+
 
 const tabVal = ref('1')
 
 </script>
 
-<style scoped lang="scss">:deep(.el-tabs__content) {
+<style scoped lang="scss">
+:deep(.el-tabs__content) {
     display: none;
 }
 
@@ -420,4 +303,5 @@ const tabVal = ref('1')
         }
     }
 
-}</style>
+}
+</style>

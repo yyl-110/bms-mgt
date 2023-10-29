@@ -87,7 +87,7 @@ const { t } = useI18n()
 
 const route = useRoute()
 
-const list = ref([{ title: t('subUser.subUserNum'), num: 0 }, { title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }])
+const list = ref([{ title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 }])
 const searchVal = ref('')
 const tableList = ref<any>([])
 const deviceData = ref<any>({})
@@ -175,23 +175,15 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
         page.value = res.data?.current_page
         list_rows.value = res.data?.per_page
         tableList.value = res.data?.data
-        console.log('res:', res)
+        list.value[0].num = res.data.project_name
+        list.value[1].num = res.data.device_num
+        list.value[2].num = res.data.online_num
     }
 }
 
 const changeCheck = () => { }
-
-const getChildDeviceList = async () => {
-    const res = await childIndexIndex({ page: 1, list_rows: 10 })
-    list.value[0].num = res.data.total
-    list.value[1].num = res.data.project_num
-    list.value[2].num = res.data.device_num
-    list.value[3].num = res.data.online_num
-}
-
 onMounted(() => {
     fetchData(1)
-    getChildDeviceList()
 })
 
 </script>

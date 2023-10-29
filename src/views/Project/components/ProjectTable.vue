@@ -1,13 +1,13 @@
 <template>
     <div class="w-full">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
-            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80" :index="indexMethod" />
-            <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" width="300" sortable>
+            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="120" :index="indexMethod" />
+            <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" min-width="300" sortable>
                 <template #default="scope">
                     <div class="text-primary cursor-pointer flex items-center justify-center">
-                        <span @click="checkedProject(scope.row.project_name)">{{ scope.row.project_name }}</span>
-                        <img src="/@/assets/img/edit.png" class="w-4 h-4 ml-5 cursor-pointer" alt=""
-                            @click="showModal(scope.row.project_name, scope.row.project_id, 1)">
+                        <span @click="checkedProject(scope.row.project_name, scope.row.project_id)">{{
+                            scope.row.project_name
+                        }}</span>
                     </div>
                 </template>
             </el-table-column>
@@ -30,8 +30,8 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="num" :label="$t('table.deviceNum')" width="100" sortable />
-            <el-table-column :align="'center'" prop="online" :label="$t('table.onlineNum')" width="100" sortable />
+            <el-table-column :align="'center'" prop="num" :label="$t('table.deviceNum')" width="150" sortable />
+            <el-table-column :align="'center'" prop="online" :label="$t('table.onlineNum')" width="150" sortable />
         </el-table>
         <div class="pageWrap h-[70px] flex justify-end items-center">
             <el-pagination v-model:current-page="currentPage" background v-model:page-size="pageSize"
@@ -96,7 +96,7 @@ const tableData = computed(() => {
     return props.device_list?.data
 })
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 
 const typeDesc = computed(() => {
@@ -115,8 +115,8 @@ const handleSort = (e) => {
     emits('handleSort', payload)
 }
 
-const checkedProject = (name) => {
-    emits('checkedProject', name)
+const checkedProject = (name, id) => {
+    emits('checkedProject', { name, id })
 }
 
 const showModal = (des, id, changeType) => {

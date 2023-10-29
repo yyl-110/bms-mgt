@@ -39,7 +39,6 @@ const errorHandler = (error:{message:string}) => {
 // request interceptor
 request.interceptors.request.use(config => {
     let {data, params, method} = config
-    console.log('config:', config)
     const {hideLoading = false} = data || {}
     if(method === 'get') {
         params.lang = locale.value

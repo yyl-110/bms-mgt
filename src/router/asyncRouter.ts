@@ -18,7 +18,6 @@ Object.keys(modules).forEach(key => {
     [name] = name.split('/').splice(-1)
     components[name] = modules[key] as () => Promise<typeof import('*.vue')>
 })
-console.log('components:', components)
 
 const asyncRouter:IMenubarList[] = [
     {
@@ -53,7 +52,6 @@ const generatorDynamicRouter = (data:IMenubarList[]):void => {
         }
     }
     f(routerList, null)
-    console.log('routerList:', routerList)
     setRoutes(routerList)
 }
 

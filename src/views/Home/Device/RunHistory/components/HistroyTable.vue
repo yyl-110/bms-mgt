@@ -2,27 +2,33 @@
     <div class="w-full">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe
             @sort-change="handleSort">
-            <el-table-column :align="'center'" type="index" label="序号" width="80" :index="indexMethod"
-                v-if="checkList.includes('序号')" />
-            <el-table-column :align="'center'" prop="type" label="充放电状态" sortable v-if="checkList.includes('充放电状态')">
+            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="120" :index="indexMethod"
+                v-if="checkList.includes($t('table.index'))" />
+            <el-table-column :align="'center'" prop="type" :label="$t('runStatus.base5')" sortable
+                v-if="checkList.includes($t('runStatus.base5'))">
                 <template #default="scope">
                     <div>{{ typeList.find(i => i.value === scope.row.type)?.label }}</div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="bgn_ts" label="开始时间" sortable v-if="checkList.includes('开始时间')">
+            <el-table-column :align="'center'" prop="bgn_ts" :label="$t('table.dataupdate_datetime')" sortable
+                v-if="checkList.includes($t('table.dataupdate_datetime'))">
                 <template #default="scope">
                     <div class="cursor-pointer text-primary">
                         {{ scope.row.bgn_ts }}
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column :align="'center'" prop="end_ts" label="结束时间" sortable v-if="checkList.includes('结束时间')">
+            <el-table-column :align="'center'" prop="end_ts" :label="$t('table.EndTime')" sortable
+                v-if="checkList.includes($t('table.EndTime'))">
             </el-table-column>
-            <el-table-column :align="'center'" prop="bgn_soc" label="开始SOC" sortable v-if="checkList.includes('开始SOC')">
+            <el-table-column :align="'center'" prop="bgn_soc" :label="$t('table.startSoc')" sortable
+                v-if="checkList.includes($t('table.startSoc'))">
             </el-table-column>
-            <el-table-column :align="'center'" prop="end_soc" label="结束SOC" sortable v-if="checkList.includes('结束SOC')">
+            <el-table-column :align="'center'" prop="end_soc" :label="$t('table.endSoc')" sortable
+                v-if="checkList.includes($t('table.endSoc'))">
             </el-table-column>
-            <el-table-column :align="'center'" prop="length" label="本次时长" sortable v-if="checkList.includes('本次时长')">
+            <el-table-column :align="'center'" prop="length" :label="$t('table.time')" sortable
+                v-if="checkList.includes($t('table.time'))">
             </el-table-column>
         </el-table>
         <div class="pageWrap h-[70px] flex justify-end items-center">
@@ -35,23 +41,21 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const typeList = [
     {
-        value: 0,
-        label: '按充电状态',
-    },
-    {
-        value: 3,
-        label: '非充非放',
-    },
-    {
         value: 1,
-        label: '充电',
+        label: t('device.cd'),
     },
     {
         value: 2,
-        label: '放电',
+        label: t('device.fd'),
+    },
+    {
+        value: 0,
+        label: t('device.nocnof'),
     },
 ]
 const props = defineProps({
@@ -66,7 +70,7 @@ const tableData = computed(() => {
     return props.history_list?.data
 })
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 
 

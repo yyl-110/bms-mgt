@@ -10,8 +10,8 @@
             </div>
         </template>
         <div class="content pt-[20px]">
-            <el-form label-position="right" label-width="80px" ref="addForm" :model="formValue" size="large">
-                <el-form-item label="上传文件" prop="file_name">
+            <el-form label-position="right" label-width="120" ref="addForm" :model="formValue" size="large">
+                <el-form-item :label="$t('table.uploadFile')" prop="file_name">
                     <el-upload class="w-full" action="" :http-request="uploadFile" :show-file-list="false">
                         <div class="upload flex items-center justify-between px-[14px] rounded-[10px] h-[50px] w-full"
                             style="border: 1px solid #E5E5E5;">
@@ -28,7 +28,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('table.kx')">
-                    <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
+                    <el-transfer v-model="leftValue" filterable :titles="[$t('table.noSelect'), $t('table.selected')]" :data="data"
                         :filter-placeholder="$t('table.searchText')" />
                 </el-form-item>
             </el-form>
@@ -115,7 +115,6 @@ const generateData = (_data: IGj[]): Option[] => {
 
 const uploadFile = (e) => {
     uploadData.value = e.file
-    console.log('e:', e)
 }
 
 /* 获取项目列表 */
@@ -166,17 +165,13 @@ const handelBind = async () => {
         return
     }
     const device_ids = leftValue.value.join(',')
-    // console.log({ project_id: formValue.value.projectId, device_ids, filename: uploadData.value })
-    console.log('leftValue.value:', leftValue.value)
     const fd = new FormData()
     // leftValue.value.forEach((value, index) => {
     //     fd.append(`device_ids[${index}]`, Number(value))
     // })
-    console.log('uploadData.valu:', uploadData.value)
     fd.append('device_ids', device_ids)
     fd.append('filename', uploadData.value)
     fd.append('project_id', formValue.value.projectId)
-    console.log('fd:', fd)
     const res = await uploadDtu(fd);
     if (res.code === 1) {
         ElMessage({

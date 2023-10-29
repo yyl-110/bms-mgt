@@ -5,7 +5,7 @@
             <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="180" :index="indexMethod"
                 v-if="checkList.includes($t('table.index'))" />
             <el-table-column :align="'center'" prop="username" :label="$t('table.subUserName')" sortable
-                v-if="checkList.includes($t('table.subUserName'))" width="140">
+                v-if="checkList.includes($t('table.subUserName'))" min-width="180">
                 <template #default="scope">
                     <div class="cursor-pointer text-primary" @click="goTo(scope.row.id)">{{
                         scope.row.username }}</div>
@@ -22,8 +22,8 @@
                 </template>
             </el-table-column>
             <el-table-column :align="'center'" prop="num" :label="$t('table.deviceNum')" sortable
-                v-if="checkList.includes($t('table.deviceNum'))" />
-            <el-table-column :label="$t('table.operate')" width="500" align="center"
+                v-if="checkList.includes($t('table.deviceNum'))" width="180" />
+            <el-table-column :label="$t('table.operate')" width="550" align="center"
                 v-if="checkList.includes($t('table.operate'))">
                 <template #default="scope">
                     <el-button type="primary" icon="el-icon-lock" @click="handleOption(4, scope.row.id)">{{
@@ -114,7 +114,7 @@ const tableData = computed(() => {
 //     )
 // )
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 const handleSizeChange = (val) => {
     emits('changePagination', { type: 'size', val })

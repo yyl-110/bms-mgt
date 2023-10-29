@@ -133,7 +133,6 @@ export default defineComponent({
 
         const searchFetchData = async (searchValue) => {
             try {
-                console.log('{ search: searchVal.value }:', { search: searchValue })
                 const res = await homeSearch({ search: searchValue })
                 return Promise.resolve(res)
             } catch (error) {
@@ -151,7 +150,6 @@ export default defineComponent({
                 loading.value = true
                 try {
                     const res = await searchFetchData(query)
-                    console.log('res:', res)
                     searchList.value = res?.data.map((item) => {
                         return { value: item, label: item, key: item }
                     })

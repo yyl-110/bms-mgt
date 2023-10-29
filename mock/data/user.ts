@@ -57,7 +57,7 @@ export const role_route = [
 export const route:Array<IMenubarList> = [
     {
         id: 1,
-        parentId: 0,
+        parentid: 0,
         name: "Home",
         path: "/",
         redirect: "/home",
@@ -69,19 +69,18 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 50,
-        parentId: 1,
+        parentid: 1,
         name: "HomePage",
         path: "/home",
         component: "Home",
         meta: {
             title: "首页",
-            alwaysShow:true,
             icon: "svg-home",
         }
     },
     {
         id: 51,
-        parentId: 1,
+        parentid: 1,
         name: "Device",
         path: "/device",
         display:0,
@@ -93,7 +92,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 52,
-        parentId: 1,
+        parentid: 1,
         name: "PositionInfo",
         path: "/positioninfo",
         display:0,
@@ -105,7 +104,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 53,
-        parentId: 1,
+        parentid: 1,
         name: "RunHistory",
         path: "/runhistory",
         display:0,
@@ -117,7 +116,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 54,
-        parentId: 1,
+        parentid: 1,
         name: "DeviceUpgrade",
         path: "/deviceupgrade",
         component: "DeviceUpgrade",
@@ -130,7 +129,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 55,
-        parentId: 1,
+        parentid: 1,
         name: "History",
         path: "/history",
         component: "History",
@@ -143,7 +142,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 55,
-        parentId: 1,
+        parentid: 1,
         name: "HistoryChart",
         path: "/historychart",
         display:0,
@@ -155,7 +154,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 2,
-        parentId: 0,
+        parentid: 0,
         name: "Project",
         path: "/Project",
         redirect: "/project/list",
@@ -167,7 +166,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 20,
-        parentId: 2,
+        parentid: 2,
         name: "ProjectList",
         path: "/Project/list",
         component: "ProjectList",
@@ -178,7 +177,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 3,
-        parentId: 0,
+        parentid: 0,
         name: "UserMgt",
         path: "/user-mgt",
         component: "Layout",
@@ -186,12 +185,12 @@ export const route:Array<IMenubarList> = [
         meta: {
             title: "用户管理",
             icon: "svg-userMgt",
-            "alwaysShow": true
+            alwaysShow: true
         }
     },
     {
         id: 30,
-        parentId: 3,
+        parentid: 3,
         name: "UserMgtSub",
         path: "/user-mgt/sub",
         component: "UserMgtSub",
@@ -202,7 +201,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 31,
-        parentId: 3,
+        parentid: 3,
         name: "UserMgtSubList",
         path: "/user-mgt/sub/list",
         component: "UserMgtSubList",
@@ -215,7 +214,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 4,
-        parentId: 0,
+        parentid: 0,
         name: "FirmwareMgt",
         path: "/firmware-mgt",
         component: "Layout",
@@ -228,7 +227,7 @@ export const route:Array<IMenubarList> = [
     },
     {
         id: 40,
-        parentId: 4,
+        parentid: 4,
         name: "FirmwareMgtList",
         path: "/firmware-mgt/list",
         component: "FirmwareMgtList",

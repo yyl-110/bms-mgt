@@ -9,7 +9,7 @@
                     <template #reference>
                         <el-button class="text-[#999]">
                             <img src="/@/assets/img/filter.png" class="w-5 h-5" alt="">
-                            筛选
+                            {{ $t('table.filter') }}
                         </el-button>
                     </template>
                     <el-checkbox-group v-model="checkList">
@@ -40,6 +40,8 @@ import HistroyTable from './components/HistroyTable.vue';
 import print from '/@/utils/print';
 import { useIndexStore } from '/@/store/modules';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const indexStore = useIndexStore()
 const { runHistorySearch = {} } = storeToRefs(indexStore)
@@ -50,20 +52,22 @@ const page = ref(1)
 let order = reactive({ value: { filed: '', order: '' } })
 const history_list = ref({})
 const chartData = ref({})
-const checkList = ref(['序号', '充放电状态', '开始时间', '结束时间', '开始SOC', '结束SOC', '本次时长'])
+const checkList = ref([t('table.index'), t('runStatus.base5'), t('table.dataupdate_datetime'), t('table.EndTime'), t('table.startSoc'), t('table.endSoc'), t('table.time')])
 const filterList = ref([
-    { label: '序号', key: 'index' },
-    { label: '充放电状态', key: 'type' },
-    { label: '开始时间', key: 'bgn_ts' },
-    { label: '结束时间', key: 'end_ts' },
-    { label: '开始SOC', key: 'bgn_soc' },
-    { label: '结束SOC', key: 'end_soc' },
-    { label: '本次时长', key: 'length' },
+    { label: t('table.index'), key: 'index' },
+    { label: t('runStatus.base5'), key: 'type' },
+    { label: t('table.dataupdate_datetime'), key: 'bgn_ts' },
+    { label: t('table.EndTime'), key: 'end_ts' },
+    { label: t('table.startSoc'), key: 'bgn_soc' },
+    { label: t('table.endSoc'), key: 'end_soc' },
+    { label: t('table.time'), key: 'length' },
 ])
 const fetchData = async (pages = page.value, size = list_rows.value) => {
     const device_code = sessionStorage.getItem('device_code')
     const _order = order.value.filed ? order.value : {}
-    const res: any = await runHistory({ code: device_code, page: pages, list_rows: size, ...runHistorySearch.value, ..._order })
+    const _runHistorySearch = runHistorySearch.value
+    if (_runHistorySearch.type === '') delete _runHistorySearch.type
+    const res: any = await runHistory({ code: device_code, page: pages, list_rows: size, ..._runHistorySearch, ..._order })
     page.value = res.data?.current_page
     list_rows.value = res.data?.per_page
     history_list.value = res.data
@@ -72,7 +76,6 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
 
 const pointTable = () => {
     let fields = checkList.value.map(i => filterList.value.find(item => item.label === i)?.key)
-    console.log('fields:', fields)
     fields.splice(fields.findIndex(i => i === 'index'), 1)
     print.printJson({
         title: '', // 打印出来的标题

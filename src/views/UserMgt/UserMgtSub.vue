@@ -6,7 +6,7 @@
                 <div class="flex items-center w-full lg:flex-1 leftContent flex-wrap lg:flex-nowrap lg:w-auto">
                     <span class="text-t3 font-[500] text-[20px] flex-shrink-0">用户列表</span>
                     <div class="input w-[50%] min-w-[200px] rounded-[6px] ml-5 lg:ml-[50px]">
-                        <el-input v-model="searchVal" placeholder="输入关键字搜索" size="large">
+                        <el-input v-model="searchVal" :placeholder="$t('table.searchText')" size="large">
                             <template #append>
                                 <el-button :icon="Search" />
                             </template>

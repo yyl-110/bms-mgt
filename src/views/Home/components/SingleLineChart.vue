@@ -18,7 +18,6 @@ const props = defineProps({
     }
 })
 const chartPie: () => ECOption = () => {
-    console.log(props.lineData.val, 12313)
     const data = { key: [0.1, 0.2, 0.4], val: [100, 200, 400] }
     const option: ECOption = {
         title: {
@@ -62,7 +61,7 @@ const chartPie: () => ECOption = () => {
                 fontWeight: 400,
             },
             type: 'category',
-            data: props.lineData.val,
+            data: props.lineData.key,
             axisLine: {
                 show: false,
                 lineStyle: {
@@ -128,7 +127,7 @@ const chartPie: () => ECOption = () => {
 
                 },
             },
-            data: props.lineData.key
+            data: props.lineData.val
         },
         ]
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
-            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="80" :index="indexMethod"
+            <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="120" :index="indexMethod"
                 v-if="checkList.includes($t('table.index'))" />
             <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" sortable width="180"
                 v-if="checkList.includes($t('table.project_name'))" />
@@ -96,7 +96,7 @@ const tableData = computed(() => {
     return props.device_list?.data
 })
 const indexMethod = (index: number) => {
-    return index + 1
+    return index + (currentPage.value - 1) * pageSize.value + 1;
 }
 
 
@@ -107,7 +107,6 @@ const handleCurrentChange = (val) => {
     emits('changePagination', { type: 'page', val })
 }
 const handleSort = (e) => {
-    console.log('e:', e)
     const payload = { filed: e.prop, order: e.order === "ascending" ? 'asc' : e.order === "descending" ? 'desc' : '' }
     emits('handleSort', payload)
 }

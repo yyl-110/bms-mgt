@@ -11,7 +11,8 @@
             }'>
             <div class='layout-sidebar-logo flex h-[60px] relative flex-center shadow-lg'>
                 <!-- v-if='getMenubar.status === 0 || getMenubar.status === 2' -->
-                <span :class='getMenubar.status === 1 ? "hidden" : ""'>{{$t('config.name')}}</span>
+                <span :class='getMenubar.status === 1 ? "hidden" : ""' class="cursor-pointer" @click="goHome">{{
+                    $t('config.name') }}</span>
             </div>
             <div class='layout-sidebar-menubar flex flex-1 overflow-hidden'>
                 <el-scrollbar wrap-class='scrollbar-wrapper overflow-x-hidden'>
@@ -53,7 +54,7 @@ import { throttle } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
 import { useIndexStore } from '/@/store/modules/index'
 import ProjectInfo from './components/projectInfo.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
@@ -68,6 +69,7 @@ export default defineComponent({
     },
     setup() {
         const { changeDeviceWidth, changeCollapsed, getMenubar, getSetting } = useLayoutStore()
+        const router = useRouter()
 
         const hiddenName = ['Device', 'PositionInfo', 'RunHistory', 'DeviceUpgrade', 'History', 'HistoryChart']
         const route = useRoute()
@@ -83,10 +85,14 @@ export default defineComponent({
             }
             window.addEventListener('resize', throttleF, true)
         })
+        const goHome = () => {
+            router.push('/home')
+        }
 
         return {
             getMenubar,
             getSetting,
+            goHome,
             changeCollapsed,
             isShowProjectBar,
         }
