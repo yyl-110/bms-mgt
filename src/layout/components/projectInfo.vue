@@ -218,8 +218,8 @@ const download = _.debounce(async () => {
     //     })
     //     return
     // }
-    const start_time = dayjs(timeArr.value[0]).format('YYYY-MM-DD HH-mm-ss')
-    const end_time = dayjs(timeArr.value[1]).format('YYYY-MM-DD HH-mm-ss')
+    const start_time = dayjs(timeArr.value[0]).format('YYYY-MM-DD HH:mm:ss')
+    const end_time = dayjs(timeArr.value[1]).format('YYYY-MM-DD HH:mm:ss')
     const code = sessionStorage.getItem('device_code')
 
     const res = await downloadHistory({ code, start_time, end_time })

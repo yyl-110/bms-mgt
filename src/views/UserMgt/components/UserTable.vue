@@ -57,12 +57,12 @@
                     <el-form-item :label="$t('table.company')" prop="value">
                         <el-input v-model="formValue.value" :placeholder="$t('table.enterCompany')" />
                     </el-form-item>
-                    <el-form-item :label="$t('table.password')" prop="password">
+                    <!-- <el-form-item :label="$t('table.password')" prop="password">
                         <el-input v-model="formValue.password" type="password" :placeholder="$t('login.password')" />
                     </el-form-item>
                     <el-form-item :label="$t('table.confirmPwd')" class="mb-2.5" prop="password2">
                         <el-input v-model="formValue.password2" type="password" :placeholder="$t('login.enterPwd')" />
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </div>
             <template #footer>
@@ -149,16 +149,16 @@ const editInfo = async () => {
         })
         return
     }
-    if (!formValue.value.password || !formValue.value.password2) {
-        ElMessage({
-            message: t('login.password'),
-            type: 'error',
-        })
-        return
-    }
+    // if (!formValue.value.password || !formValue.value.password2) {
+    //     ElMessage({
+    //         message: t('login.password'),
+    //         type: 'error',
+    //     })
+    //     return
+    // }
     const res = await childUpdateCompany({
         ids: handleId.value, value: formValue.value.value, field: 'company',
-        password: formValue.value.password, password2: formValue.value.password2
+        // password: formValue.value.password, password2: formValue.value.password2
     })
     if (res?.code === 1) {
         ElMessage({

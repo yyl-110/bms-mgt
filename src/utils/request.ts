@@ -41,11 +41,11 @@ request.interceptors.request.use(config => {
     let {data, params, method} = config
     const {hideLoading = false} = data || {}
     if(method === 'get') {
-        params.lang = locale.value
+        // params.lang = locale.value
         config.params = params
     }
     if(method === 'post') {
-        data.lang = locale.value
+        // data.lang = locale.value
         config.data = data
     }
     const { getStatus } = useLayoutStore()

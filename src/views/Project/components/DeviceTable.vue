@@ -28,9 +28,9 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column :align="'center'" prop="desc" width="200" label="描述" />
+                <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" min-width="400" />
                 <el-table-column :align="'center'" prop="version" :label="$t('table.version')" width="180" sortable />
-                <el-table-column :align="'center'" prop="status" label="状态" sortable />
+                <el-table-column :align="'center'" prop="status" :label="$t('table.status')" sortable  width="160" />
             </el-table>
 
             <div class="pageWrap h-[70px] flex justify-end items-center">
@@ -80,8 +80,8 @@ const getHomeData = async (pages = page.value, size = list_rows.value) => {
     const _order = order.value.filed ? order.value : {}
     const res = await getHomeDeviceList({ project_name: props.projectName, project_id: props.project_id, page: pages, list_rows: size, ..._order })
     if (res.code === 1) {
-        device_list.value = res.data?.device_list
-        tableData.value = res.data?.device_list?.data
+        device_list.value = res.data
+        tableData.value = res.data?.data
     }
 }
 

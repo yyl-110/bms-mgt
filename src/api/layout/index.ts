@@ -2,6 +2,8 @@ import request from '/@/utils/request'
 import axios, { AxiosResponse } from 'axios'
 import { IMenubarList } from '/@/type/store/layout'
 const baseURL = import.meta.env.MODE === 'development' ? '/api' : import.meta.env.VITE_BASE_API as string | undefined
+import i18n from '../../i18n'
+const {t,locale} = i18n.global
 
 
 const api = {
@@ -59,7 +61,7 @@ export function getUser(): Promise<AxiosResponse<IResponse<IGetuserRes>>> {
 export function getRouterList(params:any): Promise<AxiosResponse<IResponse<Array<IMenubarList>>>> {
     return request({
         url: api.getRouterList,
-        method: 'post',
-        data: params
+        method: 'get',
+        params: {...params,lang:locale.value === 'zh' ? 'zh-cn': 'en'}
     })
 }

@@ -5,6 +5,7 @@
 <script setup lang="ts">
 import { createVNode, onMounted, watch, render } from 'vue';
 import TestTemplate from './TestTemplate.vue'
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
     pos_info: {
@@ -12,6 +13,8 @@ const props = defineProps({
         default: () => { }
     }
 })
+
+const router = useRouter()
 
 let map: any = null
 let zoom: number = 4
@@ -67,6 +70,10 @@ const openInfoWindow = (lat, lng, val) => {
     infoWindowContent.el.addEventListener('click', (e) => {
         if (e.target.id === 'close') {
             infoWindow.closeInfoWindow()
+        }
+        if (e.target.id = 'id') {
+            sessionStorage.setItem('device_code', data[0])
+            window.location.href = '/device'
         }
     })
     // 创建天地图信息窗口 infoWindowContent.el：test模板dom

@@ -3,13 +3,15 @@
         <div class="p-5 bg-[#fff] rounded-[6px]">
             <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%;" stripe height="700"
                 @sort-change="handleSort">
-                <el-table-column :align="'center'" type="index" :label="$t('table.index')" fixed width="120" :index="indexMethod" />
-                <el-table-column :align="'center'" fixed label="Datetime" prop="Datetime" width="180" />
+                <el-table-column :align="'center'" type="index" :label="$t('table.index')" fixed width="120"
+                    :index="indexMethod" />
+                <el-table-column :align="'center'" fixed :label="dateProps" :prop="dateProps" width="180" />
                 <el-table-column :align="'center'" :label="item.title" v-for="(item, index) in  header">
                     <el-table-column :align="'center'" :label="val" v-for="(val) in  item?.children" :prop="val"
-                        width="180"></el-table-column>
+                        :width="val === 'Relay status' ? 600 : 180"></el-table-column>
                 </el-table-column>
-                <el-table-column :align="'center'" label="Error Detail" prop="Error Detail" width="180" />
+                <el-table-column :align="'center'" :label="errorProps" :prop="errorProps" width="800"
+                    class-name="errorClass" />
             </el-table>
             <div class="pageWrap h-[70px] flex justify-end items-center">
                 <el-pagination v-model:current-page="page" background v-model:page-size="list_rows"
@@ -24,6 +26,8 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
 import { getDeviceHistory } from '/@/api';
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 
 const list_rows = ref(10)
 const page = ref(1)
@@ -32,6 +36,9 @@ const history_list = ref({})
 const tableData = ref<any>([])
 const header = ref([])
 const headerSub = ref([])
+
+const dateProps = ref('')
+const errorProps = ref('')
 
 
 const fetchData = async (pages = page.value, size = list_rows.value) => {
@@ -47,6 +54,7 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
                 const data = (res.data?.header?.header2 || []).map((i: any, inx: number) => obj[i] = item[inx])
                 return obj
             })
+            console.log('tableData.value:', tableData.value)
         } catch (error) {
 
         }
@@ -55,8 +63,8 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
         const header1 = res.data?.header?.header1
         header1.pop()
         const header2 = res.data?.header?.header2
-        header2.shift()
-        header2.pop()
+        dateProps.value = header2.shift()
+        errorProps.value = header2.pop()
         header.value = header1.map(i => {
             const list = header2.splice(0, i.col_nums)
             return { ...i, children: list }
@@ -90,4 +98,12 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+:deep(.el-table) {
+    .errorClass {
+        .cell {
+            white-space: nowrap;
+        }
+    }
+}
+</style>

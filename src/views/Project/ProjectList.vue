@@ -32,7 +32,8 @@
                 </template>
                 <template #content>
                     <div class="map w-full px-2 h-[758px] pb-2">
-                        <Map :pos_info="pos_info" />
+                        <Map :pos_info="pos_info" v-if="locale === 'zh'" />
+                        <Amap :pos_info="pos_info" v-else />
                     </div>
                 </template>
             </CardContainer>
@@ -53,6 +54,7 @@ import { useI18n } from 'vue-i18n'
 import { useIndexStore } from '/@/store/modules';
 import { storeToRefs } from 'pinia';
 import Screenfull from '/@/layout/components/screenfull.vue';
+import Amap from '/@/components/common/Amap.vue';
 const { t, locale } = useI18n()
 
 const indexStore = useIndexStore()

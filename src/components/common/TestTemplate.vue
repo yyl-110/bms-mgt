@@ -7,11 +7,11 @@
         <div class="px-2 w-full" style="line-height: 24px;">
             <div class="row text-[16px] text-t3 ">
                 <span class="text-[16px]">设备ID：</span>
-                <span class="text-primary">{{ id }}</span>
+                <span class="text-primary" id="id">{{ id }}</span>
             </div>
             <div class="row text-[16px] text-t3 ">
                 <span class="text-[16px]">时间：</span>
-                <span>{{ id }}</span>
+                <span>{{ time }}</span>
             </div>
             <div class="row text-[16px] text-t3 ">
                 <span class="text-[16px]">状态：</span>
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+
 const props = defineProps({
     id: { type: String, default: '' },
     time: { type: String, default: '' },

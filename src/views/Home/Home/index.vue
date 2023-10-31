@@ -56,7 +56,8 @@
             <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
                 <el-row :gutter='20'>
                     <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class="mb-1">
-                        <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''">
+                        <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''"
+                            class="noBorder">
                             <template #header>
                                 <div class="flex items-center pr-5">
                                     <el-checkbox v-model="showMap" :label="$t('home.onlineShow')" size="large"
@@ -67,13 +68,14 @@
                             </template>
                             <template #content>
                                 <div class="map w-full px-2 h-[758px] pb-2">
-                                    <Map :pos_info="pos_info" />
+                                    <Map :pos_info="pos_info" v-if="locale === 'zh'" />
+                                    <Amap :pos_info="pos_info" v-else  />
                                 </div>
                             </template>
                         </CardContainer>
                     </el-col>
                     <el-col :xs='24' :sm='6' :md='6' :lg='6' :xl='6' class="mb-1">
-                        <CardContainer :title="$t('home.title5')">
+                        <CardContainer :title="$t('home.title5')" class="noBorder">
                             <template #content>
                                 <div
                                     class="failcontent flex flex-col pt-[0px] text-[16px] h-[758px] px-3 lg:px-5 overflow-x-hidden overflow-y-auto pb-5">
@@ -101,7 +103,7 @@
             <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
                 <el-row :gutter='20' class='mb-5'>
                     <el-col :xs='24' :sm='5' :md='5' :lg='5' :xl='5' class="mb-1">
-                        <div class="h-[490px] w-full rounded-[10px] overflow-y-auto bg-white">
+                        <div class="h-[490px] w-full rounded-[10px] overflow-y-auto bg-white noBorder">
                             <div :class="(index % 2 === 0) ? 'bg-[#FAFAFA]' : 'bg-[#fff]'"
                                 class="item w-full flex items-center h-[70px] bg-[#FAFAFA]"
                                 v-for="(val, key, index) in  totalInfo " :key="key">
@@ -115,7 +117,7 @@
                         </div>
                     </el-col>
                     <el-col :xs='24' :sm='19' :md='19' :lg='19' :xl='19'>
-                        <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px]">
+                        <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px] noBorder">
                             <SingleLineChart :lineData="runData" ref="SingleLineChartRef" />
                         </div>
                     </el-col>
@@ -177,6 +179,7 @@ import Screenfull from '/@/layout/components/screenfull.vue'
 import { useI18n } from 'vue-i18n'
 import { useIndexStore } from '/@/store/modules'
 import { storeToRefs } from 'pinia'
+import Amap from '/@/components/common/Amap.vue'
 const { t, locale } = useI18n()
 const indexStore = useIndexStore()
 const indexStoreState = storeToRefs(indexStore)
@@ -395,5 +398,10 @@ onMounted(() => {
 :deep(.el-collapse-item__content) {
     padding-bottom: 0;
     background-color: #f0f2f5;
+}
+
+.noBorder {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 </style>
