@@ -35,6 +35,11 @@ const initMap = () => {
         center: [116.40969, 37.43997405227057], //  地图中心点坐标 此处填【经度，纬度】
     });
     addMarkers()
+    map.value.plugin(["AMap.MarkerClusterer"], function () {
+        const cluster = new AMap.MarkerClusterer(map.value, markers.value, {
+            gridSize: 80,
+        });
+    })
 }
 
 const addMarkers = () => {
@@ -67,20 +72,20 @@ const openInfoWindow = (e, code, val) => {
     contentElement.innerHTML = `
     <div class="z-100 window p-1 pt-[6px] bg-[#fff] min-w-[240px] rounded-[4px]">
         <div class="header w-full flex items-center justify-between px-2">
-            <span class="text-t3 text-[18px]">设备信息</span>
+            <span class="text-t3 text-[18px]">Device Information</span>
             <img src="/@/assets/img/close.png" alt="" class="w-[13px] h-[13px] close" id="close" onclick="closeInfo()">
         </div>
         <div class="px-2 w-full" style="line-height: 24px;">
             <div class="row text-[16px] text-t3 ">
-                <span class="text-[16px]">设备ID：</span>
+                <span class="text-[16px]">Device ID：</span>
                 <span class="text-primary" id="id" onclick="goTo(${id})">${id}</span>
             </div>
             <div class="row text-[16px] text-t3 ">
-                <span class="text-[16px]">时间：</span>
+                <span class="text-[16px]">Time：</span>
                 <span>${time}</span>
             </div>
             <div class="row text-[16px] text-t3 ">
-                <span class="text-[16px]">状态：</span>
+                <span class="text-[16px]">Status：</span>
                 <span>${status}</span>
             </div>
         </div>

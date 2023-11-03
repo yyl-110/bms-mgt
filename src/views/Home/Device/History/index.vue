@@ -8,7 +8,7 @@
                 <el-table-column :align="'center'" fixed :label="dateProps" :prop="dateProps" width="180" />
                 <el-table-column :align="'center'" :label="item.title" v-for="(item, index) in  header">
                     <el-table-column :align="'center'" :label="val" v-for="(val) in  item?.children" :prop="val"
-                        :width="val === 'Relay status' ? 600 : 180"></el-table-column>
+                        :width="(val === 'Relay status' || val === '继电器状态') ? 650 : 180"></el-table-column>
                 </el-table-column>
                 <el-table-column :align="'center'" :label="errorProps" :prop="errorProps" width="800"
                     class-name="errorClass" />
@@ -44,7 +44,7 @@ const errorProps = ref('')
 const fetchData = async (pages = page.value, size = list_rows.value) => {
     const device_code = sessionStorage.getItem('device_code')
     const _order = order.value.filed ? order.value : {}
-    const res: any = await getDeviceHistory({ code: device_code, page: pages, list_rows: size, ..._order, lang: 'en' })
+    const res: any = await getDeviceHistory({ code: device_code, page: pages, list_rows: size, ..._order })
     if (res.code === 1) {
         history_list.value = res.data
         try {

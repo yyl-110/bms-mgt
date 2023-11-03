@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort">
+        <el-table ref="tableRef" row-key="device_id" :data="tableData" style="width: 100%" stripe @sort-change="handleSort" id="out-table">
             <el-table-column :align="'center'" type="index" :label="$t('table.index')" width="120" :index="indexMethod"
                 v-if="checkList.includes($t('table.index'))" />
             <el-table-column :align="'center'" prop="project_name" :label="$t('table.project_name')" sortable width="180"
@@ -15,7 +15,7 @@
                 </template>
             </el-table-column>
             <el-table-column :align="'center'" prop="des" :label="$t('table.desc')" sortable
-                v-if="checkList.includes($t('table.desc'))">
+                v-if="checkList.includes($t('table.desc'))" min-width="150">
                 <template #default="scope">
                     <div class="flex items-center justify-center">
                         {{ scope.row.des }}

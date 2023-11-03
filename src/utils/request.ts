@@ -3,6 +3,8 @@ import axios from 'axios'
 import { AxiosResponse } from 'axios'
 import { ElLoading, ElNotification } from 'element-plus'
 import i18n from '../i18n'
+import { api } from '../api'
+import { objectToQueryString } from './tools'
 
 let loading:{close():void}
 const baseURL = import.meta.env.MODE === 'development' ? '/api' : import.meta.env.VITE_BASE_API as string | undefined
@@ -63,6 +65,7 @@ request.interceptors.request.use(config => {
     // 让每个请求携带自定义 token 请根据实际情况自行修改
     if (token) {
         config.headers['token'] = token
+        config.headers['lang'] = locale.value === 'zh' ? 'zh-cn' : 'en'
     }
     return config
 }, errorHandler)
@@ -85,7 +88,18 @@ request.interceptors.response.use((response:AxiosResponse<IResponse>) => {
 
 export const downloadHistory = (params:any) => {
     const { getStatus } = useLayoutStore()
-    return axios({method:'get', url:baseURL + '/api/device/history/download',params:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
+    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN})
+    const url = `${baseURL}/api/device/history/download?${query}`
+    window.open(url)
+    // return axios({method:'get', url:baseURL + '/api/device/history/download',params:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
+}
+
+export const tableDown = (params:any, type:string) => {
+    const { getStatus } = useLayoutStore()
+    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN})
+    const url = `${baseURL}${api[type]}?${query}`
+    console.log('url:', url)
+    window.open(url)
 }
 
 export default request

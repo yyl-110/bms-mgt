@@ -41,7 +41,17 @@ const chartPie: () => ECOption = () => {
                 color: "rgba(212, 232, 254, 1)",
                 // fontSize: fontChart(0.24),
             },
-            confine: true
+            confine: true,
+            formatter: (p) => {
+                var dom = `<div >
+    
+        <div style="display: flex;
+        justify-content: center;
+        flex-direction: column;position: relative;z-index: 1;color:#fff">
+                <div style="display:flex;align-items:center"><span style="width:10px;height:10px;background:#0078D7;border-radius:50%;margin-right:5px"></span> ${p[0]?.seriesName}：${p[0]?.data}台 </div>
+             </div>`
+                return dom
+            }
         },
         grid: {
             top: '25%',
@@ -110,7 +120,7 @@ const chartPie: () => ECOption = () => {
             }
         },
         series: [{
-            name: t('home.cd'),
+            name: t('home.number'),
             type: 'bar',
             barWidth: '10',
             barCategoryGap: '100',

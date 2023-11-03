@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CardContainer :title="$t('table.FirmwareUpgrade')" class="mb-5">
+        <CardContainer :title="$t('table.FirmwareUpgrade')" class="mb-5" v-if="componentVisible('Upgrade')">
             <template #content>
                 <div class="h-[100px] w-full  px-5">
                     <div class="flex gap-[23px] items-center">
@@ -48,16 +48,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { dtuOperationList, optionalDtuList, handleDtuUpdate } from '/@/api';
 import CardContainer from '/@/components/common/CardContainer.vue';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router';
 const { t } = useI18n()
 
 const dtuId = ref('')
 const tableData = ref([])
 let options = ref([])
+
+const route = useRoute()
+const componentVisible = computed(() => (val: any) => {
+    try {
+        return (route?.meta?.inner).includes(val);
+    } catch (error) {
+        return false
+    }
+});
 
 const canUseDtuList = async () => {
     const device_code = sessionStorage.getItem('device_code')

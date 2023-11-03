@@ -13,7 +13,7 @@
                         </template>
                     </el-input>
                 </div>
-                <el-button class="text-[#999] absolute right-1 sm:right-5">
+                <el-button class="text-[#999] absolute right-1 sm:right-5" @click="exportTable">
                     <img src="../../assets/img/export.png" class="w-5 h-5 hidden sm:block" alt="">
                     {{ $t('table.export') }}
                 </el-button>
@@ -55,6 +55,8 @@ import { useIndexStore } from '/@/store/modules';
 import { storeToRefs } from 'pinia';
 import Screenfull from '/@/layout/components/screenfull.vue';
 import Amap from '/@/components/common/Amap.vue';
+import { ElMessage } from 'element-plus';
+import { tableDown } from '/@/utils/request';
 const { t, locale } = useI18n()
 
 const indexStore = useIndexStore()
@@ -109,6 +111,10 @@ const checkedProject = (data) => {
     const { name, id } = data
     projectName.value = name
     project_id.value = id
+}
+
+const exportTable = async () => {
+    tableDown({ search: searchVal.value }, 'projectDown')
 }
 
 /**

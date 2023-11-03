@@ -2,7 +2,7 @@ import { useLayoutStore } from '../store/modules/layout'
 import request from '/@/utils/request'
 import axios, { AxiosResponse } from 'axios'
 
-const api = {
+export const api = {
     child_device_index: '/api/child/index/index',
     device_index: '/api/home/run',
     addChild:'/api/child/index/add',
@@ -28,7 +28,12 @@ const api = {
     historyTotal:'/api/device/history/total',
     childUpdateApi:'/api/child/index/update',
     projectUpdateApi:'/api/project/update',
+    homeDown:'/api/home/_down',
+    projectDown:'/api/project/_down',
+    childDown:'/api/child/index/_down',
+    childDeviceDown:'/api/child/device/_down',
 }
+
 /*
 ** 子用户设备列表
  */

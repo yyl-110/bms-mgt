@@ -209,3 +209,15 @@ export const getFormData = (obj:any) => {
     }
     return null
 }
+
+// 将js对象转换成查询字符串
+export const objectToQueryString = (obj) => {
+    const keyValuePairs = []
+    for (const key in obj) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj.hasOwnProperty(key)) {
+        keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]))
+      }
+    }
+    return keyValuePairs.join('&')
+  }

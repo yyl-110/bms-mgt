@@ -53,7 +53,12 @@
             </el-col>
         </el-row>
         <el-collapse v-model="activeNames1" class="mb-5">
-            <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
+            <el-collapse-item title="地图/故障" name="1" class="rounded-[10px] overflow-hidden">
+                <template #title>
+                    <div class="px-5  text-t3 font-[500] text-xl flex items-center">
+                        {{ $t('home.title7') }}
+                    </div>
+                </template>
                 <el-row :gutter='20'>
                     <el-col :xs='24' :sm='18' :md='18' :lg='18' :xl='18' class="mb-1">
                         <CardContainer :title="$t('home.title4')" :class="isFullscreen ? 'fullScreen' : ''"
@@ -69,7 +74,7 @@
                             <template #content>
                                 <div class="map w-full px-2 h-[758px] pb-2">
                                     <Map :pos_info="pos_info" v-if="locale === 'zh'" />
-                                    <Amap :pos_info="pos_info" v-else  />
+                                    <Amap :pos_info="pos_info" v-else />
                                 </div>
                             </template>
                         </CardContainer>
@@ -100,24 +105,32 @@
         </el-collapse>
 
         <el-collapse v-model="activeNames4" class="mb-5">
-            <el-collapse-item title="" name="1" class="rounded-[10px] overflow-hidden">
-                <el-row :gutter='20' class='mb-5'>
-                    <el-col :xs='24' :sm='5' :md='5' :lg='5' :xl='5' class="mb-1">
-                        <div class="h-[490px] w-full rounded-[10px] overflow-y-auto bg-white noBorder">
-                            <div :class="(index % 2 === 0) ? 'bg-[#FAFAFA]' : 'bg-[#fff]'"
-                                class="item w-full flex items-center h-[70px] bg-[#FAFAFA]"
-                                v-for="(val, key, index) in  totalInfo " :key="key">
-                                <span
-                                    class="flex-shrink-0 w-[75%] xl:w-[55%] text-center text-[14px] xl:text-[16px] text-[#666] ">{{
-                                        totalDataEnum[key]
-                                    }}</span>
-                                <span class="flex-shrink-0 w-[25%] xl:w-[45%] text-center text-[14px] text-t3 font-[500]">{{
-                                    val }}</span>
+            <el-collapse-item title="统计" name="1" class="rounded-[10px] overflow-hidden">
+                <template #title>
+                    <div class="px-5  text-t3 font-[500] text-xl flex items-center">
+                        {{ $t('home.title8') }}
+                    </div>
+                </template>
+                <el-row :gutter='20'>
+                    <el-col :xs='24' :sm='7' :md='7' :lg='7' :xl='7' class="mb-1">
+                        <el-scrollbar wrap-class='overflow-x-hidden'>
+                            <div class="h-[490px] w-full rounded-[10px] overflow-x-hidden bg-white noBorder">
+                                <div :class="(index % 2 === 0) ? 'bg-[#FAFAFA]' : 'bg-[#fff]'"
+                                    class="item w-full flex items-center h-[70px] bg-[#FAFAFA]"
+                                    v-for="(val, key, index) in  totalInfo " :key="key">
+                                    <span
+                                        class="flex-shrink-0 w-[75%] xl:w-[60%] text-center text-[14px] xl:text-[16px] text-[#666] ">{{
+                                            totalDataEnum[key]
+                                        }}</span>
+                                    <span
+                                        class="flex-shrink-0 w-[25%] xl:w-[40%] text-center text-[14px] text-t3 font-[500]">{{
+                                            val }}</span>
+                                </div>
                             </div>
-                        </div>
+                        </el-scrollbar>
                     </el-col>
-                    <el-col :xs='24' :sm='19' :md='19' :lg='19' :xl='19'>
-                        <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px] noBorder">
+                    <el-col :xs='24' :sm='17' :md='17' :lg='17' :xl='17'>
+                        <div class="lineContainer w-full bg-white rounded-[10px] relative h-[490px] noBorder px-2">
                             <SingleLineChart :lineData="runData" ref="SingleLineChartRef" />
                         </div>
                     </el-col>
@@ -146,7 +159,7 @@
                             <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
                             {{ $t('table.print') }}
                         </el-button>
-                        <el-button class="text-[#999]">
+                        <el-button class="text-[#999]" @click="exportTable">
                             <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
                             {{ $t('table.export') }}
                         </el-button>
@@ -180,6 +193,8 @@ import { useI18n } from 'vue-i18n'
 import { useIndexStore } from '/@/store/modules'
 import { storeToRefs } from 'pinia'
 import Amap from '/@/components/common/Amap.vue'
+import { ElMessage } from 'element-plus'
+import { tableDown } from '/@/utils/request'
 const { t, locale } = useI18n()
 const indexStore = useIndexStore()
 const indexStoreState = storeToRefs(indexStore)
@@ -249,8 +264,8 @@ const pieChartRef2 = ref(null)
 const SingleLineChartRef = ref(null)
 const lineChartRef = ref(null)
 
-const getHomeData = async () => {
-    const res = await homeData({ status: showMap.value ? 'on' : '' })
+const getHomeData = async (val: string = '') => {
+    const res = await homeData({ status: showMap.value ? 'on' : '', search: val })
     if (res?.code === 1) {
         list.value[0].num = res.data?.project_num
         list.value[1].num = res.data?.device_num
@@ -285,7 +300,10 @@ const handleSort = (val) => {
 
 const handleSearch = (val) => {
     searchVal.value = val
-    getDeviceList(val)
+    getDeviceList()
+    getHomeData(val)
+    handleGetHomeTotal(val)
+    getDeviceIndex(val)
 }
 
 /**
@@ -305,8 +323,8 @@ const changePagination = (value: { type: string, val: number }) => {
     }
 }
 
-const getDeviceIndex = async () => {
-    const res = await deviceIndex({ type: selectTime.value })
+const getDeviceIndex = async (val: string = '') => {
+    const res = await deviceIndex({ type: selectTime.value, search: val })
     if (res.code === 1) {
         chargeData.value = res.data
     }
@@ -321,8 +339,8 @@ const goTo = (code: string) => {
     window.location.href = '/device'
 }
 
-const handleGetHomeTotal = async () => {
-    const res = await getHomeTotal({})
+const handleGetHomeTotal = async (val: string = '') => {
+    const res = await getHomeTotal({ search: val })
     flt_info.value = res.data?.flt_info?.info
     totalInfo.value = res.data?.total
     socData.value = res.data?.soc
@@ -342,6 +360,9 @@ const getDeviceList = async (pages = page.value, size = list_rows.value, search 
 
 
 
+const exportTable = async () => {
+    tableDown({ search: searchVal.value, fields: order.value.filed }, 'homeDown')
+}
 
 onMounted(() => {
     getHomeData()

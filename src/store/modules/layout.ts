@@ -258,7 +258,7 @@ export const useLayoutStore = defineStore({
                 if(item.name === 'FirmwareMgt') {
                     return {...item, meta:{...item.meta,alwaysShow:true}}
                 }
-                return  item
+                return {...item,meta:{...item.meta,inner: item?.inner || []}}
             })
             generatorDynamicRouter(newData)
         }

@@ -41,7 +41,7 @@
                         <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
                         {{ $t('table.print') }}
                     </el-button>
-                    <el-button class="text-[#999]">
+                    <el-button class="text-[#999]" @click="exportTable">
                         <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
                         {{ $t('table.export') }}
                     </el-button>
@@ -134,6 +134,7 @@ import BindDevice from '../components/BindDevice.vue';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
 import { useI18n } from 'vue-i18n'
+import { tableDown } from '/@/utils/request';
 const { t } = useI18n()
 let order = reactive({ value: { filed: '', order: '' } })
 const list = ref([{ title: t('subUser.subUserNum'), num: 0 }, { title: t('home.projectNum'), num: 0 }, { title: t('home.deviceNum'), num: 0 }, { title: t('home.onlineNum'), num: 0 },])
@@ -343,6 +344,10 @@ const search = () => {
 
 const changeCheck = (e: string[]) => {
 
+}
+
+const exportTable = async () => {
+    tableDown({ search: searchVal.value }, 'childDown')
 }
 
 /* 绑定成功 */

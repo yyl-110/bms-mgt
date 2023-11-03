@@ -31,7 +31,7 @@
                         <img src="/@/assets/img/point.png" class="w-5 h-5" alt="">
                         {{ $t('table.print') }}
                     </el-button>
-                    <el-button class="text-[#999]">
+                    <el-button class="text-[#999]" @click="exportTable">
                         <img src="/@/assets/img/export.png" class="w-5 h-5" alt="">
                         {{ $t('table.export') }}
                     </el-button>
@@ -83,6 +83,7 @@ import { ElMessage } from 'element-plus';
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThanSm = breakpoints.greater('sm') // only larger than sm
 import { useI18n } from 'vue-i18n'
+import { tableDown } from '/@/utils/request';
 const { t } = useI18n()
 
 const route = useRoute()
@@ -179,6 +180,10 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
         list.value[1].num = res.data.device_num
         list.value[2].num = res.data.online_num
     }
+}
+
+const exportTable = async () => {
+    tableDown({ search: searchVal.value }, 'childDeviceDown')
 }
 
 const changeCheck = () => { }
