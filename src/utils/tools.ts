@@ -214,7 +214,6 @@ export const getFormData = (obj:any) => {
 export const objectToQueryString = (obj) => {
     const keyValuePairs = []
     for (const key in obj) {
-      // eslint-disable-next-line no-prototype-builtins
       if (obj.hasOwnProperty(key)) {
         keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]))
       }
