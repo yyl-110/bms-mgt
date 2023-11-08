@@ -10,7 +10,8 @@ export const useIndexStore = defineStore({
         runHistorySearch: {
             type:'',
             start_time:'',
-            end_time:''
+            end_time:'',
+            month:'',
         },
         runHistoryChartSearch: {
             start_time:dayjs().format('YYYY-MM-DD HH:mm:ss'),

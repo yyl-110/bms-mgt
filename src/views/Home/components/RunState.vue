@@ -10,13 +10,13 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
@@ -24,7 +24,7 @@
                     <tr style="text-align: center;" v-for="(item, index) in baseArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
                             <th>{{ $t(`runStatus.base${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -34,13 +34,13 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
@@ -48,7 +48,7 @@
                     <tr style="text-align: center;" v-for="(item, index) in cdArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
                             <th>{{ $t(`runStatus.cd${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -58,13 +58,13 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
@@ -72,7 +72,7 @@
                     <tr style="text-align: center;" v-for="(item, index) in totalArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
                             <th>{{ $t(`runStatus.total${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -83,13 +83,13 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
-                        <th>{{$t('table.name')}}</th>
+                        <th>{{ $t('table.name') }}</th>
                         <th style="text-align: center;">{{ $t('table.status') }}</th>
                     </tr>
                 </thead>
@@ -97,7 +97,7 @@
                     <tr style="text-align: center;" v-for="(item, index) in allArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
                             <th>{{ $t(`runStatus.all${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -117,21 +117,51 @@ const props = defineProps({
     }
 })
 
+const ChgDsgStaList = {
+    0: '非充非放',
+    1: '充电',
+    2: '放电',
+    3: '其他'
+}
+
+const HeatStaList = {
+    0: '否',
+    1: '是',
+    2: '其他',
+}
+
+const SysStaList = {
+    0: '正常',
+    1: '禁充',
+    2: '禁放',
+    3: '禁充禁放',
+    4: '未知',
+}
+
 const baseArr = computed(() => {
     const arr = []
     arr.push(props.data?.StatisticInfo_Type1?.CycleNums)
     arr.push(props.data?.StatisticInfo_Type1?.RunTimeSum)
     arr.push(props.data?.StatisticInfo_Type1?.ChgTimeSum)
     arr.push(props.data?.StatisticInfo_Type1?.DsgTimeSum)
-    arr.push(props.data?.SysInfo_Type1?.ChgDsgSta)
-    arr.push(props.data?.SysInfo_Type1?.HeatSta)
-    arr.push(props.data?.SysInfo_Type1.SysSta)
+    const ChgDsgSta = ChgDsgStaList[props.data?.SysInfo_Type1?.ChgDsgSta]
+    arr.push(ChgDsgSta)
+    const HeatSta = HeatStaList[props.data?.SysInfo_Type1?.HeatSta]
+    arr.push(HeatSta)
+    const SysSta = SysStaList[props.data?.SysInfo_Type1.SysSta]
+    arr.push(SysSta)
     arr.push(props.data?.SysInfo_Type1.SelfChkCode)
     arr.push(props.data?.SysInfo_Type1.Hv1)
     arr.push(props.data?.SysInfo_Type1.Hv2)
     arr.push(props.data?.SysInfo_Type1.Hv3)
     arr.push(props.data?.SysInfo_Type1.Hv4)
-    const newArr = arr.concat(props.data?.relay)
+    const relayArr = props.data?.relay.map(item => {
+        if (item === 0) {
+            return '断开'
+        }
+        return item === 1 ? '闭合' : item
+    })
+    const newArr = arr.concat(relayArr)
     return _.chunk(newArr, 4)
 })
 
@@ -139,8 +169,10 @@ const cdArr = computed(() => {
     const arr = []
     arr.push(props.data?.SysInfo_Type1.ChgOnVolt)
     arr.push(props.data?.SysInfo_Type1.ChgerCommuSta)
-    arr.push(props.data?.SysInfo_Type1.ChgDsgSta)
-    arr.push(props.data?.SysInfo_Type1.HeatSta)
+    const ChgDsgSta = ChgDsgStaList[props.data?.SysInfo_Type1?.ChgDsgSta]
+    arr.push(ChgDsgSta)
+    const HeatSta = HeatStaList[props.data?.SysInfo_Type1?.HeatSta]
+    arr.push(HeatSta)
     arr.push(props.data?.SysInfo_Type1.ChgerReqVolt)
     arr.push(props.data?.SysInfo_Type1.ChgerReqCurr)
     arr.push(props.data?.SysInfo_Type1.ChgerOutVolt)
@@ -153,14 +185,23 @@ const cdArr = computed(() => {
 })
 
 const allArr = computed(() => {
-    const arr = [...props.data?.relay]
+    const relayArr = props.data?.relay.map(item => {
+        if (item === 0) {
+            return '断开'
+        }
+        return item === 1 ? '闭合' : item
+    })
+    const arr = [...relayArr]
     arr.push(props.data?.StatisticInfo_Type1.CycleNums)
     arr.push(props.data?.StatisticInfo_Type1.RunTimeSum)
     arr.push(props.data?.StatisticInfo_Type1.ChgTimeSum)
     arr.push(props.data?.StatisticInfo_Type1.DsgTimeSum)
-    arr.push(props.data?.SysInfo_Type1.ChgDsgSta)
-    arr.push(props.data?.SysInfo_Type1.HeatSta)
-    arr.push(props.data?.SysInfo_Type1.SysSta)
+    const ChgDsgSta = ChgDsgStaList[props.data?.SysInfo_Type1?.ChgDsgSta]
+    arr.push(ChgDsgSta)
+    const HeatSta = HeatStaList[props.data?.SysInfo_Type1?.HeatSta]
+    arr.push(HeatSta)
+    const SysSta = SysStaList[props.data?.SysInfo_Type1.SysSta]
+    arr.push(SysSta)
     arr.push(props.data?.SysInfo_Type1.SelfChkCode)
     arr.push(props.data?.SysInfo_Type1.ChgOnVolt)
     arr.push(props.data?.SysInfo_Type1.ChgerCommuSta)

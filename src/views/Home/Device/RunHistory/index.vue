@@ -1,6 +1,15 @@
 <template>
     <div>
         <div class="chart h-[450px] rounded-[10px] mb-5 bg-[#fff]">
+            <div class="left absolute left-5 top-10  z-10">
+                <el-button type="primary" size="small" :icon="ArrowLeftBold" @click="changeEndTime(1)">
+                </el-button>
+            </div>
+            <div class="right absolute right-5 top-10  z-10">
+                <el-button type="primary" size="small" :icon="ArrowRightBold" @click="changeEndTime(2)"
+                    :disabled="isLastMonth">
+                </el-button>
+            </div>
             <LineChart :lineData="chartData" />
         </div>
         <div class="min-h-[640px] rounded-[10px] mb-5 bg-[#fff] px-5 w-full">
@@ -41,10 +50,15 @@ import print from '/@/utils/print';
 import { useIndexStore } from '/@/store/modules';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n'
+import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue';
+import dayjs from 'dayjs';
 const { t } = useI18n()
 
 const indexStore = useIndexStore()
-const { runHistorySearch = {} } = storeToRefs(indexStore)
+const { handleRunHistorySearch } = indexStore
+const { runHistorySearch } = storeToRefs(indexStore)
+
+const isLastMonth = ref(false)
 
 const tableList = ref([])
 const list_rows = ref(10)
@@ -65,7 +79,7 @@ const filterList = ref([
 const fetchData = async (pages = page.value, size = list_rows.value) => {
     const device_code = sessionStorage.getItem('device_code')
     const _order = order.value.filed ? order.value : {}
-    const _runHistorySearch = runHistorySearch.value
+    const _runHistorySearch = { ...runHistorySearch.value }
     if (_runHistorySearch.type === '') delete _runHistorySearch.type
     const res: any = await runHistory({ code: device_code, page: pages, list_rows: size, ..._runHistorySearch, ..._order })
     page.value = res.data?.current_page
@@ -80,7 +94,7 @@ const pointTable = () => {
     print.printJson({
         title: '', // 打印出来的标题
         data: tableList.value, // 需要打印的数据
-        serial: checkList.value.includes('序号'), // 是否需要打印序列号
+        serial: checkList.value.includes(t('table.index')), // 是否需要打印序列号
         fields, // 需要打印的字段
         properties: fields.map(i => {
             return { field: i, displayName: filterList.value.find(item => item.key === i)?.label }
@@ -112,14 +126,41 @@ const changePagination = (value: { type: string, val: number }) => {
     }
 }
 
-const getHistoryChartList = async () => {
+const getHistoryChartList = async (time = '') => {
     const device_code = sessionStorage.getItem('device_code')
-    const res = await getHistoryChart({ code: device_code })
+    const res = await getHistoryChart({ code: device_code, end_time: time })
     if (res.code === 1) {
         chartData.value = res.data
+        try {
+            const keys = Object.keys(chartData.value)
+            const lastMonth = keys[keys.length - 1]
+            isLastMonth.value = dayjs().isSame(lastMonth, 'month')
+        } catch (error) {
+            console.log('error:', error)
+        }
     }
 }
 
+const changeEndTime = (type: number) => {
+    let end_time = ''
+    const keys = Object.keys(chartData.value)
+    if (type === 1) {
+        const currentDate = keys[keys.length - 1]
+        const day = dayjs(currentDate).subtract(1, 'month').endOf('month').format('YYYY-MM-DD');
+        console.log('end_time:', day)
+        end_time = day
+    }
+    if (type === 2) {
+        const lastMonth = keys[keys.length - 1]
+        const day = dayjs(lastMonth).add(1, 'month').endOf('month').format('YYYY-MM-DD');
+        end_time = day
+    }
+    handleRunHistorySearch({
+        ...runHistorySearch.value,
+        end_time
+    })
+    getHistoryChartList(end_time)
+}
 
 
 onMounted(() => {
@@ -128,7 +169,7 @@ onMounted(() => {
 })
 
 
-watch(() => runHistorySearch, (val) => {
+watch(() => runHistorySearch.value, (val) => {
     fetchData()
 }, { deep: true })
 

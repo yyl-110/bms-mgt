@@ -89,6 +89,7 @@
                 </div>
             </template>
         </CardContainer>
+        <!-- v-if="componentVisible('UserData')" -->
         <div class="w-full" v-if="componentVisible('UserData')">
             <CardContainer :title="$t('device.wdzs')" :collapseHeader="true" class="mb-5">
                 <template #header>

@@ -28,8 +28,8 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item :label="$t('table.kx')">
-                    <el-transfer v-model="leftValue" filterable :titles="[$t('table.noSelect'), $t('table.selected')]" :data="data"
-                        :filter-placeholder="$t('table.searchText')" />
+                    <el-transfer v-model="leftValue" filterable :titles="[$t('table.noSelect'), $t('table.selected')]"
+                        :data="data" :filter-placeholder="$t('table.searchText')" />
                 </el-form-item>
             </el-form>
         </div>
@@ -51,6 +51,8 @@ import { projectData } from '../../../../api/project'
 import { getChildDevice, optionalDtuList, uploadDtu } from '../../../../api'
 import { getFormData } from '/@/utils/tools'
 import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n()
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThan2xl = breakpoints.greater('2xl') // only larger than sm
@@ -95,7 +97,7 @@ const options = computed(() => {
                 value: i.project_id
             }
         })
-        list.unshift({ label: '全部', value: 0 })
+        list.unshift({ label: locale.value === 'zh' ? '全部' : 'All', value: 0 })
         return list
     }
     return []
@@ -152,14 +154,14 @@ const handleClose = () => {
 const handelBind = async () => {
     if (!uploadData.value.name) {
         ElMessage({
-            message: '文件不能为空',
+            message: t('table.fileNoEmpty'),
             type: 'error',
         })
         return
     }
     if (!leftValue.value.length) {
         ElMessage({
-            message: '请选择固件',
+            message: t('table.chooseFirmware'),
             type: 'error',
         })
         return
@@ -175,9 +177,10 @@ const handelBind = async () => {
     const res = await uploadDtu(fd);
     if (res.code === 1) {
         ElMessage({
-            message: '上传成功！',
+            message: t('table.success'),
             type: 'success',
         })
+        leftValue.value = []
         emits('bindSucess')
     }
 }

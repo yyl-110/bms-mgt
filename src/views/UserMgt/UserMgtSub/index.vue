@@ -218,7 +218,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     const res = await addChild({ ...formValue.value })
                     if (res?.code === 1) {
                         ElMessage({
-                            message: '添加成功',
+                            message: t('table.success'),
                             type: 'success',
                         })
                         getChildDeviceList()
@@ -227,7 +227,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                     }
                 } catch (error) {
                     ElMessage({
-                        message: '添加失败',
+                        message: t('table.fail'),
                         type: 'error',
                     })
                 }
@@ -237,7 +237,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 const res = await childUpdate({ ...formValue.value, ids: handelId.value })
                 if (res?.code === 1) {
                     ElMessage({
-                        message: '修改成功',
+                        message: t('table.success'),
                         type: 'success',
                     })
                     getChildDeviceList()
@@ -246,7 +246,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 }
             } catch (error) {
                 ElMessage({
-                    message: '修改失败',
+                    message: t('table.fail'),
                     type: 'error',
                 })
             }

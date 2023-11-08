@@ -65,12 +65,11 @@ const cellInfo = computed(() => {
     arr.forEach((item, index) => {
         let _item = [...item]
         item.forEach((val, inx) => {
-            _item.splice(inx + inx, 0, 'V' + ((inx + 1) + (index * item.length)))
+            _item.splice(inx + inx, 0, 'V' + ((inx + 1) + (index * 4)))
 
         })
         newArr.push(_item)
     })
-
     return newArr
 })
 

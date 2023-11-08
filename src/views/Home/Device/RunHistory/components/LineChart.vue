@@ -7,7 +7,11 @@ import { defineComponent, onMounted, watch, ref, defineProps } from 'vue'
 import { echarts, ECOption } from '/@/components/Echart'
 import _ from 'lodash'
 import { useI18n } from 'vue-i18n'
+import { useIndexStore } from '/@/store/modules';
 const { t } = useI18n()
+
+const { handleRunHistorySearch, runHistorySearch = {} } = useIndexStore()
+
 
 const props = defineProps({
     lineData: {
@@ -154,6 +158,20 @@ const chartInit = () => {
     window.onresize = () => {
         myChart.resize()
     }
+    myChart.getZr().on("click", (params) => {
+        var pointInPixel = [params.offsetX, params.offsetY];
+        // 判断给定的点是否在指定的坐标系
+        if (myChart.containPixel("grid", pointInPixel)) {
+            let xIndex = myChart.convertFromPixel({ seriesIndex: 0 }, [params.offsetX, params.offsetY])[0]
+            const xData = Object.keys(props.lineData)
+            handleRunHistorySearch({
+                ...runHistorySearch,
+                month: xData[xIndex]
+            })
+        }
+    });
+
+
 }
 
 onMounted(() => {

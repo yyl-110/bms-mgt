@@ -96,6 +96,9 @@ export default {
         operationsHistory: '操作历史',
         FirmwareUpgrade: '固件升级',
         UpgradableFirmware: '可升级固件',
+        chooseFirmware:'请选择设备',
+        fileNoEmpty:'文件不能为空',
+        allUnbind:'全部解绑',
     },
     device: {
         systemState: '系统状态',

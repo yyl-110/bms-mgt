@@ -20,8 +20,12 @@
                 <tbody class="cell-info-tbl">
                     <tr style="text-align: center;" v-for="(item, index) in baseArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
-                            <th>{{ $t(`runStatus.vd${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <th>{{ $t(`runStatus.vd${inx + 1 + (3 * index)}`) }}</th>
+                            <td v-if="inx === 0 && index === 0">{{ ms[val] ?? 'N/A' }}</td>
+                            <td v-else-if="inx === 1 && index === 0">{{ dw[val] ?? 'N/A' }}</td>
+                            <td v-else-if="inx === 0 && index === 1">{{ zy[val] ?? 'N/A' }}</td>
+                            <td v-else-if="inx === 1 && index === 1">{{ sf[val] ?? 'N/A' }}</td>
+                            <td v-else>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -42,8 +46,8 @@
                 <tbody class="cell-info-tbl">
                     <tr style="text-align: center;" v-for="(item, index) in cdArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
-                            <th>{{ $t(`runStatus.ws${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <th>{{ $t(`runStatus.ws${inx + 1 + (3 * index)}`) }}</th>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -64,8 +68,8 @@
                 <tbody class="cell-info-tbl">
                     <tr style="text-align: center;" v-for="(item, index) in totalArr" :key="index">
                         <template v-for="(val, inx) in item" :key="inx">
-                            <th>{{ $t(`runStatus.hs${inx + 1 + (4 * index)}`) }}</th>
-                            <td>{{ val || 'N/A' }}</td>
+                            <th>{{ $t(`runStatus.hs${inx + 1 + (3 * index)}`) }}</th>
+                            <td>{{ val ?? 'N/A' }}</td>
                         </template>
                     </tr>
                 </tbody>
@@ -83,6 +87,11 @@ const props = defineProps({
         default: () => { }
     }
 })
+
+const ms = ref({ 0: "标准模式", 1: "标准模式", 2: "标准模式", 3: "标准模式" })
+const dw = ref({ 0: "空挡", 1: "后退", 2: "前进" })
+const zy = ref({ 0: "无人", 1: "有人", })
+const sf = ref({ 0: "释放", 1: "刹车" })
 
 const baseArr = computed(() => {
     const arr = []

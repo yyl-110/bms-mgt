@@ -88,7 +88,7 @@ request.interceptors.response.use((response:AxiosResponse<IResponse>) => {
 
 export const downloadHistory = (params:any) => {
     const { getStatus } = useLayoutStore()
-    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN})
+    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN,lang: locale.value === 'zh' ? 'zh-cn' : 'en'})
     const url = `${baseURL}/api/device/history/download?${query}`
     window.open(url)
     // return axios({method:'get', url:baseURL + '/api/device/history/download',params:params, headers: {token:getStatus.ACCESS_TOKEN}, responseType: 'blob'})
@@ -96,7 +96,7 @@ export const downloadHistory = (params:any) => {
 
 export const tableDown = (params:any, type:string) => {
     const { getStatus } = useLayoutStore()
-    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN})
+    const query = objectToQueryString({...params,token:getStatus.ACCESS_TOKEN,lang: locale.value === 'zh' ? 'zh-cn' : 'en'})
     const url = `${baseURL}${api[type]}?${query}`
     console.log('url:', url)
     window.open(url)

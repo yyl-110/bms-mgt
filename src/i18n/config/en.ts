@@ -97,6 +97,9 @@ export default {
         operationsHistory:'Operations History',
         FirmwareUpgrade:'Firmware Upgrade',
         UpgradableFirmware:'Upgradable Firmware',
+        chooseFirmware:'Please select a device',
+        fileNoEmpty:'File cannot be empty',
+        allUnbind:'Unbind All',
     },
     device: {
         systemState:'System State',

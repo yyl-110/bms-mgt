@@ -17,16 +17,16 @@
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="$t('table.kx')">
+                <!-- <el-form-item :label="$t('table.kx')">
                     <el-select v-model="formValue.device_code" placeholder="Select" filterable class="w-full" size="large"
                         clearable>
                         <el-option v-for="item in data" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
-                </el-form-item>
-                <!-- <el-form-item :label="$t('table.kx')">
-                    <el-transfer v-model="leftValue" filterable :titles="['未选设备', '已选设备']" :data="data"
-                        :filter-placeholder="$t('table.searchText')" />
                 </el-form-item> -->
+                <el-form-item :label="$t('table.kx')">
+                    <el-transfer v-model="leftValue" filterable :titles="[$t('table.noSelect'), $t('table.selected')]"
+                        :data="data" :filter-placeholder="$t('table.searchText')" />
+                </el-form-item>
             </el-form>
         </div>
         <template #footer>
@@ -47,6 +47,8 @@ import { projectData } from '../../../../api/project'
 import { getChildDevice, handleDtuUpdate, optionalDtuList, uploadDtu } from '../../../../api'
 import { getFormData } from '/@/utils/tools'
 import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n()
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const largerThan2xl = breakpoints.greater('2xl') // only larger than sm
@@ -93,7 +95,7 @@ const options = computed(() => {
                 value: i.project_id
             }
         })
-        list.unshift({ label: '全部', value: 0 })
+        list.unshift({ label: locale.value === 'zh' ? '全部' : 'All', value: 0 })
         return list
     }
     return []
@@ -103,7 +105,7 @@ const generateData = (_data: IGj[]): Option[] => {
     const data: Option[] = []
     for (let i = 0; i <= _data.length - 1; i++) {
         data.push({
-            value: _data[i]?.device_id,
+            key: _data[i]?.device_id,
             label: _data[i]?.identify_code,
             disabled: false,
         })
@@ -144,9 +146,16 @@ const handleClose = () => {
 }
 
 const handelBind = async () => {
-    if (!formValue.value.device_code) {
+    // if (!formValue.value.device_code) {
+    //     ElMessage({
+    //         message: '请选择设备',
+    //         type: 'error',
+    //     })
+    //     return
+    // }
+    if (!leftValue.value.length) {
         ElMessage({
-            message: '请选择设备',
+            message: t('table.chooseFirmware'),
             type: 'error',
         })
         return
@@ -155,12 +164,14 @@ const handelBind = async () => {
     // leftValue.value.forEach((value, index) => {
     //     fd.append(`device_ids[${index}]`, Number(value))
     // })
-    const res = await handleDtuUpdate({ firmware_id: props.handelId, code: "864708060986265" });
+    const device_ids = leftValue.value.join(',')
+    const res = await handleDtuUpdate({ firmware_id: props.handelId, device_ids });
     if (res.code === 1) {
         ElMessage({
-            message: '升级成功！',
+            message: t('table.success'),
             type: 'success',
         })
+        leftValue.value = []
         emits('bindSucess')
     }
 }

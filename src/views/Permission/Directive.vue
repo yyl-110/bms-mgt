@@ -46,7 +46,7 @@ export default defineComponent({
     name: 'Directive',
     setup() {
         const { getUserInfo, setToken } = useLayoutStore()
-        const username = ref(getUserInfo.name)
+        const username = ref(getUserInfo.username)
         const changeUser = () => {
             setToken(`token_${username.value}_token`)
             history.go(0)

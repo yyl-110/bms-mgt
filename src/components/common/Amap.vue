@@ -7,6 +7,7 @@ import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()
+import close from '/@/assets/img/close.png'
 
 const router = useRouter()
 
@@ -73,7 +74,7 @@ const openInfoWindow = (e, code, val) => {
     <div class="z-100 window p-1 pt-[6px] bg-[#fff] min-w-[240px] rounded-[4px]">
         <div class="header w-full flex items-center justify-between px-2">
             <span class="text-t3 text-[18px]">Device Information</span>
-            <img src="/@/assets/img/close.png" alt="" class="w-[13px] h-[13px] close" id="close" onclick="closeInfo()">
+            <img src="${close}" alt="" class="w-[13px] h-[13px] close" id="close" onclick="closeInfo()">
         </div>
         <div class="px-2 w-full" style="line-height: 24px;">
             <div class="row text-[16px] text-t3 ">
@@ -106,6 +107,8 @@ onMounted(() => {
     if (!map.value) { initMap() }
 })
 watch(() => props.pos_info, (val) => {
+    map.value = null
+    markers.value = []
     initMap()
 }, { deep: true })
 

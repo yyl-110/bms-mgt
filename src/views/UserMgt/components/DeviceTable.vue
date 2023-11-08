@@ -21,7 +21,7 @@
                 v-if="checkList.includes($t('table.status'))" />
             <el-table-column :label="$t('table.operate')" :align="'center'"  width="160" v-if="checkList.includes($t('table.operate'))">
                 <template #default="scope">
-                    <el-button type="danger" @click="handleOption(scope.row.device_id)">
+                    <el-button type="danger" @click="handleOption(scope.row.id)">
                         <svg-icon class-name='cursor-pointer' icon-class='svg-unbind' class="text-lg" />
                         {{ $t('table.unbind') }}</el-button>
                 </template>

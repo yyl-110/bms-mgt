@@ -30,7 +30,7 @@
         <el-dropdown class="ml-5 xl:ml-[100px]">
             <span class='el-dropdown-link flex flex-center px-2'>
                 <el-avatar :size='30' src='https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png' />
-                <span class='ml-2'>{{ userInfo.name }}</span>
+                <span class='ml-2'>{{ userInfo.username }}</span>
                 <el-icon><el-icon-arrow-down /></el-icon>
             </span>
             <template #dropdown>

@@ -19,9 +19,10 @@ export interface IMenubar {
     isPhone: boolean
 }
 export interface IUserInfo {
-    name: string,
-    role: string[],
+    username: string,
+    role?: string[],
     level_status?: number,
+    token?:string,
 }
 export interface ITags {
     tagsList: Array<ITagsList>

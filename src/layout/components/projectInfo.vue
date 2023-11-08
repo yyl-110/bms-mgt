@@ -6,7 +6,7 @@
             <span>{{ $t('table.userProjectNumber') }}：{{ projectInfo?.user_project_name }}</span>
             <span>{{ $t('table.version') }}：{{ projectInfo?.version }}</span>
             <span>{{ $t('table.identify_code') }}：{{ code }}</span>
-            <span>{{$t('table.status')}}：{{ projectInfo?.status }}</span>
+            <span>{{ $t('table.status') }}：{{ projectInfo?.status }}</span>
             <el-button type="primary" size="small" @click="handleGetQrcode">{{ $t('device.qrCode') }}</el-button>
         </div>
         <div class="flex w-full h-full items-center justify-between px-[20px] text-[#666] text-[12px] sm:text-[16px] flex-wrap"
@@ -39,8 +39,8 @@
                     <el-date-picker v-model="end_time" type="datetime" placeholder="" size="small"
                         format="YYYY-MM-DD HH:mm:ss" :prefix-icon="Calendar" class="w-[150px] xl:w-[240px] " />
                 </div>
-                <el-button type="primary" class="rounded-[6px] text-[14px]" size="small"
-                    @click="searchRunHistory">{{ $t('device.search') }}</el-button>
+                <el-button type="primary" class="rounded-[6px] text-[14px]" size="small" @click="searchRunHistory">{{
+                    $t('device.search') }}</el-button>
             </div>
         </div>
         <div class="flex w-full h-full items-center justify-between px-[20px] text-[#666] text-[12px] sm:text-[16px] flex-wrap"
@@ -59,10 +59,11 @@
                 <span>{{ $t('table.identify_code') }}：{{ code }}</span>
             </div>
             <div class="filter flex items-center justify-end ml-auto">
-                <el-date-picker v-model="timeArr" type="daterange" range-separator="-" :start-placeholder="$t('table.dataupdate_datetime')"
-                    :end-placeholder="$t('table.EndTime')" size="small" class="w-[240px]" />
-                <el-button type="primary" class="rounded-[6px] text-[14px] ml-[15px]" size="small"
-                    @click="download">{{ $t('device.download') }}</el-button>
+                <el-date-picker v-model="timeArr" type="daterange" range-separator="-"
+                    :start-placeholder="$t('table.dataupdate_datetime')" :end-placeholder="$t('table.EndTime')" size="small"
+                    class="w-[240px]" />
+                <el-button type="primary" class="rounded-[6px] text-[14px] ml-[15px]" size="small" @click="download">{{
+                    $t('device.download') }}</el-button>
             </div>
         </div>
         <div class="flex w-full h-full items-center justify-between px-[20px] text-[#666] text-[12px] sm:text-[16px] flex-wrap gap-x-10"
@@ -74,8 +75,9 @@
                 <span>{{ $t('table.identify_code') }}：{{ code }}</span>
             </div>
             <div class="filter flex items-center justify-end ml-auto">
-                <el-date-picker v-model="timeArr2" type="daterange" range-separator="-" :start-placeholder="$t('table.dataupdate_datetime')"
-                    :end-placeholder="$t('table.EndTime')" size="small" />
+                <el-date-picker v-model="timeArr2" type="daterange" range-separator="-"
+                    :start-placeholder="$t('table.dataupdate_datetime')" :end-placeholder="$t('table.EndTime')"
+                    size="small" />
                 <el-button type="primary" class="rounded-[6px] text-[14px] ml-2" size="small"
                     @click="searchRunHistoryChart">{{ $t('device.search') }}</el-button>
             </div>
@@ -150,6 +152,11 @@ const indexStore = useIndexStore()
 const { handleRunHistorySearch, handleRunHistoryChartSearch } = useIndexStore()
 const layoutStore = useLayoutStore()
 const projectData = storeToRefs(indexStore)
+console.log('projectData:', projectData)
+
+const runHistorySearch = computed(() => {
+    return projectData.runHistorySearch.value
+})
 
 const projectInfo = computed(() => {
     return projectData.projectInfo.value
@@ -175,7 +182,8 @@ const time = computed(() => {
 const searchRunHistory = () => {
     handleRunHistorySearch({
         type: type.value, start_time: start_time.value ? dayjs(start_time.value).format('YYYY-MM-DD HH:mm:ss') : '',
-        end_time: end_time.value ? dayjs(end_time.value).format('YYYY-MM-DD HH:mm:ss') : ''
+        end_time: end_time.value ? dayjs(end_time.value).format('YYYY-MM-DD HH:mm:ss') : '',
+        month: runHistorySearch.value.month
     })
 }
 const searchRunHistoryChart = () => {
@@ -223,7 +231,6 @@ const download = _.debounce(async () => {
     const code = sessionStorage.getItem('device_code')
 
     const res = await downloadHistory({ code, start_time, end_time })
-    fileDownload(res, code)
 
 }, 1000 * 60, {
     leading: true,
@@ -236,6 +243,14 @@ const handleGetQrcode = async () => {
     qrCode.value = 'data:image/jpg;base64,' + res?.data
     dialogVisible.value = true
 }
+
+watch(() => runHistorySearch.value.month, (val) => {
+    if (val) {
+        start_time.value = ''
+        end_time.value = ''
+        type.value = ''
+    }
+})
 </script>
 
 <style scoped lang="scss">

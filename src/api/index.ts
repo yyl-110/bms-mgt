@@ -22,7 +22,7 @@ export const api = {
     historyChart: '/api/device/index/chart',
     dtu_operation: '/api/device/dtu', // 500
     deviceHistory : '/api/device/history',
-    dtuUpdate : '/api/device/dtu/update',
+    dtuUpdate : '/api/dtu/update',
     historyDownload : '/api/device/history/download',
     qrcode:'/api/qr_code',
     historyTotal:'/api/device/history/total',

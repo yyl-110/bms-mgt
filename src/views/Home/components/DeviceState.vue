@@ -83,7 +83,7 @@
                         </div>
                         <div class="item flex items-center h-[70px]">
                             <div class="title flex-1 h-full flex items-center justify-center text-[18px] text-[#666]">
-                                {{ $t('device.show8') }}(℃)</div>
+                                {{ $t('device.show8') }}</div>
                             <div class="title flex-1 h-full flex items-center justify-center text-6 text-t3">
                                 {{ projectInfo?.sys_info?.cell_temp_max_pos }}</div>
                         </div>
@@ -95,7 +95,7 @@
                         </div>
                         <div class="item flex items-center h-[70px]">
                             <div class="title flex-1 h-full flex items-center justify-center text-[18px] text-[#666]">
-                                {{ $t('device.show10') }}(℃)</div>
+                                {{ $t('device.show10') }}</div>
                             <div class="title flex-1 h-full flex items-center justify-center text-6 text-t3">
                                 {{ projectInfo?.sys_info?.cell_temp_min_pos }}</div>
                         </div>

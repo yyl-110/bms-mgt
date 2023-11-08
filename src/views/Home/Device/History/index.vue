@@ -27,9 +27,10 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { getDeviceHistory } from '/@/api';
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router';
 const { locale } = useI18n()
 
-const list_rows = ref(10)
+const list_rows = ref(15)
 const page = ref(1)
 let order = reactive({ value: { filed: '', order: '' } })
 const history_list = ref({})
@@ -39,14 +40,18 @@ const headerSub = ref([])
 
 const dateProps = ref('')
 const errorProps = ref('')
+const route = useRoute()
 
 
-const fetchData = async (pages = page.value, size = list_rows.value) => {
+const fetchData = async (pages = page.value, size = list_rows.value, key_id = null) => {
     const device_code = sessionStorage.getItem('device_code')
     const _order = order.value.filed ? order.value : {}
-    const res: any = await getDeviceHistory({ code: device_code, page: pages, list_rows: size, ..._order })
+    const res: any = await getDeviceHistory({ code: device_code, page: pages, list_rows: size, ..._order, key_id, })
     if (res.code === 1) {
         history_list.value = res.data
+        if (key_id) {
+            page.value = Number(res.data?.current_page)
+        }
         try {
             headerSub.value = res.data?.header?.header2
             tableData.value = (res?.data?.data || []).map((item: any) => {
@@ -54,7 +59,6 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
                 const data = (res.data?.header?.header2 || []).map((i: any, inx: number) => obj[i] = item[inx])
                 return obj
             })
-            console.log('tableData.value:', tableData.value)
         } catch (error) {
 
         }
@@ -69,7 +73,6 @@ const fetchData = async (pages = page.value, size = list_rows.value) => {
             const list = header2.splice(0, i.col_nums)
             return { ...i, children: list }
         })
-
     }
 }
 
@@ -92,8 +95,9 @@ const handleCurrentChange = (val) => {
     fetchData(val, list_rows.value)
 }
 
-onMounted(() => {
-    fetchData()
+onMounted(async () => {
+    const key_id = Number(route?.query.key_id)
+    fetchData(page.value, list_rows.value, key_id)
 })
 
 </script>

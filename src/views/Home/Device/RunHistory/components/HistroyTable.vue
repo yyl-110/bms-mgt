@@ -11,9 +11,9 @@
                 </template>
             </el-table-column>
             <el-table-column :align="'center'" prop="bgn_ts" :label="$t('table.dataupdate_datetime')" sortable
-                v-if="checkList.includes($t('table.dataupdate_datetime'))">
+                v-if="checkList.includes($t('table.dataupdate_datetime'))" width="200">
                 <template #default="scope">
-                    <div class="cursor-pointer text-primary">
+                    <div class="cursor-pointer text-primary" @click="goTo(scope.row.bgn_id)">
                         {{ scope.row.bgn_ts }}
                     </div>
                 </template>
@@ -42,8 +42,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router';
 const { t } = useI18n()
-
+const router = useRouter()
 const typeList = [
     {
         value: 1,
@@ -71,6 +72,13 @@ const tableData = computed(() => {
 })
 const indexMethod = (index: number) => {
     return index + (currentPage.value - 1) * pageSize.value + 1;
+}
+
+const goTo = (id) => {
+    router.push({
+        path: '/history',
+        query: { key_id: id }
+    })
 }
 
 

@@ -21,8 +21,8 @@ export const useLayoutStore = defineStore({
         },
         // 用户信息
         userInfo: {
-            name: '',
-            role: []
+            username: '',
+            token:'',
         },
         // 标签栏
         tags: {
@@ -50,7 +50,11 @@ export const useLayoutStore = defineStore({
             return this.menubar
         },
         getUserInfo():IUserInfo {
-            return this.userInfo
+            if(this.userInfo.token) {
+                return this.userInfo
+            }
+            const userInfo = getLocal('userInfo')
+            return userInfo
         },
         getTags():ITags {
             return this.tags
@@ -167,6 +171,8 @@ export const useLayoutStore = defineStore({
             // await loginout({})
             this.status.ACCESS_TOKEN = ''
             localStorage.removeItem('token')
+            localStorage.removeItem('userInfo')
+            localStorage.removeItem('device_code')
             history.go(0)
         },
         setToken(token:string):void {
@@ -224,10 +230,13 @@ export const useLayoutStore = defineStore({
             
             const res:any = await login(param)
             const { token, username, company, level_status } = res.data
-            this.userInfo.name = username
+            
+            this.userInfo.username = username
+            this.userInfo.token = token
             this.userInfo.level_status = level_status
             this.status.ACCESS_TOKEN = token
             setLocal('token', this.status, 1000 * 60 * 60)
+            setLocal('userInfo', res.data, 1000 * 60 * 60)
             const { query } = router.currentRoute.value
             router.push(typeof query.from === 'string' ? decode(query.from) : '/home')
         },
@@ -239,9 +248,9 @@ export const useLayoutStore = defineStore({
         // },
         async GenerateRoutes():Promise<void> {
             const res = await getRouterList({})
-            const { data } = res as {data:any}
+            const { data = [] } = res || {}
             /* 过滤display：1 */
-            const _data = data.filter(item => item.display === 1)
+            const _data = (data??[]).filter(item => item.display === 1)
             const newData = _data.map(item => {
                 if(item.name === 'Home') {
                     return {...item, path:'/'}

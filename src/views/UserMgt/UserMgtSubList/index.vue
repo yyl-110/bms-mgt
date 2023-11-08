@@ -15,6 +15,9 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-2.5 options ml-auto lg:ml-0 lg:mt-0">
+                    <el-button class="text-[#999]" @click="dialogDelVisible = true">
+                        {{ $t('table.allUnbind') }}
+                    </el-button>
                     <el-popover placement="bottom-end" title="" trigger="click">
                         <template #reference>
                             <el-button class="text-[#999]">
@@ -143,8 +146,23 @@ const changePagination = (value: { type: string, val: number }) => {
  * @return {*}
  */
 const confirmOption = async () => {
-    const res = await deviceDel({ ids: handelId.value })
-    if (res.code === 1) {
+    /* 单个解绑 */
+    if (handelId.value) {
+        const res = await deviceDel({ ids: handelId.value })
+        if (res.code === 1) {
+            ElMessage({
+                message: t('table.unBindSuc'),
+                type: 'success',
+            })
+            dialogDelVisible.value = false
+            handelId.value = null
+            fetchData()
+        }
+        return
+    }
+    const tableIdList = deviceData.value?.data.map(item => item.id)
+    const allUnbindRes = await deviceDel({ ids: tableIdList.join(',') })
+    if (allUnbindRes.code === 1) {
         ElMessage({
             message: t('table.unBindSuc'),
             type: 'success',
@@ -152,6 +170,7 @@ const confirmOption = async () => {
         dialogDelVisible.value = false
         fetchData()
     }
+
 }
 
 const handleOption = (id: number) => {
